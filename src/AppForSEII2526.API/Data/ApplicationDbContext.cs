@@ -6,6 +6,6 @@ namespace AppForSEII2526.API.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options) {
    
-    public DbSet<Review> YourClasses { get; set; }
+    public DbSet<Review> Reviews { get; set; }
     }
     
