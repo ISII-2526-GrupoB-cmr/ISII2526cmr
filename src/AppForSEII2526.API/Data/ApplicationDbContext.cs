@@ -11,9 +11,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     DbSet<PurchaseItem> PurchaseItems { get; set; }
     DbSet<ReviewItem> ReviewItems { get; set; }
     DbSet<Car> Cars { set; get; }
-}
+    DbSet<Review> Reviews { get; set; }
+    
+ }
 
    
-    
+
     
 
