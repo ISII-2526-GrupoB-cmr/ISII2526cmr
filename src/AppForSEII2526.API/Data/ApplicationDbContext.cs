@@ -5,7 +5,10 @@ using AppForSEII2526.API.Models;
 namespace AppForSEII2526.API.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options) {
+    DbSet<Car> YourClasses { set; get; }
+}
+
    
-    public DbSet<Review> YourClasses { get; set; }
-    }
     
+    
+
