@@ -1,10 +1,10 @@
-﻿using RabbitMQ.Client;
-using System;
 
-public class PurchaseItem
+namespace AppForSEII2526.API.Models
 {
-	public PurchaseItem()
-	{
-	
-	}
-}
+    public class PurchaseItem
+    {
+        public int CarId { get; set; }
+        public int PurchaseId { get; set; }
+        public int Quantity { get; set; } 
+
+    }
