@@ -1,9 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using AppForSEII2526.API.Models;
 
 namespace AppForSEII2526.API.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options) {
-    public DbSet<ReviewItem> YourClasses { get; set; }
+
+    public DbSet<ReviewItem> ReviewItems { get; set; }
+
+    public DbSet<Car> Cars { set; get; }
+
 }
+
+   
+    
+    
+
