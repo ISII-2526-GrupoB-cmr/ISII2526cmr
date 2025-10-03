@@ -16,9 +16,10 @@ public class Car
     public float QuantityForRenting { get; set; }
 
     public float RentingPrice { get; set; }
-    public float ReviewItems { get; set; }
+    public float RentalItems { get; set; }
     public float RimSize { get; set; }
 
+    public IList<ReviewItem> ReviewItems { get; set; }
     public IList<RentalItem> RentalItems { get; set; }
 
     public Model Model { get; set; }

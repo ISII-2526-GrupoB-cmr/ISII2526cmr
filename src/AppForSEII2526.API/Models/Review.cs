@@ -10,6 +10,8 @@
         public int Id { get; set; }
 
         public String UserName { get; set; }
+        
+        public IList<ReviewItem> ReviewItems { get; set; }
     }
 
 }
