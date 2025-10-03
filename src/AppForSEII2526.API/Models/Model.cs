@@ -4,7 +4,9 @@
     {
          public int ID { get; set; }
          public string Name { get; set; }
-    
+
+
+        public IList<Car> Car { get; set; }
     }
 
 }
