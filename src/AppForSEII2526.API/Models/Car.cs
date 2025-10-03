@@ -1,3 +1,5 @@
+using Humanizer.Localisation;
+
 public class Car
 {
     public string CarClass { get; set; }
@@ -18,4 +20,9 @@ public class Car
     public float RimSize { get; set; }
 
     public IList<ReviewItem> ReviewItems { get; set; }
+    public IList<RentalItem> RentalItems { get; set; }
+
+    public Model Model { get; set; }
+
+
 }
