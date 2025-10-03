@@ -19,7 +19,9 @@ public class Car
     public float ReviewItems { get; set; }
     public float RimSize { get; set; }
 
+    public IList<RentalItem> RentalItems { get; set; }
 
     public Model Model { get; set; }
+
 
 }
