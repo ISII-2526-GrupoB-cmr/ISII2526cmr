@@ -8,5 +8,7 @@ namespace AppForSEII2526.API.Models
         public int Quantity { get; set; }
 
         public Car Car { get; set; }
+        public Purchase Purchase { get; set; }
+
     }
 }
