@@ -7,5 +7,6 @@ namespace AppForSEII2526.API.Models
         public int PurchaseId { get; set; }
         public int Quantity { get; set; }
 
+        public Car Car { get; set; }
     }
 }

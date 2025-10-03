@@ -6,7 +6,7 @@
          public string Name { get; set; }
 
 
-        public IList<Car> Car { get; set; }
+        public IList<Car> Cars { get; set; }
     }
 
 }
