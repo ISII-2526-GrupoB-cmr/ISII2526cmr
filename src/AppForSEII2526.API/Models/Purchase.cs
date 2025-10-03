@@ -9,5 +9,8 @@
         public DateTime PurchasingDate { get; set; }
 
         public string PurchasingType  { get; set; }
+
+
+        public IList<PurchaseItem> PurchaseItems { get; set; }
     }
 }

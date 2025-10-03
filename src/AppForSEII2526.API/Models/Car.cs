@@ -21,7 +21,7 @@ public class Car
 
     public IList<ReviewItem> ReviewItems { get; set; }
     public IList<RentalItem> RentalItems { get; set; }
-    public IList<RentalItem> PurchaseItems { get; set; }
+    public IList<PurchaseItem> PurchaseItems { get; set; }
 
     public Model Model { get; set; }
 
