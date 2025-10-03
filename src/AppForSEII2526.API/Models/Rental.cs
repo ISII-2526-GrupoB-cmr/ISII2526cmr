@@ -8,4 +8,5 @@ public class Rental
     public DateTime StartDate { get; set; }
     public string Surname { get; set; }
     public float TotalPrice { get; set; }
+    public IList<RentalItem> RentalItems { get; set; }
 }
