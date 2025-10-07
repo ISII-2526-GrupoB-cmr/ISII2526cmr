@@ -5,16 +5,17 @@
 
         public int Id { get; set; }
 
-        [Display(Name = "Delivery Car Leader")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your address for delivery")]
-
+        [Display(Name = "Delivery Car Dealer")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your delivery car leader")]
         public string DeliveryCarLeader { get; set; }
 
         [Display(Name = "Payment Method")]
         public PaymentMethodTypes PaymentMethod { get; set; }
 
+        [Display(Name = "Purchasing Date")]
         public DateTime PurchasingDate { get; set; }
 
+        [Display(Name = "Purchasing Type")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your purchasing type")]
         public string PurchasingType  { get; set; }
 
