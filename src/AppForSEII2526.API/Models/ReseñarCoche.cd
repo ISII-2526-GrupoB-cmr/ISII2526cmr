@@ -3,9 +3,12 @@
   <Class Name="AppForSEII2526.API.Models.Review">
     <Position X="3.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAACAAAAAAAAAAAAAABAAAAAACAQAAABAAAAA=</HashCode>
+      <HashCode>AAACAAAAACAAAAAQAAAAAAAABAAAAAACAAAAABAAAAA=</HashCode>
       <FileName>Models\Review.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ApplicationUser" />
+    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="ReviewItems" />
     </ShowAsCollectionAssociation>
@@ -42,6 +45,16 @@
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="ReviewItems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ApplicationUser">
+    <Position X="3" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAAEAAAAAAAAAAAAAAAAQABAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Reviews" />
     </ShowAsCollectionAssociation>
   </Class>
   <Enum Name="AppForSEII2526.API.Models.DriverType">

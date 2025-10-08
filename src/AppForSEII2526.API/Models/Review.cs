@@ -16,9 +16,8 @@
 
         public int Id { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "This field cannot be empty")]
-        public String UserName { get; set; }
-        
+        public ApplicationUser ApplicationUser { get; set; }
+
         public IList<ReviewItem> ReviewItems { get; set; }
     }
 
