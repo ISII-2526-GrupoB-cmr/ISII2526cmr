@@ -7,26 +7,30 @@ namespace AppForSEII2526.API.Models
 
         }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Delivery Car Dealer")]
-
+        [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string DeliveryCarDealer { get; set; }
        
         public int Id { get; set; }
 
 
         [Display(Name = "Payment Method")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your PaymentMethod")]
+        [StringLength(15, ErrorMessage = "Name can be neither longer than 50 characters nor shorter than 10.", MinimumLength=3)]
         public string PaymentMethod { get; set; }
 
         [Display(Name = "Renting Date")]
-
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime RentignDate { get; set; }
+
         [Display(Name = "Start Date")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
         [Display(Name = "End Date")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
-        [Display(Name = "Total Price")]
 
+        [Display(Name = "Total Price")]
+        [Precision(10,2)]
         public double TotalPrice { get; set; }
         [Display(Name = "List of Rental Items")]
 
