@@ -12,8 +12,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     DbSet<ReviewItem> ReviewItems { get; set; }
     DbSet<Car> Cars { set; get; }
     DbSet<Review> Reviews { get; set; }
-    
- }
+    DbSet<RentalItem> RentalItems { get; set; }
+    DbSet<Rental> Rentals { get; set; }
+    DbSet<ApplicationUser> ApplicationUsers { get; set; }
+}
 
    
 
