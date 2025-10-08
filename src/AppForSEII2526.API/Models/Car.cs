@@ -26,8 +26,6 @@ public class Car
 
     [Display(Name = "Renting price")]
     public float RentingPrice { get; set; }
-    [Display(Name = "Rental item")]
-    public float RentalItem { get; set; }
     [Display(Name = "Rim size")]
     public float RimSize { get; set; }
 

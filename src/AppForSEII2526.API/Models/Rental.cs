@@ -37,11 +37,4 @@ namespace AppForSEII2526.API.Models
         public IList<RentalItem> RentalItems { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }
-    public enum PaymentMethod
-    {
-        Visa,
-        GooglePay,
-        Paypal
-
-    }
 }
