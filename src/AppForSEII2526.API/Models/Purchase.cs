@@ -30,6 +30,7 @@
     public enum PaymentMethodTypes
     {
         GooglePay,
+        Paypal,
         Visa
     }
 }

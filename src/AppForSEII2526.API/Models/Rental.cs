@@ -15,7 +15,7 @@ namespace AppForSEII2526.API.Models
 
         [Display(Name = "Payment Method")]
         [StringLength(15, ErrorMessage = "Name can be neither longer than 50 characters nor shorter than 10.", MinimumLength=3)]
-        public string PaymentMethod { get; set; }
+        public PaymentMethodTypes PaymentMethod { get; set; }
 
         [Display(Name = "Renting Date")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
