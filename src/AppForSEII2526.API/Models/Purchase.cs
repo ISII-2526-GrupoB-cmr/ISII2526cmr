@@ -8,10 +8,11 @@
         public ApplicationUser ApplicationUser { get; set; }
 
         [Display(Name = "Delivery Car Dealer")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your delivery car leader")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your delivery car Dealer")]
         public string DeliveryCarLeader { get; set; }
 
         [Display(Name = "Payment Method")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your payment method")]
         public PaymentMethodTypes PaymentMethod { get; set; }
 
         [Display(Name = "Purchasing Date")]

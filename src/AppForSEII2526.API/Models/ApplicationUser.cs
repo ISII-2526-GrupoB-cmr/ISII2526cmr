@@ -7,9 +7,14 @@ public class ApplicationUser : IdentityUser {
 
     public string UserName { get; set; }
 
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Please, enter your name")]
     public string Name { get; set; }
 
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Please, enter your Surname")]
     public string Surname { get; set; }
+
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Please, enter your Address")]
+    public string Address { get; set; }
 
     public IList<Purchase> Purchases { get; set; }
 
