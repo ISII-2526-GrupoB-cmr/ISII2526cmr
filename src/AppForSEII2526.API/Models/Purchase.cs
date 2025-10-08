@@ -5,6 +5,8 @@
 
         public int Id { get; set; }
 
+        public ApplicationUser ApplicationUser { get; set; }
+
         [Display(Name = "Delivery Car Dealer")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your delivery car leader")]
         public string DeliveryCarLeader { get; set; }
