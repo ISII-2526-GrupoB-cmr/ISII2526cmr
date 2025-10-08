@@ -10,7 +10,7 @@
       <Property Name="Cars" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="Car">
+  <Class Name="AppForSEII2526.API.Models.Car">
     <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgCCAgIAARgAAABAABCAAACAAAgAAAAEAgAgBAAAAQ=</HashCode>
@@ -21,6 +21,16 @@
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="RentalItems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ApplicationUser">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAAEAAAAAAAAAAAAAAAAQABAAAAAACAQAAAAAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Rentals" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.Rental">
@@ -46,16 +56,6 @@
       <Property Name="Car" />
       <Property Name="Rental" />
     </ShowAsAssociation>
-  </Class>
-  <Class Name="AppForSEII2526.API.Models.ApplicationUser">
-    <Position X="11.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAwAAEAAAAAAAAAAAAAAAAQABAAAAAAAAQAAAAAAAAA=</HashCode>
-      <FileName>Models\ApplicationUser.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Rentals" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
