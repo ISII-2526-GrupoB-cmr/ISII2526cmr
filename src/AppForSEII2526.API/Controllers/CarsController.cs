@@ -43,9 +43,11 @@ namespace AppForSEII2526.API.Controllers
             
                 .Select(c => new CocheParaAlquilarDTO(c.Id, c.Model.Name,
         c.Color, c.FuelType, c.Manufacturer, c.RentingPrice)).ToListAsync();
+            return Ok(coches);
         }
         [HttpGet]
         [Route("[action]")]
+
         [ProducesResponseType(typeof(IList<CocheParaComprarDTO>), (int)HttpStatusCode.OK)]
 
         public async Task<ActionResult> GetCoche_Para_ComprarDTO(string? filtroColor, string? modelo)
