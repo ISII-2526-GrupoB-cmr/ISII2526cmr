@@ -8,10 +8,11 @@ namespace AppForSEII2526.API.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        //used to enable your controller to access to the database
-        private readonly ApplicationDbContext _context;
-        //used to log any information when your system is running
-        private readonly ILogger<CarsController> _logger;
+        //used to enable your controller to access to the database
+        private readonly ApplicationDbContext _context;
+        //used to log any information when your system is running
+        private readonly ILogger<CarsController> _logger;
+        
 
         public CarsController(ApplicationDbContext context, ILogger<CarsController> logger)
         {
@@ -31,6 +32,18 @@ namespace AppForSEII2526.API.Controllers
 
 
 
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(IList<CocheParaAlquilarDTO>), (int)HttpStatusCode.OK)]
+
+        public async Task<ActionResult> GetCoche_Para_AlquilarDTO(float precio, string? modelo)
+        {
+            var coches = await _context.Cars.Include(Car => Car.Model)
+              .Where(c => c.PurchasePrice.Equals(precio) || (precio == null) && (c.Model.Name.Contains(modelo) || modelo == null))
+            
+                .Select(c => new CocheParaAlquilarDTO(c.Id, c.Model.Name,
+        c.Color, c.FuelType, c.Manufacturer, c.RentingPrice)).ToListAsync();
+        }
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<CocheParaComprarDTO>), (int)HttpStatusCode.OK)]
