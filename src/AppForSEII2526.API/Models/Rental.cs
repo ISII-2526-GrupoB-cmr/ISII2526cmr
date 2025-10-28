@@ -1,11 +1,10 @@
+
 namespace AppForSEII2526.API.Models
 {
     public class Rental
     {
-        public Rental()
-        {
+       
 
-        }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Delivery Car Dealer")]
         [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string DeliveryCarDealer { get; set; }
@@ -36,5 +35,6 @@ namespace AppForSEII2526.API.Models
 
         public IList<RentalItem> RentalItems { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+       
     }
 }

@@ -39,8 +39,8 @@ namespace AppForSEII2526.API.Controllers
                     r.StartDate, r.EndDate,
                     r.RentalItems
                         .Select(ri => new RentalItemDTO(ri.Car.Id,
-                                ri.Car.Manufacturer, ri.Car.Model.Name,
-                                ri.Car.RentingPrice, ri.Car.QuantityForRenting)).ToList<RentalItemDTO>()))
+                                 ri.Car.Model.Name, ri.Car.Manufacturer,
+                                ri.Car.RentingPrice)).ToList<RentalItemDTO>()))
              .FirstOrDefaultAsync();
 
 
@@ -53,7 +53,9 @@ namespace AppForSEII2526.API.Controllers
 
             return Ok(rental);
         }
-
+    }
+}
+        /*
         [HttpPost]
         [Route("[action]")]
         [ProducesResponseType(typeof(RentalDetailDTO), (int)HttpStatusCode.Created)]
@@ -62,17 +64,17 @@ namespace AppForSEII2526.API.Controllers
         public async Task<ActionResult> CreateRental(RentalForCreateDTO rentalForCreate)
         {
             //any validation defined in PurchaseForCreate is checked before running the method so they don't have to be checked again
-            if (rentalForCreate.RentalDateFrom <= DateTime.Today)
+            if (rentalForCreate.StartDate <= DateTime.Today)
                 ModelState.AddModelError("RentalDateFrom", "Error! Your rental date must start later than today");
 
-            if (rentalForCreate.RentalDateFrom >= rentalForCreate.RentalDateTo)
+            if (rentalForCreate.StartDate >= rentalForCreate.EndDate)
                 ModelState.AddModelError("RentalDateFrom&RentalDateTo", "Error! Your rental must end later than it starts");
 
             if (rentalForCreate.RentalItems.Count == 0)
-                ModelState.AddModelError("RentalItems", "Error! You must include at least one movie to be rented");
+                ModelState.AddModelError("RentalItems", "Error! You must include at least one car to be rented");
 
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == rentalForCreate.CustomerUserName);
+            var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == rentalForCreate.Name);
             if (user == null)
                 ModelState.AddModelError("RentalApplicationUser", "Error! UserName is not registered");
 
@@ -80,7 +82,7 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
 
-            var rentingnames = rentalForCreate.RentalItems.Select(ri => ri.Car).ToList<string>();
+            var rentingnames = rentalForCreate.RentalItems.Select(ri => ri.Model).ToList<string>();
 
             var cars = _context.Cars.Include(m => m.RentalItems)
                 .ThenInclude(ri => ri.Rental)
@@ -89,12 +91,13 @@ namespace AppForSEII2526.API.Controllers
                 //we use an anonymous type https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/anonymous-types
                 .Select(m => new {
                     m.Id,
-                    m.Model.Name,
+                    m.Model,
+                    m.Manufacturer,
                     m.QuantityForRenting,
                     m.RentingPrice,
                     //we count the number of rentalItems that are within the rental period
                     NumberOfRentedItems = m.RentalItems.Count(ri => ri.Rental.StartDate <= rentalForCreate.EndDate
-                            && ri.Rental.EndDate >= rentalForCreate.RentalDateFrom)
+                            && ri.Rental.EndDate >= rentalForCreate.StartDate)
                 })
                 .ToList();
 
@@ -111,16 +114,16 @@ rentalForCreate.StartDate, rentalForCreate.EndDate, new List<RentalItem>());
 
             foreach (var item in rentalForCreate.RentalItems)
             {
-                var car = cars.FirstOrDefault(m => m.Name == item.Name);
+                var car = cars.FirstOrDefault(m => m.Id == item.CarId);
                 //we must check that there is enough quantity to be rented in the database
                 if ((car == null) || (car.QuantityForRenting >= car.QuantityForRenting))
                 {
-                    ModelState.AddModelError("RentalItems", $"Error! Movie titled '{item.Name}' is not available for being rented from {rentalForCreate.StartDate.ToShortDateString()} to {rentalForCreate.EndDate.ToShortDateString()}");
+                    ModelState.AddModelError("RentalItems", $"Error! Model car '{item.Model}' is not available for being rented from {rentalForCreate.StartDate.ToShortDateString()} to {rentalForCreate.EndDate.ToShortDateString()}");
                 }
                 else
                 {
                     // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
-                    rental.RentalItems.Add(new RentalItem(car.Id, rental, car.RentingPrice, item.Description));
+                    rental.RentalItems.Add(new RentalItem(car.Id, rental, car.RentingPrice, item.Manufacturer));
                     item.RentingPrice = car.RentingPrice;
                 }
             }
@@ -159,4 +162,4 @@ rentalForCreate.StartDate, rentalForCreate.EndDate, new List<RentalItem>());
         }
     }
 
-}
+}*/
