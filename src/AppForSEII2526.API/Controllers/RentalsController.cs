@@ -52,10 +52,10 @@ namespace AppForSEII2526.API.Controllers
 
 
             return Ok(rental);
-        }
-    }
+        
+    
 }
-        /*
+        
         [HttpPost]
         [Route("[action]")]
         [ProducesResponseType(typeof(RentalDetailDTO), (int)HttpStatusCode.Created)]
@@ -104,7 +104,7 @@ namespace AppForSEII2526.API.Controllers
 
             Rental rental = new Rental(rentalForCreate.Name, rentalForCreate.Surname,
                 rentalForCreate.Address, DateTime.Now,
-                (AppForSEII2526.API.Models.PaymentMethodTypes)rentalForCreate.PaymentMethod,
+               rentalForCreate.PaymentMethod,
 rentalForCreate.StartDate, rentalForCreate.EndDate, new List<RentalItem>());
 
 
@@ -162,4 +162,4 @@ rentalForCreate.StartDate, rentalForCreate.EndDate, new List<RentalItem>());
         }
     }
 
-}*/
+}

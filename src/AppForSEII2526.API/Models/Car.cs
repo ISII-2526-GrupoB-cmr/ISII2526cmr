@@ -35,6 +35,22 @@ public class Car
     public IList<PurchaseItem> PurchaseItems { get; set; }
 
     public Model Model { get; set; }
-
-
+    public Car(string carClass, string color, string description, string engDisplacement, string fuelType, int id, string maintenanceType, string manufacturer, int purchaseItem, float purchasePrice, float quantityForPurchase, float quantityForRenting, float rentingPrice, float rimSize)
+    {
+        CarClass = carClass;
+        Color = color;
+        Description = description;
+        EngDisplacement = engDisplacement;
+        FuelType = fuelType;
+        Id = id;
+        MaintenanceType = maintenanceType;
+        Manufacturer = manufacturer;
+        PurchaseItem = purchaseItem;
+        PurchasePrice = purchasePrice;
+        QuantityForPurchase = quantityForPurchase;
+        QuantityForRenting = quantityForRenting;
+        RentingPrice = rentingPrice;
+        RimSize = rimSize;
+        
+    }
 }

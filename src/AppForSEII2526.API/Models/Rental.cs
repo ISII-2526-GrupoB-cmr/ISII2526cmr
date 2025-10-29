@@ -1,4 +1,5 @@
 
+
 namespace AppForSEII2526.API.Models
 {
     public class Rental
@@ -31,10 +32,38 @@ namespace AppForSEII2526.API.Models
         [Display(Name = "Total Price")]
         [Precision(10,2)]
         public double TotalPrice { get; set; }
+
+        public Rental() { }
+        public Rental(string deliveryCarDealer, string surname, PaymentMethodTypes paymentMethod, DateTime rentignDate, DateTime startDate, DateTime endDate, double totalPrice)
+        {
+            DeliveryCarDealer = deliveryCarDealer;
+            PaymentMethod = (PaymentMethodTypes)paymentMethod;
+            RentignDate = rentignDate;
+            StartDate = startDate;
+            EndDate = endDate;
+            TotalPrice = totalPrice;
+        }
+
+        public Rental(string name, string surname, string address, DateTime now, PaymentMethodTypes paymentMethod, DateTime startDate, DateTime endDate, List<RentalItem> rentalItems)
+        {
+            Name = name;
+            Surname = surname;
+            Address = address;
+            Now = now;
+            PaymentMethod = paymentMethod;
+            StartDate = startDate;
+            EndDate = endDate;
+            RentalItems = rentalItems;
+        }
+
         [Display(Name = "List of Rental Items")]
 
         public IList<RentalItem> RentalItems { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-       
+        public string Name { get; }
+        public string Surname { get; }
+        public string Address { get; }
+        public DateTime Now { get; }
     }
+    
 }
