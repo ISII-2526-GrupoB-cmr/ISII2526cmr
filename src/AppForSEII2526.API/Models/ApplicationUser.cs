@@ -29,4 +29,14 @@ public class ApplicationUser : IdentityUser {
     public IList<Rental> Rentals { get; set; }
 
     public IList<Review> Reviews { get; set; }
+
+
+    public ApplicationUser() { }
+    public ApplicationUser(string userName, string name, string surname, string address)
+    {
+        UserName = userName;
+        Name = name;
+        Surname = surname;
+        Address = address;
+    }
 }
