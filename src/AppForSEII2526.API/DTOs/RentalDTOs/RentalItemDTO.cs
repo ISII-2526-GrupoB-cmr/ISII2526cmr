@@ -30,6 +30,7 @@
                    Model == dTO.Model &&
                    RentingPrice == dTO.RentingPrice &&
                    Manufacturer == dTO.Manufacturer;
+                   
                   
         }
 

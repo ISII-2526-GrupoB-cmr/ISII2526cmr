@@ -14,14 +14,14 @@
 
         public float RentingPrice { get; set; }
 
-        public CocheParaAlquilarDTO(int id, string model, string color, string fuelType, string manufacturer, float RentingPrice)
+        public CocheParaAlquilarDTO(int id, string model, string color, string fuelType, string manufacturer, float rentingPrice)
         {
             Id = id;
             Model = model;
             Color = color;
             FuelType = fuelType;
             Manufacturer = manufacturer;
-            RentingPrice = RentingPrice;
+            RentingPrice = rentingPrice;
         }
     }
 }

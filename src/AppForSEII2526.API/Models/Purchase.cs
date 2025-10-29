@@ -18,6 +18,7 @@
         [Display(Name = "Purchasing Date")]
         public DateTime PurchasingDate { get; set; }
 
+      
         [Display(Name = "Purchasing Price")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your purchasing price")]
         public float PurchasingPrice  { get; set; }
