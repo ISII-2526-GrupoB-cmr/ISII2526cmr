@@ -7,8 +7,8 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         public PurchaseDetailDTO(int id, DateTime purchaseDate, string customerName, string customerSurname,
             string deliveryAddress, float totalPrice, IList<PurchaseItemDTO> purchaseItems)
         {
-            CustomerUserName = customerName ?? throw new ArgumentNullException(nameof(customerName));
-            CustomerNameSurname = customerSurname ?? throw new ArgumentNullException(nameof(customerSurname));
+            CustomerName = customerName ?? throw new ArgumentNullException(nameof(customerName));
+            CustomerSurname = customerSurname ?? throw new ArgumentNullException(nameof(customerSurname));
             DeliveryAddress = deliveryAddress ?? throw new ArgumentNullException(nameof(deliveryAddress));
             TotalPrice = totalPrice;
             PurchaseItems = purchaseItems ?? throw new ArgumentNullException(nameof(purchaseItems));
@@ -19,9 +19,9 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
 
         public DateTime PurchaseDate { get; set; }
 
-        public string CustomerUserName { get; set; }
+        public string CustomerName { get; set; }
 
-        public string CustomerNameSurname { get; set; }
+        public string CustomerSurname { get; set; }
 
         public string DeliveryAddress { get; set; }
 
