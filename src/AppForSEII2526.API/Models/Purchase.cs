@@ -18,9 +18,9 @@
         [Display(Name = "Purchasing Date")]
         public DateTime PurchasingDate { get; set; }
 
-        [Display(Name = "Purchasing Type")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your purchasing type")]
-        public string PurchasingType  { get; set; }
+        [Display(Name = "Purchasing Price")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your purchasing price")]
+        public float PurchasingPrice  { get; set; }
 
         public IList<PurchaseItem> PurchaseItems { get; set; }
 
