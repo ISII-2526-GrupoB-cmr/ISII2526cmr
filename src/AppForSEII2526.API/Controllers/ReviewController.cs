@@ -31,9 +31,9 @@ namespace AppForSEII2526.API.Controllers
 
                 var review = await _context.Reviews
                  .Where(r => r.Id == id)
-                     .Include(r => r.Review) //join table RentalItems
+                     .Include(r => r.ReviewItems) //join table RentalItems
                         .ThenInclude(ri => ri.Car) //then join table Movies
-                            .ThenInclude(movie => movie.Rental) //then join table Genre
+                            .ThenInclude(movie => movie.Model) //then join table Genre
                  .Select(r => new ReviewDetailDTO(r.model, r.Manufacturer, r.color,
                         r.rating, r.description, r.name, r.country, r.DriverType, r.created)
                             .Select(ri => new ReviewDTO(ri.Movie.Id,
