@@ -32,8 +32,7 @@ public class ApplicationUser : IdentityUser {
     public IList<Review> Reviews { get; set; }
 
 
-    public ApplicationUser() { 
-    }
+  
 
 
     public ApplicationUser(string id, string name, string surname, string email, string address)
