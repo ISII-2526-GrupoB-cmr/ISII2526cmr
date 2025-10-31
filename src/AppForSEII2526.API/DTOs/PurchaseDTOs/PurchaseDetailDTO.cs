@@ -4,6 +4,11 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
 {
     public class PurchaseDetailDTO
     {
+
+        public PurchaseDetailDTO () 
+        {
+
+        }  
         public PurchaseDetailDTO(int id, DateTime purchaseDate, string customerName, string customerSurname,
             string deliveryAddress, float totalPrice, IList<PurchaseItemDTO> purchaseItems)
         {

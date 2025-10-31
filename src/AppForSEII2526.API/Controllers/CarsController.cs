@@ -1,6 +1,7 @@
 ﻿using AppForSEII2526.API.DTOs.Car;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AppForSEII2526.API.Controllers
 {
