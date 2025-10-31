@@ -2,6 +2,11 @@
 
 public class PurchaseItemDTO
 {
+    public PurchaseItemDTO ()
+    {
+
+    }
+
     public PurchaseItemDTO(int carID, float purchasePrice, float totalPrice, string modelo, string carColor, string description = "")
     {
         CarID = carID;
