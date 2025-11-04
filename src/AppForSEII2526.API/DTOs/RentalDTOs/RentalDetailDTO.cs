@@ -4,15 +4,16 @@
     {
         public RentalDetailDTO(int id, DateTime rentalDate, string name, string surname,
             string address, PaymentMethodTypes paymentMethod, DateTime startDate,
-            DateTime EndDate, IList<RentalItemDTO> rentalItems)
-            : base(name,
-                   surname,
-                   address,
-                   paymentMethod,
-                   startDate,
-                   EndDate,
-                   rentalItems)
+            DateTime endDate, IList<RentalItemDTO> rentalItems)
+            
         {
+            Name =name ?? throw new ArgumentNullException(nameof(name));
+            Surname = surname ?? throw new ArgumentNullException(nameof(surname));
+            Address = address ?? throw new ArgumentNullException(nameof(address));
+            PaymentMethod = paymentMethod;
+            StartDate = startDate;
+            EndDate = endDate;
+            RentalItems = rentalItems ?? throw new ArgumentNullException(nameof(rentalItems));
             Id = id;
             RentalDate = rentalDate;
         }

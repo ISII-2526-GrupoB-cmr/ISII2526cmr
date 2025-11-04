@@ -31,6 +31,14 @@ public class RentalItem {
             Manufacturer = manufacturer;
         }
 
+        public RentalItem(int id, int quantity, Rental rental, float rentingPrice1, string manufacturer, double rentingPrice2)
+        {
+            Id = id;
+            Quantity = quantity;
+            Rental = rental;
+            Manufacturer = manufacturer;
+        }
+
         public Car Car { get; set; }
 
     public Rental Rental { get; set; }

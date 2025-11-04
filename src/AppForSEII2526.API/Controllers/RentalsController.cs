@@ -64,17 +64,13 @@ namespace AppForSEII2526.API.Controllers
         public async Task<ActionResult> CreateRental(RentalForCreateDTO rentalForCreate)
         {
             //any validation defined in PurchaseForCreate is checked before running the method so they don't have to be checked again
-            if (rentalForCreate.StartDate <= DateTime.Today)
-                ModelState.AddModelError("RentalDateFrom", "Error! Your rental date must start later than today");
-
-            if (rentalForCreate.StartDate >= rentalForCreate.EndDate)
-                ModelState.AddModelError("RentalDateFrom&RentalDateTo", "Error! Your rental must end later than it starts");
-
-            if (rentalForCreate.RentalItems.Count == 0)
-                ModelState.AddModelError("RentalItems", "Error! You must include at least one car to be rented");
-
+            if (rentalForCreate.RentalItems == null || rentalForCreate.RentalItems.Count==0)
+                ModelState.AddModelError("RentalItems", "Error! Rental items list is null");
+            
+            if(rentalForCreate.Quantity<=0)
+                ModelState.AddModelError("Quantity", "Error! You must select a quantity greater than 0");
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == rentalForCreate.Name);
+            var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == rentalForCreate.Name && au.Surname == rentalForCreate.Surname);
             if (user == null)
                 ModelState.AddModelError("RentalApplicationUser", "Error! UserName is not registered");
 
@@ -82,9 +78,10 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
 
-            var rentingnames = rentalForCreate.RentalItems.Select(ri => ri.Model).ToList<string>();
+            var rentingnames = rentalForCreate.RentalItems.Select(ri => ri.Modelo).ToList<string>();
 
-            var cars = _context.Cars.Include(m => m.RentalItems)
+            var cars = _context.Cars
+                .Include(m => m.RentalItems)
                 .ThenInclude(ri => ri.Rental)
                 .Where(m => rentingnames.Contains(m.Model.Name))
 
@@ -103,9 +100,10 @@ namespace AppForSEII2526.API.Controllers
 
 
             Rental rental = new Rental(rentalForCreate.Name, rentalForCreate.Surname,
-                rentalForCreate.Address, DateTime.Now,
-               rentalForCreate.PaymentMethod,
-rentalForCreate.StartDate, rentalForCreate.EndDate, new List<RentalItem>());
+                                       rentalForCreate.Address, DateTime.Now,
+                                       rentalForCreate.PaymentMethod,
+                                       rentalForCreate.StartDate, rentalForCreate.EndDate, new List<RentalItem>());
+            rental.ApplicationUser = user;
 
 
             rental.TotalPrice = 0;
@@ -114,16 +112,16 @@ rentalForCreate.StartDate, rentalForCreate.EndDate, new List<RentalItem>());
 
             foreach (var item in rentalForCreate.RentalItems)
             {
-                var car = cars.FirstOrDefault(m => m.Id == item.CarId);
+                var car = cars.FirstOrDefault(m => m.Model.Name == item.Modelo);
                 //we must check that there is enough quantity to be rented in the database
                 if ((car == null) || (car.QuantityForRenting >= car.QuantityForRenting))
                 {
-                    ModelState.AddModelError("RentalItems", $"Error! Model car '{item.Model}' is not available for being rented from {rentalForCreate.StartDate.ToShortDateString()} to {rentalForCreate.EndDate.ToShortDateString()}");
+                    ModelState.AddModelError("RentalItems", $"Error! Model car '{item.Modelo}' is not available for being rented from {rentalForCreate.StartDate.ToShortDateString()} to {rentalForCreate.EndDate.ToShortDateString()}");
                 }
                 else
                 {
                     // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
-                    rental.RentalItems.Add(new RentalItem(car.Id, rental, car.RentingPrice, item.Manufacturer));
+                    rental.RentalItems.Add(new RentalItem(car.Id,rentalForCreate.Quantity, rental, car.RentingPrice, item.Manufacturer,item.RentingPrice));
                     item.RentingPrice = car.RentingPrice;
                 }
             }
