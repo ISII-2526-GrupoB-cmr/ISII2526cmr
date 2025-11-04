@@ -19,6 +19,9 @@ namespace AppForSEII2526.API.Models
             DeliveryAddress = deliveryAddress;
             PaymentMethod = paymentMethod;
             PurchaseItems = purchaseItems;
+            DeliveryCarLeader = "Concesionario Albacete";
+            PurchasingDate = DateTime.Now;
+            PurchasingPrice = 0;
         }
 
         public int Id { get; set; }

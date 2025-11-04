@@ -29,12 +29,12 @@ namespace AppForSEII2526.API.Models
 
         // Constructor usado en PurchasesController:
         // new PurchaseItem(car.Id, purchase, car.PurchasePrice, purchase.PurchasingPrice, item.CarColor, item.Description)
-        public PurchaseItem(int carId, Purchase purchase, float purchasePrice, float totalPrice, string carColor, string? description = "")
+        public PurchaseItem(int carId, int quantity, Purchase purchase, float purchasePrice, float totalPrice, string carColor, string? description = "")
         {
             CarId = carId;
             Purchase = purchase;
             PurchaseId = purchase?.Id ?? 0;
-            Quantity = 1;
+            Quantity = quantity;
 
             PurchasePrice = purchasePrice;
             TotalPrice = totalPrice;

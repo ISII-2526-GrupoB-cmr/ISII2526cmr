@@ -77,7 +77,8 @@ namespace AppForSEII2526.API.Controllers
                 ModelState.AddModelError("Quantity", "Error! Debes seleccionar una cantidad mayor a 0");
 
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == purchaseForCreate.CustomerName);
+            var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == purchaseForCreate.CustomerName &&
+                                                                au.Surname == purchaseForCreate.CustomerSurname);
             if (user == null)
                 ModelState.AddModelError("PurchaseApplicationUser", "Error! Tu nombre no esta registrado");
 
@@ -111,12 +112,13 @@ namespace AppForSEII2526.API.Controllers
                 new List<PurchaseItem>());
 
 
-            purchase.PurchasingPrice = 0;
-
+            purchase.ApplicationUser = user;
+     
 
             foreach (var item in purchaseForCreate.PurchaseItems)
             {
                 var car = cars.FirstOrDefault(c => c.Model.Name == item.Modelo);
+                purchase.PurchasingPrice = car.PurchasePrice * purchaseForCreate.Quantity;
 
                 //we must check that there is enough quantity to be rented in the database
                 if (car == null || car.QuantityForPurchase < purchaseForCreate.Quantity)
@@ -125,9 +127,8 @@ namespace AppForSEII2526.API.Controllers
                 }
                 else
                 {
-                    purchase.PurchasingPrice = purchase.PurchaseItems.Sum(pi => pi.PurchasePrice);
                     // purchase does not exist in the database yet and does not have a valid Id, so we must relate purchaseitem to the object purchase
-                    purchase.PurchaseItems.Add(new PurchaseItem(car.Id, purchase, car.PurchasePrice, purchase.PurchasingPrice, item.CarColor, item.Description));
+                    purchase.PurchaseItems.Add(new PurchaseItem(car.Id, purchaseForCreate.Quantity, purchase, car.PurchasePrice, purchase.PurchasingPrice, item.CarColor, item.Description));
                     item.PurchasePrice = car.PurchasePrice;
                 }
             }
