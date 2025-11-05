@@ -21,7 +21,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
         }
         public ReviewForCreateDTO(int rating, string model, string manufacturer)
         {
-            Reviewitems = new List<ReviewItemDTO>();
+            Reviewitems = new List<ReviewItemDTO>(); 
           
         }
 
