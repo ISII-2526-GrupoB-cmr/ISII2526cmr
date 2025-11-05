@@ -19,14 +19,17 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
             Description = description;
             Model= model;
         }
-        public ReviewForCreateDTO(string model, string manufacturer)
+        public ReviewForCreateDTO(int rating, string model, string manufacturer)
         {
             Reviewitems = new List<ReviewItemDTO>();
-            Model = model;
-            Manufacturer = manufacturer;
+          
         }
 
         public ReviewForCreateDTO(string model, string manufacturer, string color, int rating, string description, string userName, string country, string driverType, IList<ReviewItemDTO> reviewItems) : this(model, manufacturer)
+        {
+        }
+
+        public ReviewForCreateDTO(int rating, string model, string manufacturer, string country, string driverType, IList<ReviewItemDTO> reviewItems) : this(rating, model, manufacturer)
         {
         }
 
