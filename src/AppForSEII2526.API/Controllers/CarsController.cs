@@ -1,6 +1,7 @@
 ﻿using AppForSEII2526.API.DTOs.Car;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -53,8 +54,8 @@ namespace AppForSEII2526.API.Controllers
 
         public async Task<ActionResult> GetCoche_Para_AlquilarDTO(float precio, string? modelo)
         {
-            var coches = await _context.Cars.Include(Car => Car.Model)
-              .Where(c => c.RentingPrice.Equals(precio) || (precio == null) && (c.Model.Name.Contains(modelo) || modelo == null))
+            var coches = await _context.Cars.Include(coche => coche.Model)
+              .Where(c => c.RentingPrice.Equals(precio) || (precio == 0) && (c.Model.Name.Contains(modelo) || modelo == null))
             
                 .Select(c => new CocheParaAlquilarDTO(c.Id, c.Model.Name,
         c.Color, c.FuelType, c.Manufacturer, c.RentingPrice)).ToListAsync();

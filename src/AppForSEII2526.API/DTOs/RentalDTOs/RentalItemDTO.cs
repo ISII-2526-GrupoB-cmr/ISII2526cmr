@@ -4,18 +4,19 @@
 {
     public class RentalItemDTO
     {
-        public RentalItemDTO(int carid, string model, string manufacturer,double rentingPrice)
+        public RentalItemDTO(int carid, string model, string manufacturer,double rentingPrice )
         {
             CarId = carid;
-            Model = model;
+            Modelo = model;
             Manufacturer = manufacturer;
             RentingPrice = rentingPrice;
+
         }
 
         public int CarId { get; set; }
 
 
-        public string Model { get; set; }
+        public string Modelo { get; set; }
 
 
         public double RentingPrice { get; set; }
@@ -27,15 +28,16 @@
         {
             return obj is RentalItemDTO dTO &&
                    CarId == dTO.CarId &&
-                   Model == dTO.Model &&
+                   Modelo == dTO.Modelo &&
                    RentingPrice == dTO.RentingPrice &&
                    Manufacturer == dTO.Manufacturer;
-                  
+
+
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(CarId, Model, RentingPrice, Manufacturer);
+            return HashCode.Combine(CarId, Modelo, RentingPrice, Manufacturer);
         }
     }
 }
