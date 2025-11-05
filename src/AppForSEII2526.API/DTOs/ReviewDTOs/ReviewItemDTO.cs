@@ -1,28 +1,28 @@
-﻿using AppForSEII2526.API.DTOs.RentalDTOs;
-using AppForSEII2526.API.Models;
+﻿
+using System;
 
 namespace AppForSEII2526.API.DTOs.ReviewDTOs
 {
     public class ReviewItemDTO
     {
-        public ReviewItemDTO(int carid, string model, string fueltype, string manufacturer, string color)
+        public ReviewItemDTO(int carid, string model, string fueltype, string manufacturer, string color, int rating, string? description)
         {
             Carid = carid;
             Model = model;
             Fueltype = fueltype;
             Manufacturer = manufacturer;
             Color = color;
+            Rating = rating;
+            Description = description;
         }
 
         public int Carid { get; set; }
-
         public string Model { get; set; }
-
         public string Fueltype { get; set; }
-
         public string Manufacturer { get; set; }
-
         public string Color { get; set; }
+        public int Rating { get; set; }
+        public string? Description { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -31,11 +31,13 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
                    Model == dTO.Model &&
                    Manufacturer == dTO.Manufacturer &&
                    Fueltype == dTO.Fueltype &&
-                   Color == dTO.Color;
+                   Color == dTO.Color &&
+                   Rating == dTO.Rating &&
+                   Description == dTO.Description;
         }
         public override int GetHashCode()
         {
-            return HashCode.Combine(Carid, Model, Fueltype, Manufacturer, Color);
+            return HashCode.Combine(Carid, Model, Fueltype, Manufacturer, Color, Rating, Description);
         }
     }
 }
