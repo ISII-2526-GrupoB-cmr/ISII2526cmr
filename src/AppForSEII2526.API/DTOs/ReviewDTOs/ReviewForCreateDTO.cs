@@ -25,13 +25,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
           
         }
 
-        public ReviewForCreateDTO(string model, string manufacturer, string color, int rating, string description, string userName, string country, string driverType, IList<ReviewItemDTO> reviewItems) : this(model, manufacturer)
-        {
-        }
-
-        public ReviewForCreateDTO(int rating, string model, string manufacturer, string country, string driverType, IList<ReviewItemDTO> reviewItems) : this(rating, model, manufacturer)
-        {
-        }
+       
 
         [Display(Name = "Country")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "This field cannot be empty")]
