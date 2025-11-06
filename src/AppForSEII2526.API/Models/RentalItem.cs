@@ -42,8 +42,8 @@ public class RentalItem {
         public Car Car { get; set; }
 
     public Rental Rental { get; set; }
-        public int Id { get; }
-        public float RentingPrice { get; }
-        public string Manufacturer { get; }
+        public int Id { get; set; }
+        public float RentingPrice { get; set; }
+        public string Manufacturer { get; set; }
     }
 }

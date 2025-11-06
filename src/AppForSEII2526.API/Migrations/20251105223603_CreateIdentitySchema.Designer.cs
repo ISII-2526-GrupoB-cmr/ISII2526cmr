@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppForSEII2526.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251029150951_CreateIdentitySchema")]
+    [Migration("20251105223603_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
         /// <inheritdoc />
@@ -86,7 +86,6 @@ namespace AppForSEII2526.API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -206,8 +205,8 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<DateTime>("PurchasingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PurchasingPrice")
-                        .HasColumnType("int");
+                    b.Property<float>("PurchasingPrice")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
