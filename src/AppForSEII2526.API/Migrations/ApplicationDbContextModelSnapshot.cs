@@ -83,7 +83,6 @@ namespace AppForSEII2526.API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -203,8 +202,8 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<DateTime>("PurchasingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PurchasingPrice")
-                        .HasColumnType("int");
+                    b.Property<float>("PurchasingPrice")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -279,8 +278,18 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<int>("RentalId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Manufacturer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<float>("RentingPrice")
+                        .HasColumnType("real");
 
                     b.HasKey("CarId", "RentalId");
 
