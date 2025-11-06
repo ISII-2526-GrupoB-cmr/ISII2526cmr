@@ -4,14 +4,14 @@
 {
     public class RentalItemDTO
     {
-        public RentalItemDTO(int carid, string model, string manufacturer,double rentingPrice )
+        public RentalItemDTO(int carId, string modelo, string manufacturer, double rentingPrice)
         {
-            CarId = carid;
-            Modelo = model;
+            CarId = carId;
+            Modelo = modelo;
             Manufacturer = manufacturer;
             RentingPrice = rentingPrice;
-
         }
+
 
         public int CarId { get; set; }
 
