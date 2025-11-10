@@ -17,6 +17,8 @@ namespace AppForSEII2526.API.Controllers
         {
             _context = context;
             _logger = logger;
+            //uso del logger para registra la inicializacion del controlador
+            _logger.LogInformation("TodoService initialized");
         }
 
         [HttpGet]
