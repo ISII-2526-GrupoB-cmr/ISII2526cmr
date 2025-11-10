@@ -33,16 +33,9 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         public float TotalPrice { get; set; }
 
         public IList<PurchaseItemDTO> PurchaseItems { get; set; }
- 
 
-        public override bool Equals(object? obj)
-        {
-            return obj is PurchaseDetailDTO dTO &&
-                   base.Equals(obj) &&
-                   TotalPrice == dTO.TotalPrice &&
-                   Id == dTO.Id &&
-                   CompareDate(PurchaseDate, dTO.PurchaseDate);
-        }
+
+        
 
         public override int GetHashCode()
         {
@@ -52,6 +45,18 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         public bool CompareDate(DateTime date1, DateTime date2)
         {
             return date1.Date == date2.Date;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is PurchaseDetailDTO dTO &&
+                   Id == dTO.Id &&
+                   PurchaseDate == dTO.PurchaseDate &&
+                   CustomerName == dTO.CustomerName &&
+                   CustomerSurname == dTO.CustomerSurname &&
+                   DeliveryAddress == dTO.DeliveryAddress &&
+                   TotalPrice == dTO.TotalPrice &&
+                   PurchaseItems.SequenceEqual(dTO.PurchaseItems);
         }
     }
 }
