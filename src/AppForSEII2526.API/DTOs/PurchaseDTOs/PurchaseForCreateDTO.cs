@@ -1,4 +1,5 @@
-﻿namespace AppForSEII2526.API.DTOs.PurchaseDTOs
+﻿
+namespace AppForSEII2526.API.DTOs.PurchaseDTOs
 {
     public class PurchaseForCreateDTO
     {
@@ -42,6 +43,15 @@
         [Required]
         public PaymentMethodTypes PaymentMethod { get; set; }
 
-
+        public override bool Equals(object? obj)
+        {
+            return obj is PurchaseForCreateDTO dTO &&
+                   DeliveryAddress == dTO.DeliveryAddress &&
+                   Quantity == dTO.Quantity &&
+                   CustomerName == dTO.CustomerName &&
+                   CustomerSurname == dTO.CustomerSurname &&
+                   PurchaseItems.SequenceEqual(dTO.PurchaseItems) &&
+                   PaymentMethod == dTO.PaymentMethod;
+        }
     }
 }
