@@ -16,14 +16,14 @@ namespace AppForSEII2526.UT.RentalsController_test
         public GetRentals_test()
         {
             var modelos = new List<Model>() {
-                new Model("Model A"),
+                new Model("Sedan"),
                 new Model("Model B"),
                 new Model("Model C"),
 
             };
 
             var cars = new List<Car>(){
-                new Car(modelos[0],"Sedan", "Red", "A red sedan", "2.0L", "Gasoline", 1, "Regular", "Toyota", 10, 20000, 5, 3, 100, 16),
+                new Car(modelos[0],"Sedan", "Red", "A red sedan", "2.0L", "Gasoline", 1, "Regular", "Toyota", 10, 20000, 5, 3, 85, 16),
                 new Car(modelos[1],"SUV", "Blue", "A blue SUV", "3.0L", "Diesel", 2, "Premium", "Ford", 5, 30000, 2, 1, 150, 18),
                 new Car(modelos[2],"Coupe", "Black", "A black coupe", "2.5L", "Gasoline", 3, "Regular", "Honda", 8, 25000, 4, 2, 120, 17)
 
@@ -45,10 +45,11 @@ namespace AppForSEII2526.UT.RentalsController_test
 
             var fixedDate= new DateTime(2025, 11, 16,21,28,52);
 
+
             var rentals = new Rental(
                 trackedUser,
                 "Central Dealer",
-                0,
+                PaymentMethodTypes.Visa,
                 fixedDate,
                 cars[0].RentingPrice,
                 DateTime.Today.AddDays(2),
@@ -109,10 +110,14 @@ namespace AppForSEII2526.UT.RentalsController_test
             var controller = new RentalsController(_context, logger);
 
 
+            var startDate = DateTime.SpecifyKind(DateTime.Today.AddDays(2), DateTimeKind.Local);
+            var endDate = DateTime.SpecifyKind(DateTime.Today.AddDays(5), DateTimeKind.Local);
+
             var expectedRental = new RentalDetailDTO(1, fixedDate, "Elena", "Navarro Martínez",
                         "elena@uclm.es", PaymentMethodTypes.Visa,
-                        DateTime.Today.AddDays(2), DateTime.Today.AddDays(5),
+                        startDate, endDate,
                         new List<RentalItemDTO> { new RentalItemDTO(1, "Sedan", "Toyota", 85) });
+
 
             // Act 
             var result = await controller.GetRental(1);

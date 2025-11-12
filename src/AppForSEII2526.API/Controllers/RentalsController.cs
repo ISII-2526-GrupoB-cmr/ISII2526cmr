@@ -36,7 +36,8 @@ namespace AppForSEII2526.API.Controllers
              .Select(r => new RentalDetailDTO(r.Id, r.RentignDate, r.ApplicationUser.Name,
                     r.ApplicationUser.Surname, r.ApplicationUser.Address,
                     (PaymentMethodTypes)r.PaymentMethod,
-                    r.StartDate, r.EndDate,
+                    DateTime.SpecifyKind(r.StartDate, DateTimeKind.Local),
+                    DateTime.SpecifyKind(r.EndDate, DateTimeKind.Local),
                     r.RentalItems
                         .Select(ri => new RentalItemDTO(ri.Car.Id,
                                  ri.Car.Model.Name, ri.Car.Manufacturer,
