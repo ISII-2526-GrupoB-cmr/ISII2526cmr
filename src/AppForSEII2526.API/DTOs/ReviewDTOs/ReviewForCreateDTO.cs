@@ -6,7 +6,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
 {
     public class ReviewForCreateDTO
     {
-        public ReviewForCreateDTO(string country, DriverType driverType, string username, IList<ReviewItemDTO> reviewitems, string manufacturer, string color, int rating, string description, string model) {
+        public ReviewForCreateDTO(string country, DriverType driverType, string username, IList<ReviewItemDTO> reviewitems, string manufacturer, string color, int rating, string description, string model, string fueltype) {
 
 
             Country = country ?? throw new ArgumentNullException(nameof(country));
@@ -18,6 +18,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
             Rating = rating;
             Description = description;
             Model= model;
+            Fueltype = fueltype;
         }
         public ReviewForCreateDTO(int rating, string model, string manufacturer)
         {
@@ -58,6 +59,10 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
         [Required(AllowEmptyStrings = false, ErrorMessage = "This field cannot be empty")]
         public string Model { get; set; }
 
+        [Display(Name = "Fueltype")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "This field cannot be empty")]
+        public string Fueltype { get; set; }
+
         public override bool Equals(object? obj)
         {
             return obj is ReviewForCreateDTO dTO &&
@@ -67,7 +72,8 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
                      Color == dTO.Color &&
                      Rating == dTO.Rating &&
                     Description == dTO.Description &&
-                    Model == dTO.Model;
+                    Model == dTO.Model &&
+                    Fueltype == dTO.Fueltype;
         }
     }
 }

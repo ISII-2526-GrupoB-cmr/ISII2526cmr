@@ -74,14 +74,14 @@ SET IDENTITY_INSERT [dbo].[Rentals] OFF
 -------------------------------------------------
 -- ITEMS DE RENTA
 -------------------------------------------------
-INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity],[RentingPrice],[Manufacturer])
-VALUES (1, 1, 1,1,1);
+INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity],[Id],[RentingPrice],[Manufacturer])
+VALUES (1, 1, 1,1,1,1);
 
-INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity],[RentingPrice],[Manufacturer])
-VALUES (2, 2, 1,1,1);
+INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity],[Id],[RentingPrice],[Manufacturer])
+VALUES (2, 2, 1,2,1,1);
 
-INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity],[RentingPrice],[Manufacturer])
-VALUES (3, 3, 1,1,1);
+INSERT INTO [dbo].[RentalItems] ([CarId], [RentalId], [Quantity],[Id],[RentingPrice],[Manufacturer])
+VALUES (3, 3, 1,3,1,1);
 
 
 -------------------------------------------------
