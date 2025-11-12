@@ -538,7 +538,7 @@ namespace AppForSEII2526.API.Migrations
                     b.HasOne("AppForSEII2526.API.Models.Car", "Car")
                         .WithMany("RentalItems")
                         .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AppForSEII2526.API.Models.Rental", "Rental")

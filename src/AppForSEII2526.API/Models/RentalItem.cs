@@ -5,10 +5,16 @@ public class RentalItem {
         private Rental rentals;
 
         public int CarId { get; set; }
-    [Range(1,int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
-    public int Quantity { get; set; }
+        [Range(1,int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
+        public int Quantity { get; set; }
 
-    public int RentalId { get; set; }
+        public int RentalId { get; set; }
+        public Car Car { get; set; }
+
+        public Rental Rental { get; set; }
+        public int Id { get; set; }
+        public float RentingPrice { get; set; }
+        public string Manufacturer { get; set; }
         public RentalItem() { }
         public RentalItem(int carId, int quantity, int rentalId)
         {
@@ -19,8 +25,8 @@ public class RentalItem {
 
         public RentalItem(Car car, Rental rentals)
         {
-            this.car = car;
-            this.rentals = rentals;
+            Car = car;
+            Rental = rentals;
         }
 
         public RentalItem(int id, Rental rental, float rentingPrice, string manufacturer)
@@ -39,11 +45,6 @@ public class RentalItem {
             Manufacturer = manufacturer;
         }
 
-        public Car Car { get; set; }
-
-    public Rental Rental { get; set; }
-        public int Id { get; set; }
-        public float RentingPrice { get; set; }
-        public string Manufacturer { get; set; }
+      
     }
 }
