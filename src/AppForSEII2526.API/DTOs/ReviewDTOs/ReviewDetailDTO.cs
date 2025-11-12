@@ -11,7 +11,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
         // Constructor compatible con la proyección usada en ReviewController:
         // new ReviewDetailDTO(p.Id, p.country, p.created, p.ApplicationUser.UserName, (DriverType)p.drivertype, reviewItemsList)
         public ReviewDetailDTO(int id, string country, DateTime created, string userName, DriverType drivertype, IList<ReviewItemDTO> reviewItems)
-            : base(country, drivertype, userName, reviewItems, manufacturer: string.Empty, color: string.Empty, rating: 0, description: string.Empty, model: string.Empty)
+            : base(country, drivertype, userName, reviewItems, manufacturer: string.Empty, color: string.Empty, rating: 0, description: string.Empty, model: string.Empty, fueltype: string.Empty)
         {
             Id = id;
             Created = created;

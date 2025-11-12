@@ -1,5 +1,8 @@
 
+using AppForSEII2526.API.DTOs.PurchaseDTOs;
+using AppForSEII2526.API.DTOs.RentalDTOs;
 using AppForSEII2526.API.DTOs.ReviewDTOs;
+using AppForSEII2526.API.Models;
 
 
 namespace AppForSEII2526.API.Controllers
@@ -60,7 +63,94 @@ namespace AppForSEII2526.API.Controllers
 
                 return Ok(review);
             }
+        [HttpPost]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(ReviewDetailDTO), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
+        public async Task<ActionResult> CreateReview(ReviewForCreateDTO reviewForCreate) 
+        {
 
-           
+
+
+
+            Review review = new Review(reviewForCreate.Country, reviewForCreate.Username,
+                reviewForCreate.Manufacturer, reviewForCreate.Color, reviewForCreate.Rating, reviewForCreate.Description, reviewForCreate.Model,
+                reviewForCreate.Drivertype, new List<ReviewItem>(), reviewForCreate.Fueltype
+                );
+
+            if(reviewForCreate.Country == null)
+            {
+                ModelState.AddModelError("Country", "Error! Country is null");
+            }
+            if (reviewForCreate.Rating < 1 || reviewForCreate.Rating > 5)
+            {
+                ModelState.AddModelError("Rating", "Error! Rating must be between 1 and 5");
+            }
+
+            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == reviewForCreate.Username);
+            if (reviewForCreate.Username == null)
+            {
+                ModelState.AddModelError("Username", "Error! Username is null");
+            }
+            if (reviewForCreate.Drivertype == null) {
+                ModelState.AddModelError("Username", "Error! DriverType is null");
+            }
+            if (reviewForCreate.Model == null) {
+                ModelState.AddModelError("Username", "Error! model is null");
+            }
+            if (reviewForCreate.Manufacturer == null)
+            {
+                ModelState.AddModelError("Username", "Error! manufacturer is null");
+            }
+            if (reviewForCreate.Color == null)
+            {
+                ModelState.AddModelError("Username", "Error! color is null");
+            }
+            if (reviewForCreate.Fueltype== null) {
+                ModelState.AddModelError("Username", "Error! model is null");
+            }
+
+
+
+            if (ModelState.ErrorCount > 0)
+            {
+                return BadRequest(new ValidationProblemDetails(ModelState));
+            }
+
+            _context.Add(review);
+
+            try
+            {
+                //we store in the database both purchase and its purchaseItems
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ModelState.AddModelError("Purchase", $"Error! There was an error while saving your purchase, plese, try again later");
+                return Conflict("Error" + ex.Message);
+
+            }
+            var reviewDetail = new ReviewDetailDTO(
+                              review.Id,
+                              review.country,
+                              review.created,
+                              review.ApplicationUser.UserName,
+                              review.drivertype,
+                              reviewForCreate.Reviewitems
+                            );
+
+            return CreatedAtAction("GetRental", new { id = review.Id }, reviewDetail);
+
+
+
+
+
+        }
+
+
     }
+
+ 
 }

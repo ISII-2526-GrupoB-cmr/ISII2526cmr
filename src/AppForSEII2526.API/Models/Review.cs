@@ -1,4 +1,6 @@
-﻿namespace AppForSEII2526.API.Models
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace AppForSEII2526.API.Models
 {
     public enum DriverType
     {
@@ -7,7 +9,6 @@
     }
     public class Review
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "This field cannot be empty")]
 
         public String country { get; set; }
         public DateTime created { get; set; }
@@ -19,6 +20,19 @@
         public ApplicationUser ApplicationUser { get; set; }
 
         public IList<ReviewItem> ReviewItems { get; set; }
+
+        public Review() { }
+
+        public Review(string country, string username, string manufacturer, string color, int rating, string description, string model, DriverType drivertype, List<ReviewItem> reviewItems, string fueltype)
+        {
+            this.country = country;
+            this.created = DateTime.Now;
+            this.drivertype = drivertype;
+            ReviewItems = reviewItems;
+            
+
+        }
     }
+
 
 }
