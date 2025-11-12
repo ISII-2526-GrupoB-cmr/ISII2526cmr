@@ -107,7 +107,7 @@ namespace AppForSEII2526.UT.CarController_test
             var controller = new CarsController(_context, logger);
 
             // Act
-            var result = await controller.GetCoche_Para_AlquilarDTO(float precio,string modelo);
+            var result = await controller.GetCoche_Para_AlquilarDTO(-1,null);
 
             //Assert
             //we check that the response type is OK and obtain the list of movies

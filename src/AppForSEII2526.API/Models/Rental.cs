@@ -43,6 +43,15 @@ namespace AppForSEII2526.API.Models
             EndDate = endDate;
             TotalPrice = totalPrice;
         }
+        public Rental(string deliveryCarDealer, PaymentMethodTypes paymentMethod, DateTime rentignDate, DateTime startDate, DateTime endDate, double totalPrice)
+        {
+            DeliveryCarDealer = deliveryCarDealer;
+            PaymentMethod = (PaymentMethodTypes)paymentMethod;
+            RentignDate = rentignDate;
+            StartDate = startDate;
+            EndDate = endDate;
+            TotalPrice = totalPrice;
+        }
 
         public Rental(string name, string surname, string address, DateTime now, PaymentMethodTypes paymentMethod, DateTime startDate, DateTime endDate, List<RentalItem> rentalItems)
         {
@@ -55,15 +64,26 @@ namespace AppForSEII2526.API.Models
             EndDate = endDate;
             RentalItems = rentalItems;
         }
+        public Rental( ApplicationUser user,string deliveryCarDealer, PaymentMethodTypes paymentMethod,DateTime rentignDate,float rentingPrice, DateTime startDate, DateTime endDate, List<RentalItem> rentalItems)
+        {
+           ApplicationUser = user;
+            DeliveryCarDealer= deliveryCarDealer;
+            RentignDate = rentignDate;
+            PaymentMethod = paymentMethod;
+            TotalPrice = rentingPrice;
+            StartDate = startDate;
+            EndDate = endDate;
+            RentalItems = rentalItems;
+        }
 
         [Display(Name = "List of Rental Items")]
 
         public IList<RentalItem> RentalItems { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-        public string Name { get; }
+        public string Name { get;  }
         public string Surname { get; }
-        public string Address { get; }
-        public DateTime Now { get; }
+        public string Address { get;  }
+        public DateTime Now { get;  }
     }
     
 }

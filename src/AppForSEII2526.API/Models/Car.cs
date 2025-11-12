@@ -54,6 +54,7 @@ public class Car
         
     }
 
+
     public Car(Model model, string carClass, string color, string description, string engDisplacement, string fuelType, int id, string maintenanceType, string manufacturer, int purchaseItem, float purchasePrice, float quantityForPurchase, float quantityForRenting, float rentingPrice, float rimSize)
     {
         Model = model;
