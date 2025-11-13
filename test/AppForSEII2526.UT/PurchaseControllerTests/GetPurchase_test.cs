@@ -37,9 +37,8 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             var trackedUser = _context.ApplicationUsers
                 .First(au => au.Name == user.Name && au.Surname == user.Surname);
 
-            var fixedDate = new DateTime(2025, 11, 6, 21, 28, 52); 
 
-            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, fixedDate, cars[0].PurchasePrice, new List<PurchaseItem>());
+            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, new List<PurchaseItem>());
             purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1));
             _context.Add(purchase1);
             _context.SaveChanges();
@@ -70,14 +69,13 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
         public async Task GetPurchase_Found_test()
         {
             //Arrange
-            var fixedDate = new DateTime(2025, 11, 6, 21, 28, 52);
             var mock = new Mock<ILogger<PurchasesController>>();
             ILogger<PurchasesController> logger = mock.Object;
             var controller = new PurchasesController(_context, logger);
 
             var expectedPurchase1 = new PurchaseDetailDTO(
                 1,
-                fixedDate,
+                DateTime.Now,
                 "Elena",
                 "Navarro Martínez",
                 "elena@uclm.es",
@@ -103,6 +101,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             var okResult = Assert.IsType<OkObjectResult>(result);
             var purchaseDTOActual = Assert.IsType<PurchaseDetailDTO>(okResult.Value);
             var eq = expectedPurchase1.Equals(purchaseDTOActual);
+
             //we check that the expected and actual are the same
             Assert.Equal(expectedPurchase1, purchaseDTOActual);
         }

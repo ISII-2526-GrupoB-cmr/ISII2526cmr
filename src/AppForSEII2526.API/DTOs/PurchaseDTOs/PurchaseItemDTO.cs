@@ -7,6 +7,12 @@ public class PurchaseItemDTO
 
     }
 
+    /*
+    5. El sistema muestra los coches que el cliente ha seleccionado,
+    indicando su modelo, color, descripción y precio, 
+    así como el precio total de la compra
+    */
+
     public PurchaseItemDTO(int carID, float purchasePrice, float totalPrice, string modelo, string carColor, string description = "")
     {
         CarID = carID;
