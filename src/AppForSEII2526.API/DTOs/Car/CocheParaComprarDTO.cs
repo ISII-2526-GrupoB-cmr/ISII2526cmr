@@ -23,5 +23,16 @@
             Manufacturer = manufacturer;
             PurchasePrice = purchasePrice;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is CocheParaComprarDTO dTO &&
+                   Id == dTO.Id &&
+                   Model == dTO.Model &&
+                   Color == dTO.Color &&
+                   FuelType == dTO.FuelType &&
+                   Manufacturer == dTO.Manufacturer &&
+                   PurchasePrice == dTO.PurchasePrice;
+        }
     }
 }
