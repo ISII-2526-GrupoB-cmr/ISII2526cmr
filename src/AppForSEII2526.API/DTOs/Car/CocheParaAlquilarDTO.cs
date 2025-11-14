@@ -23,5 +23,16 @@
             Manufacturer = manufacturer;
             RentingPrice = rentingPrice;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is CocheParaAlquilarDTO dTO &&
+                   Id == dTO.Id &&
+                   Model == dTO.Model &&
+                   Color == dTO.Color &&
+                   FuelType == dTO.FuelType &&
+                   Manufacturer == dTO.Manufacturer &&
+                   RentingPrice == dTO.RentingPrice;
+        }
     }
 }
