@@ -42,7 +42,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
 
             
 
-            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, fixedDate, cars[0].PurchasePrice, new List<PurchaseItem>());
+            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, new List<PurchaseItem>());
             purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1));
             _context.Add(purchase1);
             _context.SaveChanges();
@@ -54,7 +54,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             
             var purchaseNoItem = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0, 1, new List<PurchaseItemDTO>());
 
-            var purchaseItems = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, 230000, "Toyota Corolla", "Gris", "Sedán cómodo y eficiente, ideal para ciudad.") };
+                var purchaseItems = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, 230000, "Toyota Corolla", "Gris", "Sedán cómodo y eficiente, ideal para ciudad.") };
 
             var purchaseCantidadCero = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0, 0, purchaseItems);
 
@@ -69,7 +69,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             return allTests;
         }
 
-        [Theory]
+        [Theory] //[Theory] significa que esta prueba se ejecuta una vez por cada caso de datos que devuelve TestCasesFor_PostPurchase
         [Trait("LevelTesting", "Unit Testing")]
         [Trait("Database", "WithoutFixture")]
         [MemberData(nameof(TestCasesFor_PostPurchase))]
@@ -89,7 +89,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             var ProblemDetails = Assert.IsType<ValidationProblemDetails>(badRequestResult.Value);
 
-            var errorActual = ProblemDetails.Errors.First().Value[0];
+            var errorActual = ProblemDetails.Errors.First().Value[0]; //error que ha devuelto el metodo del controlador
 
             //we check that the expected error message and actual are the same
             Assert.StartsWith(expectedError, errorActual);
@@ -105,6 +105,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             ILogger<PurchasesController> logger = mock.Object;
             var controller = new PurchasesController(_context, logger);
 
+            //la entrada que se le va a dar al metodo
             var purchaseDTO = new PurchaseForCreateDTO(
                 "Elena",
                 "Navarro Martínez",
@@ -117,9 +118,10 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
                 }
             );
 
+            //PurchaseDetailDTO que se espera que devuelva el metodo
             var expectedPurchase1 = new PurchaseDetailDTO(
                 2,
-                fixedDate,
+                DateTime.Now,
                 "Elena",
                 "Navarro Martínez",
                 "elena@uclm.es",
@@ -138,13 +140,16 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             );
             //Act
             var result = await controller.CreatePurchase(purchaseDTO);
-          
+
 
             //Assert
-            //we check that the response type is BadRequest and obtain the error returned
+            //Se verifica que el resultado sea un CreatedAtActionResult (201)
             var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+
+            // en actualPurchaseDetailDTO tenemos el DTO devuelto por el metodo
             var actualPurchaseDetailDTO = Assert.IsType<PurchaseDetailDTO>(createdResult.Value);
-            actualPurchaseDetailDTO.PurchaseDate= fixedDate; // Ajustar la fecha para la comparación
+
+            //actualPurchaseDetailDTO.PurchaseDate= fixedDate; // Ajustar la fecha para la comparación
 
             Assert.Equal(expectedPurchase1, actualPurchaseDetailDTO);
         }
