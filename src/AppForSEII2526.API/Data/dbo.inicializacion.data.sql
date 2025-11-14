@@ -32,13 +32,13 @@ SET IDENTITY_INSERT [dbo].[Cars] OFF
 -- COMPRAS
 -------------------------------------------------
 SET IDENTITY_INSERT [dbo].[Purchases] ON
-INSERT INTO [dbo].[Purchases] ([Id], [ApplicationUserId], [DeliveryCarLeader],  [PurchasingDate],[PaymentMethod], [PurchasingPrice])
+INSERT INTO [dbo].[Purchases] ([Id], [ApplicationUserId], [DeliveryCarDealer],  [PurchasingDate],[PaymentMethod], [PurchasingPrice])
 VALUES (1, 1, N'Concesionario Madrid Centro', '2025-06-01',1 , 2300000);
 
-INSERT INTO [dbo].[Purchases] ([Id], [ApplicationUserId], [DeliveryCarLeader],[PurchasingDate], [PaymentMethod] , [PurchasingPrice])
+INSERT INTO [dbo].[Purchases] ([Id], [ApplicationUserId], [DeliveryCarDealer],[PurchasingDate], [PaymentMethod] , [PurchasingPrice])
 VALUES (2, 2, N'AutoPlanet Barcelona',  '2025-07-15',2, 2950000);
 
-INSERT INTO [dbo].[Purchases] ([Id], [ApplicationUserId], [DeliveryCarLeader], [PurchasingDate], [PaymentMethod], [PurchasingPrice])
+INSERT INTO [dbo].[Purchases] ([Id], [ApplicationUserId], [DeliveryCarDealer], [PurchasingDate], [PaymentMethod], [PurchasingPrice])
 VALUES (3, 3, N'BMW Premium Valencia', '2025-08-10',1 , 6870000);
 SET IDENTITY_INSERT [dbo].[Purchases] OFF
 
