@@ -1,4 +1,7 @@
-﻿using AppForSEII2526.API.DTOs.RentalDTOs;
+﻿
+
+
+using AppForSEII2526.API.DTOs.RentalDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppForSEII2526.API.Controllers
@@ -53,27 +56,32 @@ namespace AppForSEII2526.API.Controllers
 
 
             return Ok(rental);
-        
-    
-}
-        
+
+
+        }
+
         [HttpPost]
         [Route("[action]")]
         [ProducesResponseType(typeof(RentalDetailDTO), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
-        public async Task<ActionResult> CreateRental([FromBody]RentalForCreateDTO rentalForCreate)
+        public async Task<ActionResult> CreateRental([FromBody] RentalForCreateDTO rentalForCreate)
         {
             //any validation defined in PurchaseForCreate is checked before running the method so they don't have to be checked again
-            if (rentalForCreate.RentalItems == null || rentalForCreate.RentalItems.Count==0)
-                ModelState.AddModelError("RentalItems", "Error! Rental items list is null");
-            
-            if(rentalForCreate.Quantity<=0)
-                ModelState.AddModelError("Quantity", "Error! You must select a quantity greater than 0");
+            if (rentalForCreate.RentalItems == null || rentalForCreate.RentalItems.Count == 0)
+                ModelState.AddModelError("RentalItems", "Error! Ningun vehiculo seleccionado");
+            if (rentalForCreate.StartDate <= DateTime.Today)
+                ModelState.AddModelError("StartDate", "Error! La fecha de alquiler tiene que ser posterior a la de hoy");
+            if (rentalForCreate.EndDate <= rentalForCreate.StartDate)
+                ModelState.AddModelError("EndDate", "Error! La fecha de fin tiene que ser mas tarde de la que empieza");
+            if (rentalForCreate.Quantity <= 0)
+                ModelState.AddModelError("Quantity", "Error! La cantidad para alquiilar tiene que ser mayor a 0");
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
             var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == rentalForCreate.Name && au.Surname == rentalForCreate.Surname);
             if (user == null)
-                ModelState.AddModelError("RentalApplicationUser", "Error! UserName is not registered");
+                ModelState.AddModelError("RentalApplicationUser", "Error! El usuario no esta registrado");
+
+
 
             if (ModelState.ErrorCount > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
@@ -87,7 +95,6 @@ namespace AppForSEII2526.API.Controllers
                 .ThenInclude(ri => ri.Rental)
                 .Where(m => rentingnames.Contains(m.Model.Name))
                 .ToList();
-
 
             Rental rental = new Rental(rentalForCreate.Name, rentalForCreate.Surname,
                                        rentalForCreate.Address, DateTime.Now,
@@ -108,26 +115,39 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var item in rentalForCreate.RentalItems)
             {
-                var car = cars.FirstOrDefault(m => m.Model.Name == item.Modelo);
-                //we must check that there is enough quantity to be rented in the database
-                if (car == null) 
+                // Buscar el coche por nombre del modelo
+                var car = _context.Cars
+                    .Include(c => c.Model)
+                    .Include(c => c.RentalItems)
+                        .ThenInclude(ri => ri.Rental)
+                    .FirstOrDefault(c => c.Model != null && c.Model.Name == item.Modelo);
+
+                // Si no existe el modelo, lanzar el error esperado
+                if (car == null)
                 {
-                    ModelState.AddModelError("RentalItems", $"Error! Model car '{item.Modelo}' is not available for being rented from {rentalForCreate.StartDate.ToShortDateString()} to {rentalForCreate.EndDate.ToShortDateString()}");
+                    ModelState.AddModelError("RentalItems",
+                        "Error! El modelo del coche no esta disponible para ser alquilado");
+                    continue;
                 }
 
-                var rentedCount = car.RentalItems.Count(ri =>
-               ri.Rental.StartDate <= rentalForCreate.EndDate &&
-               ri.Rental.EndDate >= rentalForCreate.StartDate);
+                // Proteger contra lista nula de RentalItems
+                if (car.RentalItems == null)
+                    car.RentalItems = new List<RentalItem>();
 
+                var rentedCount = car.RentalItems.Count(ri =>
+                    ri.Rental.StartDate <= rentalForCreate.EndDate &&
+                    ri.Rental.EndDate >= rentalForCreate.StartDate);
 
                 var disponible = car.QuantityForRenting - rentedCount;
 
-                if(disponible< rentalForCreate.Quantity)
+                if (disponible < rentalForCreate.Quantity)
                 {
-                    ModelState.AddModelError("RentalItems", $"Error! Model car '{item.Modelo}' is not available for being rented from {rentalForCreate.StartDate.ToShortDateString()} to {rentalForCreate.EndDate.ToShortDateString()}");
-
+                    ModelState.AddModelError("RentalItems",
+                        "Error! El modelo del coche no esta disponible para ser alquilado");
+                    continue;
                 }
-                // rental does not exist in the database yet and does not have a valid Id, so we must relate rentalitem to the object rental
+
+                // Agregar el rental item
                 var rentalItem = new RentalItem
                 {
                     CarId = car.Id,
@@ -148,7 +168,7 @@ namespace AppForSEII2526.API.Controllers
 
 
             //if there is any problem because of the available quantity of movies or because the movie does not exist
-           
+
 
             _context.Add(rental);
 
@@ -167,13 +187,13 @@ namespace AppForSEII2526.API.Controllers
 
             //it returns rentalDetail
             var rentalDetail = new RentalDetailDTO(
-                rental.Id, 
+                rental.Id,
                 rental.RentignDate,
                 rental.ApplicationUser.Name,
                 rental.ApplicationUser.Surname,
-                rental.ApplicationUser.Address, 
+                rentalForCreate.Address,
                 rentalForCreate.PaymentMethod,
-                rental.StartDate, 
+                rental.StartDate,
                 rental.EndDate,
                 rentalForCreate.RentalItems);
 

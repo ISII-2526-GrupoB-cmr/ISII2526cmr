@@ -21,18 +21,25 @@
 
         public DateTime RentalDate { get; set; }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
-            return obj is RentalDetailDTO dTO &&
-                   base.Equals(obj) &&
-                   TotalPrice == dTO.TotalPrice &&
-                   Id == dTO.Id &&
-                   CompareDate(RentalDate, dTO.RentalDate);
+            if (obj is not RentalDetailDTO other)
+                return false;
+
+            return Id == other.Id &&
+                   Name == other.Name &&
+                   Surname == other.Surname &&
+                   Address == other.Address &&
+                   PaymentMethod == other.PaymentMethod &&
+                   StartDate == other.StartDate &&
+                   EndDate == other.EndDate &&
+                   TotalPrice == other.TotalPrice &&
+                   RentalItems.SequenceEqual(other.RentalItems);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Id, RentalDate);
+            return HashCode.Combine(Id, Name, Surname, Address, PaymentMethod, StartDate, EndDate);
         }
     }
 }

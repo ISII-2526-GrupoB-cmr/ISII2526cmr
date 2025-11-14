@@ -29,6 +29,7 @@ namespace AppForSEII2526.API.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
+
         [Display(Name = "Total Price")]
         [Precision(10,2)]
         public double TotalPrice { get; set; }

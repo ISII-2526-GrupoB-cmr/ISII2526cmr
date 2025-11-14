@@ -113,7 +113,7 @@ namespace AppForSEII2526.UT.RentalsController_test
             var startDate = DateTime.SpecifyKind(DateTime.Today.AddDays(2), DateTimeKind.Local);
             var endDate = DateTime.SpecifyKind(DateTime.Today.AddDays(5), DateTimeKind.Local);
 
-            var expectedRental = new RentalDetailDTO(1, fixedDate, "Elena", "Navarro Martínez",
+            var expectedRental = new RentalDetailDTO(1, DateTime.Today, "Elena", "Navarro Martínez",
                         "elena@uclm.es", PaymentMethodTypes.Visa,
                         startDate, endDate,
                         new List<RentalItemDTO> { new RentalItemDTO(1, "Sedan", "Toyota", 85) });
