@@ -1,6 +1,4 @@
 
-using AppForSEII2526.API.DTOs.PurchaseDTOs;
-using AppForSEII2526.API.DTOs.RentalDTOs;
 using AppForSEII2526.API.DTOs.ReviewDTOs;
 using AppForSEII2526.API.Models;
 
@@ -34,6 +32,7 @@ namespace AppForSEII2526.API.Controllers
 
             var review = await _context.Reviews
               .Where(p => p.Id == id)
+              .Include(p => p.ApplicationUser)
               .Include(p => p.ReviewItems) //join table PurchaseItems
                  .ThenInclude(pi => pi.Car) //then join table Cars
                      .ThenInclude(car => car.Model) //then join table Model
@@ -42,7 +41,7 @@ namespace AppForSEII2526.API.Controllers
                             p.country,
                             p.created,
                             p.ApplicationUser.UserName,
-                            (DriverType)p.drivertype,
+                            p.drivertype,
                             p.ReviewItems.Select(pi => new ReviewItemDTO(
                                 pi.Car.Id,
                                 pi.Car.Model.Name,    // model
@@ -51,7 +50,7 @@ namespace AppForSEII2526.API.Controllers
                                 pi.Car.Color,
                                 pi.Rating,
                                 pi.Description
-                            )).ToList()
+                            )).ToList<ReviewItemDTO>()
                         )).FirstOrDefaultAsync();
 
             if (review == null)
@@ -73,45 +72,34 @@ namespace AppForSEII2526.API.Controllers
 
 
 
+            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == reviewForCreate.Username);
 
-            Review review = new Review(reviewForCreate.Country, reviewForCreate.Username,
-                reviewForCreate.Manufacturer, reviewForCreate.Color, reviewForCreate.Rating, reviewForCreate.Description, reviewForCreate.Model,
-                reviewForCreate.Drivertype, new List<ReviewItem>(), reviewForCreate.Fueltype
+
+            Review review = new Review(reviewForCreate.Country, DateTime.Today, user,
+                reviewForCreate.Drivertype, new List<ReviewItem>()
                 );
 
             if(reviewForCreate.Country == null)
             {
                 ModelState.AddModelError("Country", "Error! Country is null");
             }
-            if (reviewForCreate.Rating < 1 || reviewForCreate.Rating > 5)
-            {
-                ModelState.AddModelError("Rating", "Error! Rating must be between 1 and 5");
+
+            if (user == null) { 
+                ModelState.AddModelError("Username", "Error! User does not exist");
             }
 
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == reviewForCreate.Username);
-            if (reviewForCreate.Username == null)
-            {
-                ModelState.AddModelError("Username", "Error! Username is null");
-            }
+          
             if (reviewForCreate.Drivertype == null) {
                 ModelState.AddModelError("Username", "Error! DriverType is null");
             }
-            if (reviewForCreate.Model == null) {
-                ModelState.AddModelError("Username", "Error! model is null");
-            }
-            if (reviewForCreate.Manufacturer == null)
-            {
-                ModelState.AddModelError("Username", "Error! manufacturer is null");
-            }
-            if (reviewForCreate.Color == null)
-            {
-                ModelState.AddModelError("Username", "Error! color is null");
-            }
-            if (reviewForCreate.Fueltype== null) {
-                ModelState.AddModelError("Username", "Error! model is null");
-            }
 
-
+            var reviewcar = reviewForCreate.Reviewitems.Select(pi => pi.Model).ToList();
+            
+            var cars=_context.Cars
+                .Include(c => c.Model)
+                .Where(c => reviewcar.Contains(c.Model.Name))
+                .Select(c => new { c.Id, c.Model.Name })
+                .ToList();
 
             if (ModelState.ErrorCount > 0)
             {

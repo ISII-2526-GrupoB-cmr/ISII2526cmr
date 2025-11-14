@@ -1,35 +1,49 @@
 ﻿
-
-
-
-
+using AppForSEII2526.API.DTOs.PurchaseDTOs;
+using AppForSEII2526.API.Models;
 
 namespace AppForSEII2526.API.DTOs.ReviewDTOs
 {
-    public class ReviewDetailDTO : ReviewForCreateDTO
+    public class ReviewDetailDTO
     {
-        // Constructor compatible con la proyección usada en ReviewController:
-        // new ReviewDetailDTO(p.Id, p.country, p.created, p.ApplicationUser.UserName, (DriverType)p.drivertype, reviewItemsList)
-        public ReviewDetailDTO(int id, string country, DateTime created, string userName, DriverType drivertype, IList<ReviewItemDTO> reviewItems)
-            : base(country, drivertype, userName, reviewItems, manufacturer: string.Empty, color: string.Empty, rating: 0, description: string.Empty, model: string.Empty, fueltype: string.Empty)
+        public ReviewDetailDTO(int id,string country, DateTime created, string userName, DriverType drivertype, IList<ReviewItemDTO> reviewItems)
         {
             Id = id;
+            Country = country;
             Created = created;
-            ReviewItems = reviewItems ?? new List<ReviewItemDTO>();
+            UserName = userName;
+            Drivertype = drivertype;
+            ReviewItems = reviewItems;
         }
 
         public int Id { get; set; }
+        public string Country { get; set; }
+
+        public string UserName { get; set; }
+
+        public DriverType Drivertype { get; set; }
+
+        
         public DateTime Created { get; set; }
 
-        // Ahora exponemos ReviewItems como DTOs (coincide con lo que proyectas en el controlador)
-        public IList<ReviewItemDTO> ReviewItems { get; }
+
+        public IList<ReviewItemDTO> ReviewItems { get; set; }
+
+
+
+
+
+
+
 
         public override bool Equals(object? obj)
         {
             return obj is ReviewDetailDTO dTO &&
-                   base.Equals(dTO) &&
                    Id == dTO.Id &&
-                   Created.Equals(dTO.Created);
+                   Country == dTO.Country &&
+                   UserName == dTO.UserName &&
+                   Drivertype == dTO.Drivertype &&
+                   ReviewItems.SequenceEqual(dTO.ReviewItems);
         }
 
         public override int GetHashCode()
