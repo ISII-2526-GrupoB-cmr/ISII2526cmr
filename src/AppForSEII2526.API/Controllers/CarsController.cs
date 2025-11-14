@@ -68,7 +68,7 @@ namespace AppForSEII2526.API.Controllers
 
         [ProducesResponseType(typeof(IList<CocheParaComprarDTO>), (int)HttpStatusCode.OK)]
 
-        public async Task<ActionResult> GetCoche_Para_ComprarDTO(string? filtroColor, string? modelo)
+        public async Task<ActionResult> GetCoche_Para_Comprar(string? filtroColor, string? modelo)
         {
             var coches = await _context.Cars.Include(coche=>coche.Model)
                 .Where(c=> c.Color.Contains(filtroColor) || (filtroColor==null) && (c.Model.Name.Contains(modelo) || modelo == null)
@@ -77,5 +77,8 @@ namespace AppForSEII2526.API.Controllers
                 c.Color, c.FuelType, c.Manufacturer, c.PurchasePrice)).ToListAsync();
             return Ok(coches);
         }
+
+
+
     }
 }
