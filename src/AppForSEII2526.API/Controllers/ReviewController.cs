@@ -1,6 +1,7 @@
 
 using AppForSEII2526.API.DTOs.ReviewDTOs;
 using AppForSEII2526.API.Models;
+using System.Linq;
 
 
 namespace AppForSEII2526.API.Controllers
@@ -32,10 +33,7 @@ namespace AppForSEII2526.API.Controllers
 
             var review = await _context.Reviews
               .Where(p => p.Id == id)
-
-
-              .Include(p => p.ApplicationUser)
-
+              .Include(p => p.Applicationuser)
               .Include(p => p.ReviewItems) //join table PurchaseItems
                  .ThenInclude(pi => pi.Car) //then join table Cars
                      .ThenInclude(car => car.Model) //then join table Model
@@ -45,7 +43,6 @@ namespace AppForSEII2526.API.Controllers
                             p.Created,
                             p.Applicationuser.UserName,
                             p.Drivertype,
-
                             p.ReviewItems.Select(pi => new ReviewItemDTO(
                                 pi.Car.Id,
                                 pi.Car.Model.Name,    // model
@@ -128,81 +125,6 @@ namespace AppForSEII2526.API.Controllers
 
 
             }
-        [HttpPost]
-        [Route("[action]")]
-        [ProducesResponseType(typeof(ReviewDetailDTO), (int)HttpStatusCode.Created)]
-        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
-        public async Task<ActionResult> CreateReview(ReviewForCreateDTO reviewForCreate) 
-        {
-
-
-
-            var user = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == reviewForCreate.Username);
-
-
-            Review review = new Review(reviewForCreate.Country, DateTime.Today, user,
-                reviewForCreate.Drivertype, new List<ReviewItem>()
-                );
-
-            if(reviewForCreate.Country == null)
-            {
-                ModelState.AddModelError("Country", "Error! Country is null");
-            }
-
-            if (user == null) { 
-                ModelState.AddModelError("Username", "Error! User does not exist");
-            }
-
-          
-            if (reviewForCreate.Drivertype == null) {
-                ModelState.AddModelError("Username", "Error! DriverType is null");
-            }
-
-            var reviewcar = reviewForCreate.Reviewitems.Select(pi => pi.Model).ToList();
-            
-            var cars=_context.Cars
-                .Include(c => c.Model)
-                .Where(c => reviewcar.Contains(c.Model.Name))
-                .Select(c => new { c.Id, c.Model.Name })
-                .ToList();
-
-            if (ModelState.ErrorCount > 0)
-            {
-                return BadRequest(new ValidationProblemDetails(ModelState));
-            }
-
-            _context.Add(review);
-
-            try
-            {
-                //we store in the database both purchase and its purchaseItems
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                ModelState.AddModelError("Purchase", $"Error! There was an error while saving your purchase, plese, try again later");
-                return Conflict("Error" + ex.Message);
-
-            }
-            var reviewDetail = new ReviewDetailDTO(
-                              review.Id,
-                              review.country,
-                              review.created,
-                              review.ApplicationUser.UserName,
-                              review.drivertype,
-                              reviewForCreate.Reviewitems
-                            );
-
-            return CreatedAtAction("GetRental", new { id = review.Id }, reviewDetail);
-
-
-
-
-
-        }
-
 
             if (ModelState.ErrorCount > 0)
             {
@@ -245,3 +167,4 @@ namespace AppForSEII2526.API.Controllers
 
 
 }
+
