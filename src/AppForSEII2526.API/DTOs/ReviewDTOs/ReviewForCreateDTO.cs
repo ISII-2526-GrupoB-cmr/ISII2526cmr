@@ -6,9 +6,9 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
 {
     public class ReviewForCreateDTO
     {
-        public ReviewForCreateDTO(string country, DriverType driverType, string username, IList<ReviewItemDTO> reviewitems, DateTime created) {
+        public ReviewForCreateDTO(string country, DriverType driverType, string username, IList<ReviewItemDTO> reviewitems) {
 
-            Created = created;
+           
             Country = country ?? throw new ArgumentNullException(nameof(country));
             Drivertype = driverType;
             Username = username ?? throw new ArgumentNullException(nameof(username));

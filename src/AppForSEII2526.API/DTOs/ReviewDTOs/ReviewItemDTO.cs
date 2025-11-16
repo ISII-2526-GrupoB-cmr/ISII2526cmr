@@ -6,10 +6,10 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
     public class ReviewItemDTO
     {
 
-        public ReviewItemDTO(int carId, string model, string fueltype, string manufacturer, string color, int rating, string? description)
+        public ReviewItemDTO(string model, string fueltype, string manufacturer, string color, float rating, string? description)
 
         {
-            Carid = carId;
+           
             Model = model;
             Fueltype = fueltype;
             Manufacturer = manufacturer;
