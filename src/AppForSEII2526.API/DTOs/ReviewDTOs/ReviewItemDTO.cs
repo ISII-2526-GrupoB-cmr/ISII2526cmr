@@ -5,7 +5,9 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
 {
     public class ReviewItemDTO
     {
+
         public ReviewItemDTO(int carId, string model, string fueltype, string manufacturer, string color, int rating, string? description)
+
         {
             Carid = carId;
             Model = model;
@@ -20,7 +22,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
         public string Fueltype { get; set; }
         public string Manufacturer { get; set; }
         public string Color { get; set; }
-        public int Rating { get; set; }
+        public float Rating { get; set; }
         public string? Description { get; set; }
 
         public override bool Equals(object? obj)
