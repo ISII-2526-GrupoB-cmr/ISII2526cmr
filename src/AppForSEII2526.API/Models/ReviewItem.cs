@@ -7,9 +7,20 @@
         public int CarId { get; set; }
         public String? Description { get; set; }
 
-        [Range(1,5, ErrorMessage = "The mark must be between 1 and 5")]
-        public int Rating { get; set; }
+        [Range(1, 5, ErrorMessage = "The mark must be between 1 and 5")]
+        public float Rating { get; set; }
         public int ReviewId { get; set; }
-        public Review Review { get; set; } 
+        public Review Review { get; set; }
+
+        public ReviewItem() { }
+        public ReviewItem(int Carid, string? description, float rating, Review review)
+        {
+            CarId = Carid;
+            Description = description;
+            Rating = rating;
+            Review = review;
+
+
+        }
     }
 }

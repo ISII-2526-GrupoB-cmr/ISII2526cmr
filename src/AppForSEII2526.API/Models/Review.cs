@@ -7,18 +7,31 @@
     }
     public class Review
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "This field cannot be empty")]
 
-        public String country { get; set; }
-        public DateTime created { get; set; }
+        public String Country { get; set; }
+        public DateTime Created { get; set; }
 
-        public DriverType drivertype { get; set; } //Ahora es un enum y solo acepta "novato" o "experto"
+        public DriverType Drivertype { get; set; } //Ahora es un enum y solo acepta "novato" o "experto"
 
+        [Key]
         public int Id { get; set; }
 
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser Applicationuser { get; set; }
 
         public IList<ReviewItem> ReviewItems { get; set; }
+
+        public Review() { }
+
+        public Review(string country, DateTime created, ApplicationUser applicationUser, DriverType drivertype, IList<ReviewItem> reviewItems)
+        {
+            Country = country;
+            Created = created;
+            Applicationuser = applicationUser;
+            Drivertype = drivertype;
+            ReviewItems = reviewItems;
+
+        }
     }
+
 
 }

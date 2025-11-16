@@ -71,7 +71,7 @@ namespace AppForSEII2526.API.Controllers
         public async Task<ActionResult> GetCoche_Para_ComprarDTO(string? filtroColor, string? modelo)
         {
             var coches = await _context.Cars.Include(coche=>coche.Model)
-                .Where(c=> c.Color.Contains(filtroColor) || (filtroColor==null) && (c.Model.Name.Contains(modelo) || modelo == null)
+                .Where(c=> (c.Color.Contains(filtroColor) || (filtroColor==null)) && (c.Model.Name.Contains(modelo) || modelo == null)
             )
                 .Select(c=>new CocheParaComprarDTO(c.Id, c.Model.Name,
                 c.Color, c.FuelType, c.Manufacturer, c.PurchasePrice)).ToListAsync();
