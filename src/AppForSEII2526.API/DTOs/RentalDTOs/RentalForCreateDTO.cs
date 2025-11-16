@@ -33,8 +33,9 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your address for delivery")]
         public string Address { get; set; }
 
-        [EmailAddress]
-        [Required]
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Name")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Name must have at least 2 characters")]
         public string Name { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Name and Surname")]

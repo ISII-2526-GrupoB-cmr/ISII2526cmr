@@ -27,6 +27,12 @@ namespace AppForSEII2526.API.Models
         [NotMapped]
         public string? Description { get; set; }
 
+        public PurchaseItem(Car car, Purchase purchase)
+        {
+            Car = car;
+            Purchase = purchase;
+        }
+
         // Constructor usado en PurchasesController:
         // new PurchaseItem(car.Id, purchase, car.PurchasePrice, purchase.PurchasingPrice, item.CarColor, item.Description)
         public PurchaseItem(int carId, int quantity, Purchase purchase, float purchasePrice, float totalPrice, string carColor, string? description = "")

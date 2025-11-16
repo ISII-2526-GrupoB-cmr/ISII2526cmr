@@ -1,4 +1,6 @@
 ﻿using AppForSEII2526.API.Models;
+using System.Drawing;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AppForSEII2526.API.DTOs.PurchaseDTOs
 {
@@ -9,6 +11,13 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         {
 
         }  
+
+        /*
+        7. El sistema muestra la compra realizada indicando los datos del cliente(nombre y
+        apellidos), dirección, cuando se realizó la compra, el precio total y los coches
+        comprados(modelo, precio, color y cantidad).
+        */
+
         public PurchaseDetailDTO(int id, DateTime purchaseDate, string customerName, string customerSurname,
             string deliveryAddress, float totalPrice, IList<PurchaseItemDTO> purchaseItems)
         {
@@ -33,25 +42,31 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         public float TotalPrice { get; set; }
 
         public IList<PurchaseItemDTO> PurchaseItems { get; set; }
- 
 
-        public override bool Equals(object? obj)
-        {
-            return obj is PurchaseDetailDTO dTO &&
-                   base.Equals(obj) &&
-                   TotalPrice == dTO.TotalPrice &&
-                   Id == dTO.Id &&
-                   CompareDate(PurchaseDate, dTO.PurchaseDate);
-        }
+
+        
 
         public override int GetHashCode()
         {
             return HashCode.Combine(base.GetHashCode(), Id, PurchaseDate);
         }
 
-        public bool CompareDate(DateTime date1, DateTime date2)
+        protected bool CompareDate(DateTime date1, DateTime date2)
         {
-            return date1.Date == date2.Date;
+            return (date1.Subtract(date2) < new TimeSpan(0, 1, 0));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is PurchaseDetailDTO dTO &&
+                   Id == dTO.Id &&
+                   CompareDate(dTO.PurchaseDate, PurchaseDate) && //permite un rango de diferencia de 1 minuto
+                   //PurchaseDate == dTO.PurchaseDate &&
+                   CustomerName == dTO.CustomerName &&
+                   CustomerSurname == dTO.CustomerSurname &&
+                   DeliveryAddress == dTO.DeliveryAddress &&
+                   TotalPrice == dTO.TotalPrice &&
+                   PurchaseItems.SequenceEqual(dTO.PurchaseItems);
         }
     }
 }

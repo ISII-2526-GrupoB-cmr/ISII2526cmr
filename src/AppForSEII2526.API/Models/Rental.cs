@@ -29,12 +29,22 @@ namespace AppForSEII2526.API.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
+
         [Display(Name = "Total Price")]
         [Precision(10,2)]
         public double TotalPrice { get; set; }
 
         public Rental() { }
         public Rental(string deliveryCarDealer, string surname, PaymentMethodTypes paymentMethod, DateTime rentignDate, DateTime startDate, DateTime endDate, double totalPrice)
+        {
+            DeliveryCarDealer = deliveryCarDealer;
+            PaymentMethod = (PaymentMethodTypes)paymentMethod;
+            RentignDate = rentignDate;
+            StartDate = startDate;
+            EndDate = endDate;
+            TotalPrice = totalPrice;
+        }
+        public Rental(string deliveryCarDealer, PaymentMethodTypes paymentMethod, DateTime rentignDate, DateTime startDate, DateTime endDate, double totalPrice)
         {
             DeliveryCarDealer = deliveryCarDealer;
             PaymentMethod = (PaymentMethodTypes)paymentMethod;
@@ -55,15 +65,26 @@ namespace AppForSEII2526.API.Models
             EndDate = endDate;
             RentalItems = rentalItems;
         }
+        public Rental( ApplicationUser user,string deliveryCarDealer, PaymentMethodTypes paymentMethod,DateTime rentignDate,float rentingPrice, DateTime startDate, DateTime endDate, List<RentalItem> rentalItems)
+        {
+           ApplicationUser = user;
+            DeliveryCarDealer= deliveryCarDealer;
+            RentignDate = rentignDate;
+            PaymentMethod = paymentMethod;
+            TotalPrice = rentingPrice;
+            StartDate = startDate;
+            EndDate = endDate;
+            RentalItems = rentalItems;
+        }
 
         [Display(Name = "List of Rental Items")]
 
         public IList<RentalItem> RentalItems { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-        public string Name { get; }
+        public string Name { get;  }
         public string Surname { get; }
-        public string Address { get; }
-        public DateTime Now { get; }
+        public string Address { get;  }
+        public DateTime Now { get;  }
     }
     
 }

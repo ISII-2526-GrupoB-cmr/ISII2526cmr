@@ -1,4 +1,5 @@
-﻿namespace AppForSEII2526.API.DTOs.PurchaseDTOs
+﻿
+namespace AppForSEII2526.API.DTOs.PurchaseDTOs
 {
     public class PurchaseForCreateDTO
     {
@@ -6,6 +7,14 @@
         public PurchaseForCreateDTO() { 
         
         }
+
+        /* ...continuacion punto 5 que está en PurchaseItemDTO.cs...
+        ...y solicita al cliente que
+        introduzca su nombre, apellidos, dirección y método de pago (Google Pay o Visa) con
+        sus datos obligatorios. Para cada coche seleccionado se solicita indicar la cantidad de
+        compra, siendo obligatorio.
+
+        */
 
         public PurchaseForCreateDTO(string customerName, string customerSurname, string deliveryAddress, PaymentMethodTypes paymentMethod, int quantity, IList<PurchaseItemDTO> purchaseItems)
         {
@@ -42,6 +51,20 @@
         [Required]
         public PaymentMethodTypes PaymentMethod { get; set; }
 
+        protected bool CompareDate(DateTime date1, DateTime date2)
+        {
+            return (date1.Subtract(date2) < new TimeSpan(0, 1, 0));
+        }
 
+        public override bool Equals(object? obj)
+        {
+            return obj is PurchaseForCreateDTO dTO &&
+                   DeliveryAddress == dTO.DeliveryAddress &&
+                   Quantity == dTO.Quantity &&
+                   CustomerName == dTO.CustomerName &&
+                   CustomerSurname == dTO.CustomerSurname &&
+                   PurchaseItems.SequenceEqual(dTO.PurchaseItems) &&
+                   PaymentMethod == dTO.PaymentMethod;
+        }
     }
 }

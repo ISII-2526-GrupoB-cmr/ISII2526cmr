@@ -1,4 +1,6 @@
-﻿namespace AppForSEII2526.API.Models
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace AppForSEII2526.API.Models
 {
     public enum DriverType
     {
@@ -21,6 +23,7 @@
         public IList<ReviewItem> ReviewItems { get; set; }
 
         public Review() { }
+
 
         public Review(string country, DateTime created, ApplicationUser applicationUser, DriverType drivertype, IList<ReviewItem> reviewItems)
         {

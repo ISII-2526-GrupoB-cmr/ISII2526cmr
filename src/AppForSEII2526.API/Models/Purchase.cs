@@ -19,9 +19,19 @@ namespace AppForSEII2526.API.Models
             DeliveryAddress = deliveryAddress;
             PaymentMethod = paymentMethod;
             PurchaseItems = purchaseItems;
-            DeliveryCarLeader = "Concesionario Albacete";
+            DeliveryCarDealer = "Concesionario Albacete";
             PurchasingDate = DateTime.Now;
             PurchasingPrice = 0;
+        }
+
+        public Purchase(ApplicationUser user, string deliveryCarDealer, PaymentMethodTypes paymentMethod, DateTime purchasingDate, float purchasingPrice, IList<PurchaseItem> purchaseItems)
+        {
+            ApplicationUser = user;
+            DeliveryCarDealer = deliveryCarDealer;
+            PaymentMethod = paymentMethod;
+            PurchasingDate = purchasingDate;
+            PurchasingPrice = purchasingPrice;
+            PurchaseItems = purchaseItems;
         }
 
         public int Id { get; set; }
@@ -30,7 +40,7 @@ namespace AppForSEII2526.API.Models
 
         [Display(Name = "Delivery Car Dealer")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your delivery car Dealer")]
-        public string DeliveryCarLeader { get; set; }
+        public string DeliveryCarDealer { get; set; }
 
         [Display(Name = "Payment Method")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your payment method")]
@@ -49,6 +59,7 @@ namespace AppForSEII2526.API.Models
         public string CustomerSurname { get; }
         public string DeliveryAddress { get; }
     }
+
 
     
 
