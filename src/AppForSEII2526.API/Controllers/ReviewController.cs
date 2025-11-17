@@ -145,7 +145,7 @@ namespace AppForSEII2526.API.Controllers
 
             }
             var reviewDetail = new ReviewDetailDTO(
-                              review.Id,
+                             
                               review.Country,
                               review.Created,
                               review.Applicationuser.UserName,
