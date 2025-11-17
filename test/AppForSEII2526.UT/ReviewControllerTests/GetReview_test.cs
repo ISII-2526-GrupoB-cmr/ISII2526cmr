@@ -81,7 +81,6 @@ namespace AppForSEII2526.UT.ReviewControllerTests
             var controller = new ReviewController(_context, logger);
 
             var expectedReview1 = new ReviewDetailDTO(
-                    1,
                     "España",
                     DateTime.Today,
                     "elena@uclm.es",
@@ -89,7 +88,7 @@ namespace AppForSEII2526.UT.ReviewControllerTests
                     new List<ReviewItemDTO>
                     {
                         new ReviewItemDTO(
-                            1,
+                            
                             "Modelo A",
                             "Gasolina",
                             "Ferrari",

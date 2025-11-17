@@ -42,7 +42,7 @@ namespace AppForSEII2526.API.Controllers
         public async Task<ActionResult> GetCoche_Para_Reseñar(string? fabricante, string? tipogasoil)
         {
             var coches = await _context.Cars.Include(coche => coche.Model)
-                .Where(c => c.Manufacturer.Contains(fabricante) || (fabricante == null) && (c.FuelType.Contains(tipogasoil) || tipogasoil == null)
+                .Where(c => (c.Manufacturer.Contains(fabricante) || (fabricante == null)) && (c.FuelType.Contains(tipogasoil) || tipogasoil == null)
             )
                 .Select(c => new CocheParaReseñarDTO(c.Id, c.Model.Name,
                 c.Color, c.FuelType, c.Manufacturer, c.CarClass)).ToListAsync();

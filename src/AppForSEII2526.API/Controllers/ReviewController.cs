@@ -44,7 +44,7 @@ namespace AppForSEII2526.API.Controllers
                             p.Applicationuser.UserName,
                             p.Drivertype,
                             p.ReviewItems.Select(pi => new ReviewItemDTO(
-                                pi.Car.Id,
+                               
                                 pi.Car.Model.Name,    // model
                                 pi.Car.FuelType,      // fueltype
                                 pi.Car.Manufacturer,
