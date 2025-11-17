@@ -6,9 +6,9 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
 {
     public class ReviewDetailDTO
     {
-        public ReviewDetailDTO(int id,string country, DateTime created, string userName, DriverType drivertype, IList<ReviewItemDTO> reviewItems)
+        public ReviewDetailDTO(string country, DateTime created, string userName, DriverType drivertype, IList<ReviewItemDTO> reviewItems)
         {
-            Id = id;
+          
             Country = country;
             Created = created;
             UserName = userName;
@@ -16,7 +16,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
             ReviewItems = reviewItems;
         }
 
-        public int Id { get; set; }
+       
         public string Country { get; set; }
 
         public string UserName { get; set; }
@@ -39,7 +39,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
         public override bool Equals(object? obj)
         {
             return obj is ReviewDetailDTO dTO &&
-                   Id == dTO.Id &&
+                  
                    Country == dTO.Country &&
                    UserName == dTO.UserName &&
                    Drivertype == dTO.Drivertype &&
@@ -48,7 +48,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Id, Created);
+            return HashCode.Combine(base.GetHashCode(), Created);
         }
     }
 }

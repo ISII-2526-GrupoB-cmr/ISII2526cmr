@@ -17,18 +17,24 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
             Rating = rating;
             Description = description;
         }
-        public int Carid { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo model es obligatorio")]
         public string Model { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo fueltype es obligatorio")]
         public string Fueltype { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo manufacturer es obligatorio")]
         public string Manufacturer { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo color es obligatorio")]
         public string Color { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo rating es obligatorio")]
+        [Range(1, 5, ErrorMessage = "La nota debe estar entre 1 y 5")]
         public float Rating { get; set; }
         public string? Description { get; set; }
 
         public override bool Equals(object? obj)
         {
             return obj is ReviewItemDTO dTO &&
-                   Carid == dTO.Carid &&
+                   
                    Model == dTO.Model &&
                    Manufacturer == dTO.Manufacturer &&
                    Fueltype == dTO.Fueltype &&
@@ -38,7 +44,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
         }
         public override int GetHashCode()
         {
-            return HashCode.Combine(Carid, Model, Fueltype, Manufacturer, Color, Rating, Description);
+            return HashCode.Combine(Model, Fueltype, Manufacturer, Color, Rating, Description);
         }
     }
 }

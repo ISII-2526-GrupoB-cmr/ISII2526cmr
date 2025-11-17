@@ -79,7 +79,7 @@ namespace AppForSEII2526.UT.ReviewControllerTests
         [Trait("LevelTesting", "Unit Testing")]
         [Trait("Database", "WithoutFixture")]
         [MemberData(nameof(TestCasesFor_PostReview))]
-        public async Task PostPurchase_Error_test(ReviewForCreateDTO purchaseDTO, string expectedError)
+        public async Task PostPurchase_Error_test(ReviewForCreateDTO reviewDTO, string expectedError)
         {
             //Arrange
             var mock = new Mock<ILogger<ReviewController>>();
@@ -88,7 +88,7 @@ namespace AppForSEII2526.UT.ReviewControllerTests
             var controller = new ReviewController(_context, logger);
 
             //Act
-            var result = await controller.CreatePurchase(purchaseDTO);
+            var result = await controller.CreateReview(reviewDTO);
 
             //Assert
             //we check that the response type is BadRequest and obtain the error returned
@@ -104,48 +104,44 @@ namespace AppForSEII2526.UT.ReviewControllerTests
         [Fact]
         [Trait("Database", "WithoutFixture")]
         [Trait("LevelTesting", "Unit Testing")]
-        public async Task PostPurchase_Success_test()
+        public async Task PostReview_Success_test()
         {
             //Arrange
-            var mock = new Mock<ILogger<PurchasesController>>();
-            ILogger<PurchasesController> logger = mock.Object;
-            var controller = new PurchasesController(_context, logger);
+            var mock = new Mock<ILogger<ReviewController>>();
+            ILogger<ReviewController> logger = mock.Object;
+            var controller = new ReviewController(_context, logger);
 
             //la entrada que se le va a dar al metodo
-            var purchaseDTO = new PurchaseForCreateDTO(
-                "Elena",
-                "Navarro Martínez",
-                "Avda. España 2, Albacete",
-                PaymentMethodTypes.GooglePay,
-                1,
-                new List<PurchaseItemDTO>()
+            var reviewDTO = new ReviewForCreateDTO(
+                "España",
+                0,
+                "elena@uclm.es",
+                new List<ReviewItemDTO>()
                 {
-                    new PurchaseItemDTO(1,230000,230000,"Modelo A","Red","Deportivo rápido")
+                    new ReviewItemDTO("Modelo A", "Gasolina", "Ferrari", "Red", 3.0f, "Buen coche")
                 }
             );
 
-            //PurchaseDetailDTO que se espera que devuelva el metodo
-            var expectedPurchase1 = new PurchaseDetailDTO(
-                2,
-                DateTime.Now,
-                "Elena",
-                "Navarro Martínez",
+            
+            var expectedReview1 = new ReviewDetailDTO(
+                "España",
+                DateTime.Today,
                 "elena@uclm.es",
-                230000,
-                new List<PurchaseItemDTO>
+                0,
+                new List<ReviewItemDTO>
                 {
-                    new PurchaseItemDTO(
-                        1,
-                        230000,
-                        230000,
-                        "Modelo A",
-                        "Red",
-                        "Deportivo rápido"
+                    new ReviewItemDTO(
+                       "Modelo A",
+                       "Gasolina",
+                       "Ferrari",
+                       "Red",
+                       3.0f,
+                       "Buen coche"
                     )
                 }
             );
             //Act
-            var result = await controller.CreatePurchase(purchaseDTO);
+            var result = await controller.CreateReview(reviewDTO);
 
 
             //Assert
@@ -153,11 +149,11 @@ namespace AppForSEII2526.UT.ReviewControllerTests
             var createdResult = Assert.IsType<CreatedAtActionResult>(result);
 
             // en actualPurchaseDetailDTO tenemos el DTO devuelto por el metodo
-            var actualPurchaseDetailDTO = Assert.IsType<PurchaseDetailDTO>(createdResult.Value);
+            var actualReviewDetailDTO = Assert.IsType<ReviewDetailDTO>(createdResult.Value);
 
             //actualPurchaseDetailDTO.PurchaseDate= fixedDate; // Ajustar la fecha para la comparación
 
-            Assert.Equal(expectedPurchase1, actualPurchaseDetailDTO);
+            Assert.Equal(expectedReview1, actualReviewDetailDTO);
         }
     }
 }
