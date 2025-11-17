@@ -37,8 +37,7 @@ namespace AppForSEII2526.API.Controllers
               .Include(p => p.ReviewItems) //join table PurchaseItems
                  .ThenInclude(pi => pi.Car) //then join table Cars
                      .ThenInclude(car => car.Model) //then join table Model
-          .Select(p => new ReviewDetailDTO(
-                            p.Id,
+          .Select(p => new ReviewDetailDTO (
                             p.Country,
                             p.Created,
                             p.Applicationuser.UserName,
