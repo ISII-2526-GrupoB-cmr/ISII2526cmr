@@ -1,4 +1,14 @@
+DELETE FROM [dbo].[ReviewItems];
+DELETE FROM [dbo].[Reviews];
 
+DELETE FROM [dbo].[RentalItems];
+DELETE FROM [dbo].[Rentals];
+
+DELETE FROM [dbo].[PurchaseItems];
+DELETE FROM [dbo].[Purchases];
+
+DELETE FROM [dbo].[Cars];
+DELETE FROM [dbo].[Models];
 
 -------------------------------------------------
 -- MODELOS
