@@ -32,7 +32,7 @@ namespace AppForSEII2526.UT.ReviewControllerTests
             _context.AddRange(cars);
             _context.SaveChanges();
 
-            ApplicationUser user = new ApplicationUser("1", "Elena", "Navarro Martínez", "elena@uclm.es");
+            var user = new ApplicationUser("elena@uclm.es", "Elena", "Navarro Martínez", "Calle López 1");
             _context.ApplicationUsers.Add(user);
             _context.SaveChanges();
 
@@ -46,9 +46,7 @@ namespace AppForSEII2526.UT.ReviewControllerTests
 
             review1.ReviewItems.Add(reviewItem1);
 
-            _context.Add(trackedUser);
-            _context.AddRange(models);
-            _context.AddRange(cars);
+            
             _context.Add(review1);
             _context.AddRange(reviewItem1);
             _context.SaveChanges();
@@ -57,18 +55,23 @@ namespace AppForSEII2526.UT.ReviewControllerTests
 
         public static IEnumerable<object[]> TestCasesFor_PostReview()
         {
+            var reviewNoCountry = new ReviewForCreateDTO("", 0, "elena@uclm.es", new List<ReviewItemDTO>());
 
-            var reviewNoItem = new ReviewForCreateDTO("España", 0, "elena@uclm.es", new List<ReviewItemDTO>());
+            var reviewMalDriverType = new ReviewForCreateDTO("España", (DriverType)55, "elena@uclm.es", new List<ReviewItemDTO>());
+
+            var reviewNoItem = new ReviewForCreateDTO("España", DriverType.experto, "elena@uclm.es", new List<ReviewItemDTO>());
 
             var reviewItems = new List<ReviewItemDTO>() { new ReviewItemDTO("Modelo B", "Diésel", "Toyota", "Blue", 3.0f, null) };
 
-            var reviewCocheNoExiste = new ReviewForCreateDTO("España", 0, "elena@uclm.es", new List<ReviewItemDTO>() { new  ReviewItemDTO("Opel Corsa", "Opel", "Gasolina", "Red", 4.0f, null) });
+            var reviewCocheNoExiste = new ReviewForCreateDTO("España", DriverType.novato, "elena@uclm.es", new List<ReviewItemDTO>() { new  ReviewItemDTO("Opel Corsa", "Opel", "Gasolina", "Red", 4.0f, null) });
 
-            var reviewUserNoExiste = new ReviewForCreateDTO("España", 0, "juanpepito@uclm.es", reviewItems);
+            var reviewUserNoExiste = new ReviewForCreateDTO("España", DriverType.experto, "juanpepito@uclm.es", reviewItems);
 
             var allTests = new List<object[]>
             {
-                new object[] { reviewNoItem, "Error! Ningún coche seleccionado par reseñar" },
+                new object[] { reviewNoCountry, "Error! País de residencia no puede estar vacío" },
+                new object[] { reviewMalDriverType, "Error! DriverType debe ser 'novato' o 'experto'." },
+                new object[] { reviewNoItem, "Error! Ningún coche seleccionado para reseñar" },
                 new object[] { reviewCocheNoExiste, "Error! El coche seleccionado no existe" },
                 new object[] { reviewUserNoExiste, "Error! Tu nombre de usuario no esta registrado" },
             };
@@ -124,6 +127,7 @@ namespace AppForSEII2526.UT.ReviewControllerTests
 
             
             var expectedReview1 = new ReviewDetailDTO(
+                1,
                 "España",
                 DateTime.Today,
                 "elena@uclm.es",

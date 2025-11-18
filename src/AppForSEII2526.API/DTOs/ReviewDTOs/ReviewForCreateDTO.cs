@@ -8,7 +8,7 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
     {
         public ReviewForCreateDTO(string country, DriverType driverType, string username, IList<ReviewItemDTO> reviewitems) {
 
-           
+         
             Country = country ?? throw new ArgumentNullException(nameof(country));
             Drivertype = driverType;
             Username = username ?? throw new ArgumentNullException(nameof(username));
@@ -18,14 +18,15 @@ namespace AppForSEII2526.API.DTOs.ReviewDTOs
         
 
         [Display(Name = "Country")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "This field cannot be empty")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Error! El país de residencia no puede estar vacío")]
         public string Country { get; set; }
 
-        [Required]
+        
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Este campo es obligatiorio")]
         public DriverType Drivertype { get; set; }
 
         [Display (Name = "Username")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Your username is required")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "El campo UserName es obligatorio")]
         public string Username { get; set; }
 
         [DisplayFormat(DataFormatString ="{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
