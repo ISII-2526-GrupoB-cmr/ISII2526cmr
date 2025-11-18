@@ -21,9 +21,9 @@ public class Car
     public float PurchasePrice { get; set; }
 
     [Display (Name ="Quantity for purchase")]
-    public float QuantityForPurchase { get; set; }
+    public int QuantityForPurchase { get; set; }
     [Display(Name = "Quantity for renting")]
-    public float QuantityForRenting { get; set; }
+    public int QuantityForRenting { get; set; }
 
     [Display(Name = "Renting price")]
     public float RentingPrice { get; set; }
@@ -35,7 +35,7 @@ public class Car
     public IList<PurchaseItem> PurchaseItems { get; set; }
 
     public Model Model { get; set; }
-    public Car(string carClass, string color, string description, string engDisplacement, string fuelType, int id, string maintenanceType, string manufacturer, int purchaseItem, float purchasePrice, float quantityForPurchase, float quantityForRenting, float rentingPrice, float rimSize)
+    public Car(string carClass, string color, string description, string engDisplacement, string fuelType, int id, string maintenanceType, string manufacturer, int purchaseItem, float purchasePrice, int quantityForPurchase, int quantityForRenting, float rentingPrice, float rimSize)
     {
         CarClass = carClass;
         Color = color;
@@ -55,7 +55,7 @@ public class Car
     }
 
 
-    public Car(Model model, string carClass, string color, string description, string engDisplacement, string fuelType, int id, string maintenanceType, string manufacturer, int purchaseItem, float purchasePrice, float quantityForPurchase, float quantityForRenting, float rentingPrice, float rimSize)
+    public Car(Model model, string carClass, string color, string description, string engDisplacement, string fuelType, int id, string maintenanceType, string manufacturer, int purchaseItem, float purchasePrice, int quantityForPurchase, int quantityForRenting, float rentingPrice, float rimSize)
     {
         Model = model;
         CarClass = carClass;
