@@ -92,19 +92,7 @@ namespace AppForSEII2526.API.Controllers
 
             var cars = _context.Cars
                 .Include(c => c.Model)
-                .Include(c => c.PurchaseItems)
-                .ThenInclude(pi => pi.Purchase)
                 .Where(c => purchaseNames.Contains(c.Model.Name))
-
-                //we use an anonymous type https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/anonymous-types
-                .Select(c => new {
-                    c.Id,
-                    c.Model,
-                    c.Color,
-                    c.Description,
-                    c.QuantityForPurchase,
-                    c.PurchasePrice,
-                })
                 .ToList();
 
 
@@ -115,25 +103,39 @@ namespace AppForSEII2526.API.Controllers
 
 
             purchase.ApplicationUser = user;
-     
+
+
+            bool quantityUpdated = false;
+            purchase.PurchasingPrice = 0;
 
             foreach (var item in purchaseForCreate.PurchaseItems)
             {
                 var car = cars.FirstOrDefault(c => c.Model.Name == item.Modelo);
-                purchase.PurchasingPrice = car.PurchasePrice * purchaseForCreate.Quantity;
 
                 //we must check that there is enough quantity to be rented in the database
                 if (car == null || car.QuantityForPurchase < purchaseForCreate.Quantity)
                 {
-                    ModelState.AddModelError("PurchaseItems", $"Error! Car Id '{item.Modelo}' is not available for being purchased");
+                    ModelState.AddModelError("PurchaseItems", $"Error! Car Model '{item.Modelo}' is not available for being purchased");
                 }
                 else
                 {
+                    if (!quantityUpdated)
+                    {
+                        car.QuantityForPurchase = car.QuantityForPurchase - purchaseForCreate.Quantity;
+                        quantityUpdated = true;
+                    }
+
+                    purchase.PurchasingPrice += car.PurchasePrice * purchaseForCreate.Quantity;
                     // purchase does not exist in the database yet and does not have a valid Id, so we must relate purchaseitem to the object purchase
                     purchase.PurchaseItems.Add(new PurchaseItem(car.Id, purchaseForCreate.Quantity, purchase, car.PurchasePrice, purchase.PurchasingPrice, item.CarColor, item.Description));
-                    item.PurchasePrice = car.PurchasePrice;
+                    
                 }
+                
             }
+
+            
+
+            
           
 
 

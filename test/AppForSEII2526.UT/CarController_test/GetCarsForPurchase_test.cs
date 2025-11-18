@@ -22,9 +22,9 @@ namespace AppForSEII2526.UT.CarController_test
             };
             var cars = new List<Car>()
                 {
-                    new Car(models[0], "Deportivo", "Azul", "Deportivo rápido", "2.0L", "Gasolina", 1, "Preventivo", "Ferrari", 1001, 230000.0f, 3.0f, 2.0f, 1500.0f, 19.0f),
-                    new Car(models[1], "Sedán", "Azul", "Sedán cómodo", "1.6L", "Diésel", 2, "Correctivo", "Toyota", 1002, 30000.0f, 5.0f, 3.0f, 500.0f, 16.0f),
-                    new Car(models[2], "SUV", "Black", "SUV espacioso", "2.5L", "Híbrido", 3, "Preventivo", "Honda", 1003, 40000.0f, 4.0f, 2.5f, 600.0f, 18.0f),
+                    new Car(models[0], "Deportivo", "Azul", "Deportivo rápido", "2.0L", "Gasolina", 1, "Preventivo", "Ferrari", 1001, 230000.0f, 3, 2, 1500.0f, 19.0f),
+                    new Car(models[1], "Sedán", "Azul", "Sedán cómodo", "1.6L", "Diésel", 2, "Correctivo", "Toyota", 1002, 30000.0f, 5, 3, 500.0f, 16.0f),
+                    new Car(models[2], "SUV", "Black", "SUV espacioso", "2.5L", "Híbrido", 3, "Preventivo", "Honda", 1003, 40000.0f, 4, 2, 600.0f, 18.0f),
             };
 
             _context.AddRange(models);
