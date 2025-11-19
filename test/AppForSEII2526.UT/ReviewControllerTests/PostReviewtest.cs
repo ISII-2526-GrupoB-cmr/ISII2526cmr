@@ -69,9 +69,9 @@ namespace AppForSEII2526.UT.ReviewControllerTests
 
             var allTests = new List<object[]>
             {
-                new object[] { reviewNoCountry, "Error! País de residencia no puede estar vacío" },
+                new object[] { reviewNoCountry, "Error! Pais de residencia no puede estar vacio" },
                 new object[] { reviewMalDriverType, "Error! DriverType debe ser 'novato' o 'experto'." },
-                new object[] { reviewNoItem, "Error! Ningún coche seleccionado para reseñar" },
+                new object[] { reviewNoItem, "Error! Ningun coche seleccionado para review" },
                 new object[] { reviewCocheNoExiste, "Error! El coche seleccionado no existe" },
                 new object[] { reviewUserNoExiste, "Error! Tu nombre de usuario no esta registrado" },
             };

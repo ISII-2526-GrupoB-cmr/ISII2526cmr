@@ -81,7 +81,7 @@ namespace AppForSEII2526.API.Controllers
 
             if (string.IsNullOrWhiteSpace(reviewForCreate.Country))
             {
-                ModelState.AddModelError("Country", "Error! Pa�s de residencia no puede estar vac�o");
+                ModelState.AddModelError("Country", "Error! Pais de residencia no puede estar vacio");
             }
 
             if (!Enum.IsDefined(typeof(DriverType), reviewForCreate.Drivertype))
@@ -92,7 +92,7 @@ namespace AppForSEII2526.API.Controllers
            
             if (reviewForCreate.Reviewitems == null || !reviewForCreate.Reviewitems.Any())
             {
-                ModelState.AddModelError("Reviewitems", "Error! Ning�n coche seleccionado para rese�ar");
+                ModelState.AddModelError("Reviewitems", "Error! Ningun coche seleccionado para review");
                 return BadRequest(new ValidationProblemDetails(ModelState));
             }
 
