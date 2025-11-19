@@ -45,7 +45,7 @@ namespace AppForSEII2526.API.Controllers
                 .Where(c => (c.Manufacturer.Contains(fabricante) || (fabricante == null)) && (c.FuelType.Contains(tipogasoil) || tipogasoil == null)
             )
                 .Select(c => new CocheParaReseñarDTO(c.Id, c.Model.Name,
-                c.Color, c.FuelType, c.Manufacturer, c.CarClass)).ToListAsync();
+                c.Color, c.FuelType, c.Manufacturer)).ToListAsync();
             return Ok(coches);
         }
 
