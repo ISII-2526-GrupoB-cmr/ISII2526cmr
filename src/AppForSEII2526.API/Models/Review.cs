@@ -18,7 +18,7 @@ namespace AppForSEII2526.API.Models
         [Key]
         public int Id { get; set; }
 
-        public ApplicationUser Applicationuser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         public IList<ReviewItem> ReviewItems { get; set; }
 
@@ -29,7 +29,7 @@ namespace AppForSEII2526.API.Models
         {
             Country = country;
             Created = created;
-            Applicationuser = applicationUser;
+            ApplicationUser = applicationUser;
             Drivertype = drivertype;
             ReviewItems = reviewItems;
 

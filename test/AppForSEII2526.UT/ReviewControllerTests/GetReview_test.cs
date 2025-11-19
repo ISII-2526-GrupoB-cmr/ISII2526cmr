@@ -29,23 +29,23 @@ namespace AppForSEII2526.UT.ReviewControllerTests
             _context.AddRange(cars);
             _context.SaveChanges();
 
-            ApplicationUser user = new ApplicationUser("1", "Elena", "Navarro Martínez", "elena@uclm.es");
+            var user = new ApplicationUser("elena@uclm.es", "Elena", "Navarro Martínez", "Calle López 1");
+            
             _context.ApplicationUsers.Add(user);
             _context.SaveChanges();
 
             // Usar la instancia rastreada por el DbContext (con Id asignado) antes de crear la compra
             var trackedUser = _context.ApplicationUsers
-                .First(au => au.UserName == user.UserName);
+                .First(au => au.UserName== user.UserName);
 
-
-            var review1 = new Review("España", DateTime.Today, trackedUser, 0, new List<ReviewItem>());
+            var fixedDate = new DateTime(2025, 11, 17);
+            var review1 = new Review("España", fixedDate, trackedUser, 0, new List<ReviewItem>());
             var reviewItem1 = new ReviewItem(1, "Buen coche", 3, review1);
 
             review1.ReviewItems.Add(reviewItem1);
 
-            _context.Add(trackedUser);
-            _context.AddRange(models);
-            _context.AddRange(cars);
+            
+            
             _context.Add(review1);
             _context.AddRange(reviewItem1);
             _context.SaveChanges();
@@ -79,10 +79,11 @@ namespace AppForSEII2526.UT.ReviewControllerTests
             var mock = new Mock<ILogger<ReviewController>>();
             ILogger<ReviewController> logger = mock.Object;
             var controller = new ReviewController(_context, logger);
-
+            var fixedDate = new DateTime(2025, 11, 17);
             var expectedReview1 = new ReviewDetailDTO(
+                    1,
                     "España",
-                    DateTime.Today,
+                    fixedDate,
                     "elena@uclm.es",
                     0,
                     new List<ReviewItemDTO>
