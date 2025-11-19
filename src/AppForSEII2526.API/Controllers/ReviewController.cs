@@ -81,7 +81,7 @@ namespace AppForSEII2526.API.Controllers
 
             if (string.IsNullOrWhiteSpace(reviewForCreate.Country))
             {
-                ModelState.AddModelError("Country", "Error! País de residencia no puede estar vacío");
+                ModelState.AddModelError("Country", "Error! Paï¿½s de residencia no puede estar vacï¿½o");
             }
 
             if (!Enum.IsDefined(typeof(DriverType), reviewForCreate.Drivertype))
@@ -92,7 +92,7 @@ namespace AppForSEII2526.API.Controllers
            
             if (reviewForCreate.Reviewitems == null || !reviewForCreate.Reviewitems.Any())
             {
-                ModelState.AddModelError("Reviewitems", "Error! Ningún coche seleccionado para reseñar");
+                ModelState.AddModelError("Reviewitems", "Error! Ningï¿½n coche seleccionado para reseï¿½ar");
                 return BadRequest(new ValidationProblemDetails(ModelState));
             }
 
@@ -163,7 +163,7 @@ namespace AppForSEII2526.API.Controllers
                               reviewForCreate.Reviewitems
                             );
 
-            _logger.LogInformation($"Review with id {review.Id} creada con éxito");
+            _logger.LogInformation($"Review with id {review.Id} creada con ï¿½xito");
             return CreatedAtAction("GetReview", new { id = review.Id }, reviewDetail);
 
 

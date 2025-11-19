@@ -23,8 +23,8 @@ namespace AppForSEII2526.UT.RentalsController_test
             };
 
             var cars = new List<Car>(){
-                new Car(modelos[0],"Sedan", "Red", "A red sedan", "2.0L", "Gasoline", 1, "Regular", "Toyota", 10, 20000, 5, 3, 85, 16),
-                new Car(modelos[1],"SUV", "Blue", "A blue SUV", "3.0L", "Diesel", 2, "Premium", "Ford", 5, 30000, 2, 1, 150, 18),
+                new Car(modelos[0],"Sedan", "Red", "A red sedan", "2.0L", "Gasoline", 1, "Regular", "Toyota", 10, 20000, 3, 2, 85, 16),
+                new Car(modelos[1],"SUV", "Blue", "A blue SUV", "3.0L", "Diesel", 2, "Premium", "Ford", 5, 30000, 5, 3, 150, 18),
                 new Car(modelos[2],"Coupe", "Black", "A black coupe", "2.5L", "Gasoline", 3, "Regular", "Honda", 8, 25000, 4, 2, 120, 17)
 
             };

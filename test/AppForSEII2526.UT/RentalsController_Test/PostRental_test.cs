@@ -14,14 +14,6 @@ namespace AppForSEII2526.UT.RentalsController_test
 {
     public class PostRentals_test : AppForSEII25264SqliteUT
     {
-        private const string _userName = "elena.navarro@uclm.es";
-        private const string _customerNameSurname = "Elena Navarro";
-        private const string _deliveryAddress = "Avda. España s/n, Albacete 02071";
-
-        private const string carmodel = "The lord of the rings";
-        private const string car = "Sci - Fi";
-        private const string _movie2Title = "The man in the high castle";
-        private const string _movie2Genre = "Drama";
 
         public PostRentals_test()
         {
@@ -34,9 +26,9 @@ namespace AppForSEII2526.UT.RentalsController_test
 
             var cars = new List<Car>()
                 {
-                    new Car(modelos[0], "Deportivo", "Red", "Deportivo rápido", "2.0L", "Gasolina", 1, "Preventivo", "Ferrari", 1001, 230000.0f, 3.0f, 2.0f, 1500.0f, 19.0f),
-                    new Car(modelos[1], "Sedán", "Blue", "Sedán cómodo", "1.6L", "Diésel", 2, "Correctivo", "Toyota", 1002, 30000.0f, 5.0f, 1.0f, 500.0f, 16.0f),
-                    new Car(modelos[2], "SUV", "Black", "SUV espacioso", "2.5L", "Híbrido", 3, "Preventivo", "Honda", 1003, 40000.0f, 4.0f, 2.5f, 600.0f, 18.0f),
+                    new Car(modelos[0], "Deportivo", "Red", "Deportivo rápido", "2.0L", "Gasolina", 1, "Preventivo", "Ferrari", 1001, 230000.0f, 3, 2, 1500.0f, 19.0f),
+                    new Car(modelos[1], "Sedán", "Blue", "Sedán cómodo", "1.6L", "Diésel", 2, "Correctivo", "Toyota", 1002, 30000.0f, 5, 3, 500.0f, 16.0f),
+                    new Car(modelos[2], "SUV", "Black", "SUV espacioso", "2.5L", "Híbrido", 3, "Preventivo", "Honda", 1003, 40000.0f, 4, 2, 600.0f, 18.0f),
                 };
             _context.AddRange(modelos);
             _context.AddRange(cars);
