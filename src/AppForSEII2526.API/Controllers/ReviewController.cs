@@ -129,6 +129,11 @@ namespace AppForSEII2526.API.Controllers
                 }
                 else
                 {
+                    if (item.Description != null && !item.Description.StartsWith("Reseña para"))
+                    {
+                        ModelState.AddModelError("Description", "Error! La reseña debe empezar por Reseña para");
+
+                    }
                     review.ReviewItems.Add(new ReviewItem(car.Id, item.Description, item.Rating, review));
                 }
 
