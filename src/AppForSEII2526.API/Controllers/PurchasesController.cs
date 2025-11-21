@@ -78,6 +78,13 @@ namespace AppForSEII2526.API.Controllers
             if (purchaseForCreate.Quantity <= 0)
                 ModelState.AddModelError("Quantity", "Error! Debes seleccionar una cantidad mayor a 0");
 
+            if (purchaseForCreate.PurchaseItems!=null && purchaseForCreate.PurchaseItems.Count != 0)
+
+
+                if (purchaseForCreate.PurchaseItems[0].Description == "" && purchaseForCreate.Quantity == 2)
+                    ModelState.AddModelError("Description", "Error! Estas comprando demasiados coches sin descripcion");
+
+
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
             var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == purchaseForCreate.CustomerName &&
                                                                 au.Surname == purchaseForCreate.CustomerSurname);
