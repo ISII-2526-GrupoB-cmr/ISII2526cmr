@@ -72,38 +72,45 @@ namespace AppForSEII2526.UT.RentalsController_test
         public static IEnumerable<object[]> TestCasesFor_CreatePurchase()
         {
             var rentalNoITem = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
-              "Avda. España 2, Albacete", PaymentMethodTypes.Visa,
+              "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(2), DateTime.Today.AddDays(5), new List<RentalItemDTO>());
 
             var rentalItems = new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85) };
 
             var rentalFromBeforeToday = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
-              "Avda. España 2, Albacete", PaymentMethodTypes.Visa,
+              "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today, DateTime.Today.AddDays(5), rentalItems);
 
             var rentalToBeforeFrom = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
-              "Avda. España 2, Albacete", PaymentMethodTypes.Visa,
+              "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(5), DateTime.Today.AddDays(2), rentalItems);
 
             var RentalApplicationUser = new RentalForCreateDTO("victor.lopez@uclm.es", "lopez muñoz", 1,
-                "C/ Postigos 20", PaymentMethodTypes.Visa,
+                "Calle Postigos 20", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(2), DateTime.Today.AddDays(4), rentalItems);
 
-           
+
 
             var CantidadMCero = new RentalForCreateDTO("Elena", "Navarro Martinez", 0,
-              "Avda. España 2, Albacete", PaymentMethodTypes.Visa,
+              "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(2), DateTime.Today.AddDays(5),
                 new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85) });
 
 
+            var DirInv = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
+              "Avda. España 2, Albacete", PaymentMethodTypes.Visa,
+                DateTime.Today.AddDays(2), DateTime.Today.AddDays(5),
+                new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85) });
+
             var allTests = new List<object[]>
-            {             
+            {
                 new object[] { rentalNoITem, "Error! Ningun vehiculo seleccionado",  },
                 new object[] { rentalFromBeforeToday, "Error! La fecha de alquiler tiene que ser posterior a la de hoy", },
                 new object[] { rentalToBeforeFrom, "Error! La fecha de fin tiene que ser mas tarde de la que empieza", },
                 new object[] { RentalApplicationUser, "Error! El usuario no esta registrado", },
                 new object[] { CantidadMCero, "Error! La cantidad para alquiilar tiene que ser mayor a 0", },
+                new object[] { DirInv, "Error! La direccion de envio debe empezar por la palabra Calle", },
+
 
             };
 
@@ -151,16 +158,16 @@ namespace AppForSEII2526.UT.RentalsController_test
 
 
             var rentalDTO = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
-              "Avda. España 2, Albacete", PaymentMethodTypes.Visa,
+              "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(6), DateTime.Today.AddDays(7), new List<RentalItemDTO>()
                 { new RentalItemDTO(2,"Toyota Corolla", "Toyota", 85) });
 
             var fixedDate = new DateTime(2025, 11, 16, 21, 28, 52);
 
 
-            var expectedrentalDetailDTO = new RentalDetailDTO(2,fixedDate ,
+            var expectedrentalDetailDTO = new RentalDetailDTO(2, fixedDate,
                 "Elena", "Navarro Martinez",
-              "Avda. España 2, Albacete", PaymentMethodTypes.Visa,
+              "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(6), DateTime.Today.AddDays(7), new List<RentalItemDTO>()
                 { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85) });
 
@@ -178,3 +185,4 @@ namespace AppForSEII2526.UT.RentalsController_test
 
     }
 }
+
