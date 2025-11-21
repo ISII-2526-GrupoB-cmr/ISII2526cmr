@@ -60,11 +60,16 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
 
             var purchaseUserNoExist = new PurchaseForCreateDTO("Juan", "Pérez", "Calle Falsa 33, Chinchilla", 0, 1, purchaseItems);
 
+                var purchaseItemsSinDesc = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, 230000, "Toyota Corolla", "Gris", "") };
+
+            var purchaseSinDescCant2 = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0, 2, purchaseItemsSinDesc);
+
             var allTests = new List<object[]>
             {
                 new object[] { purchaseNoItem, "Error! Ningun coche seleccionado" },
                 new object[] { purchaseCantidadCero, "Error! Debes seleccionar una cantidad mayor a 0" },
                 new object[] { purchaseUserNoExist, "Error! Tu nombre no esta registrado" },
+                new object[] { purchaseSinDescCant2, "Error! Estas comprando demasiados coches sin descripcion" }
             };
             return allTests;
         }
