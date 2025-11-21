@@ -81,6 +81,11 @@ namespace AppForSEII2526.API.Controllers
             if (user == null)
                 ModelState.AddModelError("RentalApplicationUser", "Error! El usuario no esta registrado");
 
+            if (!rentalForCreate.Address.Contains("Calle"))
+            {
+                ModelState.AddModelError("RentalApplicationUser", "Error! La direccion de envio debe empezar por la palabra Calle");
+
+            }
 
 
             if (ModelState.ErrorCount > 0)
