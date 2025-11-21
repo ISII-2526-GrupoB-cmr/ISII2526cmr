@@ -46,7 +46,7 @@ namespace AppForSEII2526.UT.ReviewControllerTests
 
             review1.ReviewItems.Add(reviewItem1);
 
-            
+
             _context.Add(review1);
             _context.AddRange(reviewItem1);
             _context.SaveChanges();
@@ -63,9 +63,12 @@ namespace AppForSEII2526.UT.ReviewControllerTests
 
             var reviewItems = new List<ReviewItemDTO>() { new ReviewItemDTO("Modelo B", "Diésel", "Toyota", "Blue", 3.0f, null) };
 
-            var reviewCocheNoExiste = new ReviewForCreateDTO("España", DriverType.novato, "elena@uclm.es", new List<ReviewItemDTO>() { new  ReviewItemDTO("Opel Corsa", "Opel", "Gasolina", "Red", 4.0f, null) });
+            var reviewCocheNoExiste = new ReviewForCreateDTO("España", DriverType.novato, "elena@uclm.es", new List<ReviewItemDTO>() { new ReviewItemDTO("Opel Corsa", "Opel", "Gasolina", "Red", 4.0f, null) });
 
             var reviewUserNoExiste = new ReviewForCreateDTO("España", DriverType.experto, "juanpepito@uclm.es", reviewItems);
+
+            var reviewDescripcionErronea = new ReviewForCreateDTO("España", DriverType.experto, "elena@uclm.es", new List<ReviewItemDTO>() { new ReviewItemDTO("Modelo B", "Diésel", "Toyota", "Blue", 3.0f, "Mal coche") });
+
 
             var allTests = new List<object[]>
             {
@@ -74,6 +77,8 @@ namespace AppForSEII2526.UT.ReviewControllerTests
                 new object[] { reviewNoItem, "Error! Ningun coche seleccionado para review" },
                 new object[] { reviewCocheNoExiste, "Error! El coche seleccionado no existe" },
                 new object[] { reviewUserNoExiste, "Error! Tu nombre de usuario no esta registrado" },
+                new object[] { reviewDescripcionErronea, "Error! La reseña debe empezar por Reseña para"}
+
             };
             return allTests;
         }
@@ -121,11 +126,11 @@ namespace AppForSEII2526.UT.ReviewControllerTests
                 "elena@uclm.es",
                 new List<ReviewItemDTO>()
                 {
-                    new ReviewItemDTO("Modelo A", "Gasolina", "Ferrari", "Red", 3.0f, "Buen coche")
+                    new ReviewItemDTO("Modelo A", "Gasolina", "Ferrari", "Red", 3.0f, "Reseña para coche malo")
                 }
             );
 
-            
+
             var expectedReview1 = new ReviewDetailDTO(
                 1,
                 "España",
@@ -140,7 +145,7 @@ namespace AppForSEII2526.UT.ReviewControllerTests
                        "Ferrari",
                        "Red",
                        3.0f,
-                       "Buen coche"
+                       "Reseña para coche malo"
                     )
                 }
             );
