@@ -80,7 +80,7 @@ namespace AppForSEII2526.UT.CarController_test
             var controller = new CarsController(_context, null);
 
             //Act
-            var result = await controller.GetCoche_Para_Comprar(color, modelo);
+            var result = await controller.GetCocheParaComprar(color, modelo);
 
             //Assert
             //we check that the response type is OK
