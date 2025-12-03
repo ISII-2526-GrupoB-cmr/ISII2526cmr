@@ -44,12 +44,11 @@ jobs:
           dotnet build ${{ env.WEB }} --configuration Release --no-restore
           dotnet build ${{ env.UT }} --configuration Release --no-restore
           dotnet build ${{ env.UIT }} --configuration Release --no-restore
-      
-     - name: Run unit tests with report
-       run: dotnet test ${{ env.UT }} --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
 
-     - name: dotnet publish
-       run: dotnet publish ${{ env.API }} -c Release -o "${{env.DOTNET_ROOT}}/AppForSEII2526"
+          
+     - name: Run unit test with report
+       run: dotnet test ${{ env.UT }} --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
+   
 
      
      - name: Upload test results
