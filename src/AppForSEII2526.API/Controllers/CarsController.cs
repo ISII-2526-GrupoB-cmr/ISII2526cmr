@@ -39,7 +39,7 @@ namespace AppForSEII2526.API.Controllers
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<CocheParaReseñarDTO>), (int)HttpStatusCode.OK)]
 
-        public async Task<ActionResult> GetCoche_Para_Reseñar(string? fabricante, string? tipogasoil)
+        public async Task<ActionResult> GetCocheParaReseñar(string? fabricante, string? tipogasoil)
         {
             var coches = await _context.Cars.Include(coche => coche.Model)
                 .Where(c => (c.Manufacturer.Contains(fabricante) || (fabricante == null)) && (c.FuelType.Contains(tipogasoil) || tipogasoil == null)
@@ -53,7 +53,7 @@ namespace AppForSEII2526.API.Controllers
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<CocheParaAlquilarDTO>), (int)HttpStatusCode.OK)]
 
-        public async Task<ActionResult> GetCoche_Para_Alquilar(float precio, string? modelo)
+        public async Task<ActionResult> GetCocheParaAlquilar(float precio, string? modelo)
         {
             var coches = await _context.Cars.Include(coche => coche.Model)
               .Where(c => (precio == 0 || c.RentingPrice == precio) && (modelo == null || c.Model.Name.Contains(modelo)))
@@ -69,7 +69,7 @@ namespace AppForSEII2526.API.Controllers
 
         [ProducesResponseType(typeof(IList<CocheParaComprarDTO>), (int)HttpStatusCode.OK)]
 
-        public async Task<ActionResult> GetCoche_Para_Comprar(string? filtroColor, string? modelo)
+        public async Task<ActionResult> GetCocheParaComprar(string? filtroColor, string? modelo)
         {
 
 

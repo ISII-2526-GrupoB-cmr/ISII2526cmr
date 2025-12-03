@@ -1,0 +1,174 @@
+﻿@page "/purchase/seleccionarcochepurchase"
+
+
+
+@using Microsoft.AspNetCore.Authorization
+@using AppForSEII2526.Web.API
+@using AppForSEII2526.API.DTOs.Car
+@using AppForSEII2526.API.DTOs.PurchaseDTOs
+
+@inject AppForSEII2526 apiclient
+@inject ILogger<SeleccionarCochePurchase> logger
+@inject PurchaseStateContainer purchaseState
+@inject NavigationManager navigation
+
+@attribute [Authorize]
+<h3>SeleccionarCoche</h3>
+<div class="container-fluid">
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <!-- FILTROS -->
+            <div class="row">
+                <!-- Filtro: Modelo -->
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Model</span>
+                        <input type="text" id="inputTitle" @bind=carModel class="form-control" placeholder="Model" aria-label="Model" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <!-- Select de Modelos -->
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Model</span>
+                        <select class="form-select" aria-label="Default select" @bind="carModelSelected" id="selectModel">
+                            <option value="All" selected>All</option>
+                            @foreach (string modelName in modelsNames)
+                            {
+                                <option value="@modelName" id="modelNameSelected_@modelName">@modelName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+       
+
+            
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchCars id="searchCars">Search cars</button>
+                </div>
+
+            </div>
+            <div class="row">
+                @if (cars == null)
+                {
+                    <p>Loading cars....</p>
+                }
+                else
+                {
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfCars">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Car Color</th>
+                                    <th>Purchase Price</th>
+                                    <th>Purchase</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var car in cars)
+                                {
+                                    <tr id="CarData_@car.Model">
+                                        <td>@car.Model</td>
+                                        <td>@car.Color</td>
+                                        <td>@car.PurchasePrice</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="carToPurchase_@car.Model" @onclick="@(() => AddCar(car))">Add</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                }
+            </div>
+        </div>
+        <div class="col-2" hidden="@hidePurchaseCart">
+            <div class="row">
+                <h3>Shopping Cart</h3>
+            </div>
+            @foreach (PurchaseItemDTO item in purchase.PurchaseItems)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeCar_@item.Modelo" @onclick="@(() => RemovePurchaseItem(item))">x @item.Modelo - @item.PurchasePrice€</button>
+                </div>
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="purchaseCarButton" @onclick=@PurchaseCars>Purchase cars</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+@code {
+
+    private string carModelSelected;
+    private ICollection<string>? modelsNames = new List<string>();
+    private bool hidePurchaseCart { get { return purchase.PurchaseItems.Count == 0; } }
+    private ICollection<CocheParaComprarDTO> cars;
+    private bool hideErrors { get { return errors.Length == 0; } }
+    private string errors = "";
+    private string carType { get; set; }
+    private string carModel { get; set; }
+
+    private PurchaseForCreateDTO purchase => purchaseState.Purchase;
+
+    private bool hiddenPurchaseCart = true;
+
+    private void AddCar(CocheParaComprarDTO car)
+    {
+        purchaseState.AddCarToPurchase(car);
+    }
+
+    private void RemovePurchaseItem(PurchaseItemDTO item)
+    {
+        purchaseState.RemovePurchaseItemToPurchase(item);
+        if (purchase.PurchaseItems.Count == 0) hiddenPurchaseCart = true;
+    }
+
+    public async void SearchCars()
+    {
+
+        carModel = carModelSelected == "All" ? null : carModelSelected;
+
+        try
+        {
+            cars = await apiclient.GetCarsForPurchaseAsync(carModel); //donde se saca esto??
+            errors = "";
+        }
+        catch (ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            modelsNames = await apiclient.GetModelsAsync(null); // donde se saca esto??
+        }
+        catch (ApiException ex)
+        {
+            if (modelsNames == null) modelsNames = new List<string>() { "All", };
+            logger.LogError("Error! There was an error while connecting to the GetModelsAsync service");
+        }
+       
+
+    }
+
+    private void PurchaseCars()
+    {
+        navigation.NavigateTo("/purchase/createpurchase");
+    }
+
+}
