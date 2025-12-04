@@ -44,6 +44,10 @@ builder.Services.AddScoped<AppForSEII2526APIClient>(sp => new AppForSEII2526APIC
 builder.Services.AddScoped<ReviewStateContainer>();
 
 
+//adding an In-memory state container service
+//https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
+builder.Services.AddScoped<PurchaseStateContainer>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
