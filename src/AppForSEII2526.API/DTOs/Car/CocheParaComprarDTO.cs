@@ -24,6 +24,10 @@
             PurchasePrice = purchasePrice;
         }
 
+        public CocheParaComprarDTO()
+        {
+        }
+
         public override bool Equals(object? obj)
         {
             return obj is CocheParaComprarDTO dTO &&
