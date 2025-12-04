@@ -19,8 +19,8 @@ public class RentalStateContainer
     {
         get
         {
-            int numberOfDays = (Rental.RentalDateTo - Rental.RentalDateFrom).Days;
-            return Convert.ToDecimal(Rental.RentalItems.Sum(ri => ri.PriceForRenting * numberOfDays));
+            int numberOfDays = (Rental.StartDate - Rental.EndDate).Days;
+            return Convert.ToDecimal(Rental.RentalItems.Sum(ri => ri.RentingPrice * numberOfDays));
         }
     }
 
@@ -33,14 +33,13 @@ public class RentalStateContainer
     public void AddMovieToRental(CocheParaAlquilarDTO coche)
     {
         //before adding a movie we checked whether it has been already added
-        if (!Rental.RentalItems.Any(ri => ri.Id == coche.Id))
+        if (!Rental.RentalItems.Any(ri => ri.CarId == coche.Id))
             //we add it if it is not in the list
             Rental.RentalItems.Add(new RentalItemDTO()
             {
-                MovieID = coche.Id,
-                Genre = coche.Genre,
-                Title = coche.Title,
-                PriceForRenting = coche.PriceForRenting,
+                CarId = coche.Id,
+                Modelo = coche.Model,
+                RentingPrice = coche.RentingPrice
             }
         );
 
