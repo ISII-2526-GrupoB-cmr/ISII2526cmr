@@ -1,211 +1,255 @@
 ﻿@page "/rental/SelectCocheRental"
-@using AppForSEII2526.Web.API
-@using Microsoft.AspNetCore.Authorization
 
-@inject AppForSEII2526APIClient apiservice
+
+@using Microsoft.AspNetCore.Authorization
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
 @inject ILogger<SelectCocheRental> logger
 @inject RentalStateContainer rentalState
-@inject NavigationManager Navigation
+@inject NavigationManager navigation
 
-@attribute [Authorize]
-
-<h3>Rental</h3>
-<EditForm Model="rental" OnValidSubmit="OpenDialog"/>
-    @*it checks user's inputs such as required attributes, that were defined in PurchaseForCreateDTO*@
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="row g-2">
-        <div class="col-md">
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="rental.CustomerNameSurname" class="form-control" id="NameSurname" />
-                <label for="NameSurname">Name and Surname</label>
-            </div>
-        </div>
-        <div class="col-md">
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="rental.Address" class="form-control" id="Address" />
-                <label for="DeliveryAddress">Delivery Address</label>
-            </div>
-        </div>
+<h3>Select Cars For Rental</h3>
+<div class="container-fluid">
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
     </div>
     <div class="row">
-        <div class="col">
-            <div class="form-floating">
-                @*a dropdown for selecting the payment method*@
-                <InputSelect class="form-select" @bind-Value="@rental.PaymentMethod" id="PaymentMethod">
-                    <option value="@PaymentMethodTypes.GooglePay" default> GooglePay</option>
-                    <option value="@PaymentMethodTypes.Visa" > Visa</option>
-                    <option value="@PaymentMethodTypes.Paypal" > Paypal</option>
-                </InputSelect>
-                <label for="PaymentMethod">Payment Method</label>
+        <div class="col-8">
+            <!-- FILTROS -->
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Max Price</span>
+                        <input type="number" step="5" @bind="rentingPrice" class="form-control" placeholder="Price">
+                    </div>
+                </div>
+                <!-- Select de Modelos -->
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Model</span>
+                        <select class="form-select" aria-label="Default select" @bind="carModelSelected" id="selectModel">
+                            <option value="All" selected>All</option>
+                            @foreach (string modelName in modelsNames)
+                            {
+                                <option value="@modelName" id="modelNameSelected_@modelName">@modelName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                
+
+
+
+
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchCars id="searchCars">Search cars</button>
+                </div>
+
+            </div>
+            <div class="row">
+                @if (cars == null)
+                {
+                    <p>Loading cars....</p>
+                }
+                else
+                {
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfCars">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Renting Price</th>
+                                    <th>Manufacturer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var car in cars)
+                                {
+                                    <tr id="CarData_@car.Model">
+                                        <td>@car.Model</td>
+                                        <td>@car.RentingPrice</td>
+                                        <td>@car.Manufacturer</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="carToPurchase_@car.Model" @onclick="@(() => AddCar(car))">Add</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                }
             </div>
         </div>
-        <div class="col-md">
-            <div class="form-floating">
-                @*this button will be disabled if there are no movies in the shopping cart*@
-                <button class="btn btn-primary" type="submit" id="Submit">
-                    Rent your movies
-                </button>
+            <div class="row">
+                @if (cars == null) {
+                }
+                else
+                {
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfMovies">
+                            <thead>
+                                <tr>
+                                    <th>Modelo</th>
+                                    <th>Renting Price</th>
+                                    <th>Manufacturer</th>
+                                    <th>Rent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var car in cars) {
+                                    <tr id="MovieData_@car.Model">
+                                        <td>@car.Model</td>
+                                        <td>@car.RentingPrice</td>
+                                        <td>@car.Manufacturer</td>
+
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="carToRent_@car.Model" @onclick="@(() => AddCar(car))">Add</button>
+                                        </td>
+                                    </tr>
+                                }
+                        </tbody>
+                    </table>
+                    </div>
+                
+                }
             </div>
         </div>
-    </div>
-</EditForm>
-<p></p>
-<h4>Rental detail</h4>
-<p><b>Date from:</b> @rental.StartDate.ToString("dd/MM/yyyy") <b>to:</b> @rental.EndDate.ToString("dd/MM/yyyy")</p>
-<p>
-    <b>Total price:</b> @rental.TotalPrice €                 
-    <button class="btn btn-outline-primary" type="submit" @onclick="ModifyRentalItems" id="ModifyMovies">
-        Modify movies
-    </button>
-</p>
-    <div class="mh-100 table-responsive">
-        <table class="table table-condensed table-hover" id="TableOfRentalItems">
-            <thead>
-                <tr>
-                    <th>Modelo</th>
-                    <th>Price For Renting</th>
-                    <th>Manufacturer</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in rental.RentalItems)
-            {
-                <tr id="MovieData_@item.Title">
-                    <td>@item.Title</td>
-                    <td>@item.Genre</td>
-                    <td>@item.PriceForRenting</td>
-                    <td><InputText @bind-Value="item.Description" class="form-control" id="@($"description_{item.MovieID}")" /></td>
-                </tr>
+        <div class="col-2" hidden="@hideRentingCart">
+            <div class="row">
+                <h3>Shopping Cart</h3>
+            </div>
+            @foreach (RentalItemDTO item in rental.RentalItems) {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removecar_@item.Modelo" @onclick="@(() => RemoveRentalItem(item))">x @item.Modelo - @item.RentingPrice€</button>
+                </div>
             }
-        </tbody>
-    </table>
-</div>
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="rentalcarButton" @onclick=@RentMovies>Rent movies</button>
+            </div>
+        </div>
+        
+ </div>
 
-
-@*a modal popup dialog for checking if user wants to proceed to purchase*@
-@if (DialogIsOpen)
-{
-    <Dialog Caption="Rental movies"
-    Message="Do you want to proceed to rent the selected movies?"
-    OnClose="@OnDialogClose"
-    Type=Dialog.Category.SaveNot>
-    </Dialog>
-}
-@*this is a another modal popup dialog to inform user about problems*@
-@if (DialogOKIsOpen)
-{
-    <Dialog Caption="Error!"
-    Message="@DialogOKMessage"
-    OnClose="@OnDialogOKClose"
-    Type=Dialog.Category.Okay>
-    </Dialog>
-}
 
 
 @code {
+    private string carModelSelected;
+    private ICollection<string>? modelsNames = new List<string>();
+    private bool hideRentingCart { get { return rental.RentalItems.Count == 0; } }
+    private ICollection<CocheParaAlquilarDTO> cars;
+    private bool hideErrors { get { return errors.Length == 0; } }
+    private string errors = "";
+    private string carModelo { get; set; }
+    private float rentingPrice { get; set; }
+    private DateTime _from;
+    private DateTime From {
+        get { return _from; }
+        set {
+            if (_from != value) {
+                //the rentingcart is cleared to ensure that only movies available for the selected period are selected
+                _from = value;
+                rental.StartDate = DateTime.SpecifyKind(_from, DateTimeKind.Utc);
+                rentalState.ClearRentingCart();
+
+            }
+        }
+    }
+
+    private DateTime _to;
+    private DateTime To {
+        get { return _to; }
+        set {
+            if (_to != value) {
+                //the rentingcart is cleared to ensure that only movies available for the selected period are selected
+                _to = value;
+                rental.StartDate = DateTime.SpecifyKind(_to, DateTimeKind.Utc);
+                rentalState.ClearRentingCart();
+
+            }
+        }
+    }
     private RentalForCreateDTO rental => rentalState.Rental;
 
-    private bool DialogIsOpen;
-    private bool OkCancel = false; //ok=true cancel=false
-    private void OpenDialog()
-    {
-        DialogIsOpen = true;
+    private bool hiddenRentingCart = true;
+
+    private void AddCar(CocheParaAlquilarDTO movie) {
+        rentalState.AddMovieToRental(movie);
     }
 
-    private void ModifyRentalItems()
-    {
-        Navigation.NavigateTo("/rentals/listmoviesforrenting");
+    private void RemoveRentalItem(RentalItemDTO item) {
+        rentalState.RemoveRentalItemToRent(item);
+        if (rental.RentalItems.Count == 0) hiddenRentingCart = true;
     }
 
-    private async Task OnDialogClose(bool isOk)
+    public async void SearchCars()
     {
+        // Si el usuario escribe texto en el input, ese es el filtro
+        // Si no escribe nada, usamos el modelo del dropdown (si no es "All")
+        string? modeloFiltro =
+            !string.IsNullOrWhiteSpace(carModelo)
+                ? carModelo
+                : (carModelSelected == "All" ? null : carModelSelected);
 
-
-        OkCancel = isOk;
-        DialogIsOpen = false;
-        if (OkCancel)
+        // Validaciones fechas
+        if (rental.StartDate > rental.EndDate)
         {
-            // Process the data introduced by the user if they are valid
-            if (rental.RentalItems.Count() > 0)
-            {
-                try {
-                {
-                    AppForSEII2526.Web.API.RentalForCreateDTO rentalDTO = new API.RentalForCreateDTO()
-                    {
-                        Name=rental.Name,
-                        Surname=rental.Surname,
-                        Address=rental.Address,
-                        PaymentMethod=(API.PaymentMethodTypes)rental.PaymentMethod,
-                        StartDate=rental.StartDate,
-                        EndDate=rental.EndDate,
-                        RentalItems= rental.RentalItems.Select(ri=>new API.RentalItemDTO()
-                        {
-                            CarId=ri.CarId,  Modelo=ri.Modelo,RentingPrice=ri.RentingPrice, Manufacturer=ri.Manufacturer
-                        }
-                        ).ToList(),
-                    };
-                    var rented = await apiservice.CreateRentalAsync(rentalDTO);
-                    rentalState.RentalProcessed();
-                    Navigation.NavigateTo($"/rentals/detailrental/?RentalID={rented.Id}");
-                }
-                catch (AppForSEII2526.Web.API.ApiException<AppForSEII2526.Web.API.ValidationProblemDetails> apiexceptionvalidation)
-                {
-                    //we need to inform user that there was a 400 error
-                    string message = "Error while processing your request, please try again later!";
-
-                    if (apiexceptionvalidation.Result.Errors.Values != null)
-                    {
-                        message = "";
-                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
-                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
-                            message = string.Join("(*) ", message, string.Join(" (*) ", errors));
-                    }
-                    OpenDialogOK(message);
-                }
-                catch ( AppForSEII2526.Web.API.ApiException apiexception)
-                {
-                    //we need to inform user that there was some other error while processing the request
-                    string message = "Error while processing your request, please try again later!";
-                    OpenDialogOK(message);
-                }
-            }
+            errors = "Your rental must end after than it starts";
+            return;
         }
-    }
 
-    private bool DialogOKIsOpen;
-    private string DialogOKMessage;
-    private void OpenDialogOK(string message)
-    {
-        DialogOKIsOpen = true;
-        DialogOKMessage = message;
-    }
-    private async Task OnDialogOKClose()
-    {
-        DialogOKIsOpen = false;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        if (authenticationState is not null)
+        if (rental.StartDate < DateTime.Today || rental.EndDate < DateTime.Today)
         {
-            var authState = await authenticationState;
-            var user = authState?.User;
-
-            if (user is not null)
-            {
-                if (user.Identity is not null && user.Identity.IsAuthenticated)
-                {
-                    rental.Name= user.Identity.Name;
-                }
-            }
+            errors = "Your rental period must be later";
+            return;
         }
+
+        try
+        {
+            cars = await apiclient.GetCocheParaAlquilarAsync(rentingPrice, modeloFiltro);
+            errors = "";
+        }
+        catch (ApiException ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error while connecting to the system";
+        }
+
+        StateHasChanged();
+    
     }
 
+    protected override async Task OnInitializedAsync() {
 
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationState { get; set; }
+        try {
+            modelsNames = await apiclient.GetModelsAsync(null);
+        }
+        catch (ApiException ex) {
+            if (modelsNames == null) modelsNames = new List<string>() { "All", };
+            logger.LogError("Error! There was an error while connecting to the GetGenresAsync service");
+        }
 
+        //the type of RentalDateFrom is DateTimeOffset, it is required a conversion
+        //https://learn.microsoft.com/es-es/dotnet/standard/datetime/converting-between-datetime-and-offset
+        _from = (_from == new DateTime(1, 1, 1)) ?
+            DateTime.SpecifyKind(DateTime.Today.AddDays(1), DateTimeKind.Utc)
+            : _from;
+        rental.StartDate = _from;
+
+        //the type of RentalDateFrom is DateTimeOffset, it is required a conversion
+        //https://learn.microsoft.com/es-es/dotnet/standard/datetime/converting-between-datetime-and-offset
+        _to = (_to == new DateTime(1, 1, 1)) ?
+            DateTime.SpecifyKind(DateTime.Today.AddDays(2), DateTimeKind.Utc)
+            : _to;
+        rental.EndDate = _to;
+
+
+       // return base.OnInitializedAsync();
+    }
+
+    private void RentMovies() {
+        navigation.NavigateTo("/rentals/createrental");
+    }
 
 }
+
