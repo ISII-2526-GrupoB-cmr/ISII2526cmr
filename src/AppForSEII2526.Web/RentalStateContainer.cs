@@ -39,7 +39,8 @@ public class RentalStateContainer
             {
                 CarId = coche.Id,
                 Modelo = coche.Model,
-                RentingPrice = coche.RentingPrice
+                RentingPrice = coche.RentingPrice,
+                Manufacturer=coche.Manufacturer
             }
         );
 
