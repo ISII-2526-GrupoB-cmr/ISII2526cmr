@@ -4,15 +4,13 @@
 
 @using Microsoft.AspNetCore.Authorization
 @using AppForSEII2526.Web.API
-@using AppForSEII2526.API.DTOs.Car
-@using AppForSEII2526.API.DTOs.PurchaseDTOs
 
-@inject AppForSEII2526 apiclient
+@inject AppForSEII2526APIClient apiclient
 @inject ILogger<SeleccionarCochePurchase> logger
 @inject PurchaseStateContainer purchaseState
 @inject NavigationManager navigation
 
-@attribute [Authorize]
+
 <h3>SeleccionarCoche</h3>
 <div class="container-fluid">
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
@@ -109,12 +107,13 @@
 @code {
 
     private string carModelSelected;
+    private string carColorSelected;
     private ICollection<string>? modelsNames = new List<string>();
     private bool hidePurchaseCart { get { return purchase.PurchaseItems.Count == 0; } }
     private ICollection<CocheParaComprarDTO> cars;
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
-    private string carType { get; set; }
+    private string carColor { get; set; }
     private string carModel { get; set; }
 
     private PurchaseForCreateDTO purchase => purchaseState.Purchase;
@@ -134,12 +133,12 @@
 
     public async void SearchCars()
     {
-
+        carColor = carColorSelected == "All" ? null : carColorSelected;
         carModel = carModelSelected == "All" ? null : carModelSelected;
 
         try
         {
-            cars = await apiclient.GetCarsForPurchaseAsync(carModel); //donde se saca esto??
+            cars = await apiclient.GetCocheParaComprarAsync(carColor, carModel); //donde se saca esto??
             errors = "";
         }
         catch (ApiException ex)

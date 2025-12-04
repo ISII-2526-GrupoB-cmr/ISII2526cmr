@@ -14,6 +14,54 @@
     "version": "v1"
   },
   "paths": {
+    "/api/Models/GetModels": {
+      "get": {
+        "tags": [
+          "Models"
+        ],
+        "operationId": "GetModels",
+        "parameters": [
+          {
+            "name": "modelName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Cars/GetCars": {
       "get": {
         "tags": [

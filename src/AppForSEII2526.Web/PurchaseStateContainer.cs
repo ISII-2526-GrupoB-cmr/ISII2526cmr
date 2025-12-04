@@ -1,8 +1,4 @@
-﻿using AppForSEII2526.API.DTOs;
-using AppForSEII2526.API.DTOs.Car;
-using AppForSEII2526.API.DTOs.PurchaseDTOs;
-using AppForSEII2526.API.Models;
-using System.Drawing;
+﻿using AppForSEII2526.Web.API;
 
 
 
