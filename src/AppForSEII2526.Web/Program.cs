@@ -1,3 +1,4 @@
+using AppForSEII2526.Web;
 using AppForSEII2526.Web.API;
 using AppForSEII2526.Web.Components;
 using AppForSEII2526.Web.Components.Account;
@@ -38,6 +39,7 @@ builder.Services.AddSingleton<IEmailSender<AppForSEII2526.Web.Data.ApplicationUs
 
 string? URI2API = builder.Configuration.GetValue(typeof(string), "AppForSEII2526_API") as string;
 
+builder.Services.AddScoped<RentalStateContainer>();
 
 var app = builder.Build();
 

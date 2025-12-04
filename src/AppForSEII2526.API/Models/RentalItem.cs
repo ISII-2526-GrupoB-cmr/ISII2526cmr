@@ -13,7 +13,7 @@ public class RentalItem {
 
         public Rental Rental { get; set; }
         public int Id { get; set; }
-        public float RentingPrice { get; set; }
+        public double RentingPrice { get; set; }
         public string Manufacturer { get; set; }
         public RentalItem() { }
         public RentalItem(int carId, int quantity, int rentalId)

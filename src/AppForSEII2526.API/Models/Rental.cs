@@ -31,7 +31,6 @@ namespace AppForSEII2526.API.Models
 
 
         [Display(Name = "Total Price")]
-        [Precision(10,2)]
         public double TotalPrice { get; set; }
 
         public Rental() { }
