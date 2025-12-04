@@ -22,7 +22,7 @@ namespace AppForSEII2526.Web
 
 
 
-        public void AddMovieToRental(CocheParaReseñarDTO car)
+        public void AddCarToReview(CocheParaReseñarDTO car)
         {
             //before adding a movie we checked whether it has been already added
             if (!Review.Reviewitems.Any(ri => ri.Model == car.Model))
