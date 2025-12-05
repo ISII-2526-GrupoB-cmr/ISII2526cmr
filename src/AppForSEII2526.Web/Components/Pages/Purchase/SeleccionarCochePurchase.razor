@@ -10,6 +10,7 @@
 @inject PurchaseStateContainer purchaseState
 @inject NavigationManager navigation
 
+@attribute [Authorize]
 
 <h3>SeleccionarCoche</h3>
 <div class="container-fluid">
@@ -20,13 +21,17 @@
         <div class="col-8">
             <!-- FILTROS -->
             <div class="row">
-                <!-- Filtro: Modelo -->
+        
+
+                <!-- Filtro: Color-->
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">Model</span>
-                        <input type="text" id="inputTitle" @bind=carModel class="form-control" placeholder="Model" aria-label="Model" aria-describedby="basic-addon1">
+                        <span class="input-group-text" id="basic-addon1">Color</span>
+                        <input type="text" id="inputColor" @bind=carColor class="form-control" placeholder="Color" aria-label="Color" aria-describedby="basic-addon1">
                     </div>
                 </div>
+                
+
                 <!-- Select de Modelos -->
                 <div class="col">
                     <div class="input-group mb-3">
@@ -62,6 +67,8 @@
                                     <th>Model</th>
                                     <th>Car Color</th>
                                     <th>Purchase Price</th>
+                                    <th>Fuel Type</th>
+                                    <th>Manufacturer</th>
                                     <th>Purchase</th>
                                 </tr>
                             </thead>
@@ -72,6 +79,8 @@
                                         <td>@car.Model</td>
                                         <td>@car.Color</td>
                                         <td>@car.PurchasePrice</td>
+                                        <td>@car.FuelType</td>
+                                        <td>@car.Manufacturer</td>
                                         <td>
                                             <button class="btn btn-outline-secondary" id="carToPurchase_@car.Model" @onclick="@(() => AddCar(car))">Add</button>
                                         </td>
@@ -133,7 +142,6 @@
 
     public async void SearchCars()
     {
-        carColor = carColorSelected == "All" ? null : carColorSelected;
         carModel = carModelSelected == "All" ? null : carModelSelected;
 
         try
