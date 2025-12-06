@@ -1,0 +1,115 @@
+﻿@page "/purchase/detailpurchase"
+
+
+@using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+@inject AppForSEII2526APIClient apiclient
+
+<h3>DetailPurchase</h3>
+
+@attribute [Authorize]
+
+@if (purchase == null)
+{
+    <p>@error</p>
+}
+else
+{
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Name and Surname</th>
+            <td id="NameSurname">@purchase.CustomerName @purchase.CustomerSurname</td>
+        </tr>
+        <tr>
+            <th>Delivery Address</th>
+            <td id="DeliveryAddress">@purchase.DeliveryAddress</td>
+        </tr>
+        <tr>
+            <th>Payment Method</th>
+            <td id="PaymentMethod">@purchase.TotalPrice</td>
+        </tr>
+        <tr>
+            <th>Purchase Date</th>
+            <td id="PurchaseDate">@purchase.PurchaseDate.ToString("dd/MM/yyyy hh:mm:ss")</td>
+        </tr>
+    </table>
+
+    <h4>Purchased Cars</h4>
+
+    <table class="table" id="PurchasedMovies">
+        <thead>
+            <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Color</th>
+                <th scope="col">Price for Purchasing</th>
+                <th scope="col">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (PurchaseItemDTO item in purchase.PurchaseItems)
+            {
+                <tr id="PurchaseItem_@item.Modelo">
+                    <td>@item.CarColor</td>
+                    <td>@item.PurchasePrice</td>
+                    <td>@item.Quantity</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @*colspan is used to state that TWO columns are collapsed*@
+        <th scope="row" colspan="2" class="text-end">Total Price</th>
+        <td id="TotalPrice">@purchase.TotalPrice €</td>
+        </tfoot>
+
+    </table>
+
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int PurchaseID { get; set; }
+    private PurchaseDetailDTO purchase;
+    private string error = "";
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        //we check the user is logged in
+        string userName = "";
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            //we retrieve the id of the user logged in
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
+                {
+                    userName = user.Identity.Name;
+                }
+            }
+        }
+
+        try
+        {
+            purchase = await apiclient.GetPurchaseAsync(PurchaseID);
+        }
+        catch (ApiException exception)
+        {
+            purchase = null;
+        }
+        if ((purchase == null) || (purchase.UserNameCustomer != userName))
+        {
+            error = $"Error! You are not authorized to see this rental or there is not a rental with id={RentalID}";
+        }
+
+
+    }
+
+}

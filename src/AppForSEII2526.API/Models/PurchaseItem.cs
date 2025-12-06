@@ -1,4 +1,6 @@
 
+using Humanizer;
+
 namespace AppForSEII2526.API.Models
 {
     [PrimaryKey(nameof(CarId), nameof(PurchaseId))]
@@ -27,10 +29,11 @@ namespace AppForSEII2526.API.Models
         [NotMapped]
         public string? Description { get; set; }
 
-        public PurchaseItem(Car car, Purchase purchase)
+        public PurchaseItem(Car car, Purchase purchase, int quantity)
         {
             Car = car;
             Purchase = purchase;
+            Quantity = quantity;
         }
 
         // Constructor usado en PurchasesController:
@@ -50,13 +53,13 @@ namespace AppForSEII2526.API.Models
 
         // Constructor usado en pruebas y lugares donde se dispone del objeto Car:
         // new PurchaseItem(car, purchase, car.PurchasePrice)
-        public PurchaseItem(Car car, Purchase purchase, float purchasePrice)
+        public PurchaseItem(Car car, Purchase purchase, float purchasePrice, int quantity)
         {
             Car = car;
             CarId = car?.Id ?? 0;
             Purchase = purchase;
             PurchaseId = purchase?.Id ?? 0;
-            Quantity = 1;
+            Quantity = quantity;
 
             PurchasePrice = purchasePrice;
             TotalPrice = purchasePrice;

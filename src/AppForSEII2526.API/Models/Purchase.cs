@@ -5,17 +5,15 @@ namespace AppForSEII2526.API.Models
     public class Purchase
     {
         private ApplicationUser? user;
-        private int quantity;
 
         public Purchase ()
         {
 
         }
-        public Purchase(string customerName, string customerSurname, int quantity, string deliveryAddress, PaymentMethodTypes paymentMethod, List<PurchaseItem> purchaseItems)
+        public Purchase(string customerName, string customerSurname, string deliveryAddress, PaymentMethodTypes paymentMethod, List<PurchaseItem> purchaseItems)
         {
             CustomerName = customerName;
             CustomerSurname = customerSurname;
-            this.quantity = quantity;
             DeliveryAddress = deliveryAddress;
             PaymentMethod = paymentMethod;
             PurchaseItems = purchaseItems;
