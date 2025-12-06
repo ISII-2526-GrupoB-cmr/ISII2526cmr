@@ -1,0 +1,198 @@
+﻿@page "/purchase/createpurchase"
+
+@inject NavigationManager navigation
+@using AppForSEII2526.Web.Components.Shared
+@using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<CreatePurchase> logger
+@inject PurchaseStateContainer purchaseState
+
+@attribute [Authorize]
+
+<h3>Create Purchase</h3>
+
+@* rental is the object that will be edited thanks to the form *@
+<EditForm Model="purchase" OnValidSubmit="OpenDialog">
+    <div class="row">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="row alert alert-danger"/>
+    </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @messageError</p>
+    </div>
+    <div class="row g-3">
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="purchase.CustomerName" class="form-control" id="Name" />
+                <label for="Name">Name </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="purchase.CustomerSurname" class="form-control" id="Surname" />
+                <label for="Surname">Surname </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="purchase.DeliveryAddress" class="form-control" id="DeliveryAddress" />
+                <label for="DeliveryAddress">Delivery Address</label>
+            </div>
+        </div>
+    </div>
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+                @*a dropdown for selecting the payment method*@
+                <InputSelect class="form-select" @bind-Value="@purchase.PaymentMethod" id="PaymentMethod">
+                    <option value="@PaymentMethodTypes.GooglePay" default> GooglePay</option>
+                    <option value="@PaymentMethodTypes.Visa"> Visa</option>
+                </InputSelect>
+                <label for="PaymentMethod">Payment Method</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating">
+                @*this button will be used to ask the user if he want to proceed to rent the movies*@
+                <button class="btn btn-primary" type="submit" id="Submit">
+                    Purchase your cars
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <h4>Purchase detail</h4>
+    <p>
+        <b>Total price:</b> @TotalCost €
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyPurchaseItems" id="ModifyCars">
+            Modify cars
+        </button>
+    </p>
+@*we show the information of the movies according to step 5 of the UC (...)*@
+
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="TableOfPurchaseItems">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Color</th>
+                    <th>Purchase price</th>
+                    <th>Description</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in purchase.PurchaseItems)
+                {
+                    <tr id="MovieData_@item.Modelo">
+                        <td>@item.Modelo</td>
+                        <td>@item.CarColor</td>
+                        <td>@item.PurchasePrice</td>
+                        <td>@item.Description</td>
+                        <td><InputText @bind-Value="item.Modelo" class="form-control" id="@($"_{item.CarID}")" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</EditForm>
+
+@*a modal popup dialog for checking if user wants to proceed to rent*@
+@if (DialogIsOpen)
+{
+    <Dialog Caption="Purchase cars"
+    Message="Do you want to proceed to purchase the selected cars?"
+    OnClose="@OnDialogClose"
+    Type=Dialog.Category.SaveNot>
+    </Dialog>
+}
+
+@code {
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
+    private bool DialogIsOpen;
+
+    private PurchaseForCreateDTO purchase => purchaseState.Purchase;
+
+    private decimal TotalCost
+    {
+        get
+        {
+            double price = purchase.PurchaseItems.Sum(ri => ri.PurchasePrice);
+            return Convert.ToDecimal(price);
+        }
+    }
+    private void ModifyPurchaseItems()
+    {
+        navigation.NavigateTo("/purchase/seleccionarcochepurchase");
+    }
+
+    private void OpenDialog()
+    {
+        DialogIsOpen = true;
+    }
+
+    private async Task OnDialogClose(bool isOk)
+    {
+
+        DialogIsOpen = false;
+        if (isOk)
+        {
+            // Process the data introduced by the user if they are valid
+        }
+        if (purchase.PurchaseItems.Count > 0)
+        {
+            try
+            {
+                var purchased = await apiclient.CreatePurchaseAsync(purchase);
+                purchaseState.PurchaseProcessed();
+                navigation.NavigateTo($"/purchase/detailpurchase/?PurchaseID={purchased.Id}");
+            }
+            catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+            {
+
+                if (apiexceptionvalidation.Result.Errors.Values != null)
+                {
+                    messageError = "";
+                    foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                        //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                        messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                }
+            }
+            catch (ApiException apiexception)
+            {
+                //we need to inform user that there was some other error while processing the request
+                messageError = "Error while processing your request, please try again later!";
+
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    purchase.CustomerName = user.Identity.Name;
+                }
+            }
+            purchase.CustomerName = purchase.CustomerName == null ? "" : purchase.CustomerName;
+            purchase.CustomerSurname = purchase.CustomerSurname == null ? "" : purchase.CustomerSurname;
+            purchase.DeliveryAddress = purchase.DeliveryAddress == null ? "" : purchase.DeliveryAddress;
+
+        }
+    }
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+}

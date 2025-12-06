@@ -38,6 +38,8 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         [Range(1, 100, ErrorMessage = "Quantity must be between 1 and 100")]
         public int Quantity { get; set; }
 
+        public string Username { get; set; }
+
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Name")]
         [StringLength(50, MinimumLength = 1, ErrorMessage = "Name must have at least 1 characters")]
