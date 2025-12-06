@@ -104,9 +104,9 @@ else
         {
             purchase = null;
         }
-        if ((purchase == null) || (purchase.UserNameCustomer != userName))
+        if ((purchase == null) || (purchase.CustomerName != userName))
         {
-            error = $"Error! You are not authorized to see this rental or there is not a rental with id={RentalID}";
+            error = $"Error! You are not authorized to see this rental or there is not a purchase with id={PurchaseID}";
         }
 
 
