@@ -13,22 +13,19 @@ public class PurchaseItemDTO
     así como el precio total de la compra
     */
 
-    public PurchaseItemDTO(int carID, float purchasePrice, float totalPrice, string modelo, string carColor, string description = "", int quantity)
+    public PurchaseItemDTO(int carID, float purchasePrice, string modelo, string carColor, int quantity,string description = "")
     {
         CarID = carID;
         CarColor = carColor;
         PurchasePrice = purchasePrice;
-        TotalPrice = totalPrice;
         Modelo = modelo;
-        Description = description;
         Quantity = quantity;
+        Description = description;
     }
 
     public int Quantity { get; set; }
     public int CarID { get; set; }
     public string CarColor { get; set; }
-
-    public float TotalPrice { get; set; }
 
     public double PurchasePrice { get; set; }
 

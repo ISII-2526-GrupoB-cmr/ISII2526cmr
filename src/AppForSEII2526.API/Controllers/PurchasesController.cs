@@ -44,11 +44,12 @@ namespace AppForSEII2526.API.Controllers
                     p.PurchaseItems
                         .Select(pi => new PurchaseItemDTO(
                             pi.Car.Id,
-                            pi.Purchase.PurchasingPrice,
                             pi.Car.PurchasePrice,
                             pi.Car.Model.Name,
                             pi.Car.Description,
+                            pi.Quantity,
                             pi.Car.Color
+                            
                         )).ToList<PurchaseItemDTO>())).FirstOrDefaultAsync();
 
 
@@ -75,14 +76,7 @@ namespace AppForSEII2526.API.Controllers
             if (purchaseForCreate.PurchaseItems == null || purchaseForCreate.PurchaseItems.Count == 0)
                 ModelState.AddModelError("PurchaseItems", "Error! Ningun coche seleccionado");
 
-            if (purchaseForCreate.Quantity <= 0)
-                ModelState.AddModelError("Quantity", "Error! Debes seleccionar una cantidad mayor a 0");
-
-            if (purchaseForCreate.PurchaseItems!=null && purchaseForCreate.PurchaseItems.Count != 0)
-
-
-                if (purchaseForCreate.PurchaseItems[0].Description == "" && purchaseForCreate.Quantity == 2)
-                    ModelState.AddModelError("Description", "Error! Estas comprando demasiados coches sin descripcion");
+            
 
 
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
@@ -98,44 +92,46 @@ namespace AppForSEII2526.API.Controllers
             var purchaseNames = purchaseForCreate.PurchaseItems.Select(pi => pi.Modelo).ToList<string>();
 
             var cars = _context.Cars
-                .Include(c => c.Model)
+                .Include(c => c.PurchaseItems)
+                .ThenInclude(pi => pi.Purchase)
                 .Where(c => purchaseNames.Contains(c.Model.Name))
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Model.Name,
+                    c.QuantityForPurchase,
+                    c.PurchasePrice,
+                    NumberOfPurchaseItems = c.PurchaseItems.Sum(pi => pi.Quantity)
+                })
                 .ToList();
 
 
             Purchase purchase = new Purchase(purchaseForCreate.CustomerName, purchaseForCreate.CustomerSurname,
-                purchaseForCreate.Quantity, purchaseForCreate.DeliveryAddress,
-                purchaseForCreate.PaymentMethod,
+                purchaseForCreate.DeliveryAddress, purchaseForCreate.PaymentMethod,
                 new List<PurchaseItem>());
 
 
             purchase.ApplicationUser = user;
 
 
-            bool quantityUpdated = false;
+            
             purchase.PurchasingPrice = 0;
 
             foreach (var item in purchaseForCreate.PurchaseItems)
             {
-                var car = cars.FirstOrDefault(c => c.Model.Name == item.Modelo);
+                var car = cars.FirstOrDefault(c => c.Name == item.Modelo);
 
                 //we must check that there is enough quantity to be rented in the database
-                if (car == null || car.QuantityForPurchase < purchaseForCreate.Quantity)
+                if (car == null || car.QuantityForPurchase < item.Quantity)
                 {
                     ModelState.AddModelError("PurchaseItems", $"Error! Car Model '{item.Modelo}' is not available for being purchased");
                 }
                 else
                 {
-                    if (!quantityUpdated)
-                    {
-                        car.QuantityForPurchase = car.QuantityForPurchase - purchaseForCreate.Quantity;
-                        quantityUpdated = true;
-                    }
-
-                    purchase.PurchasingPrice += car.PurchasePrice * purchaseForCreate.Quantity;
+  
+                    purchase.PurchasingPrice += car.PurchasePrice * item.Quantity;
                     // purchase does not exist in the database yet and does not have a valid Id, so we must relate purchaseitem to the object purchase
-                    purchase.PurchaseItems.Add(new PurchaseItem(car.Id, purchaseForCreate.Quantity, purchase, car.PurchasePrice, purchase.PurchasingPrice, item.CarColor, item.Description));
-                    
+                    purchase.PurchaseItems.Add(new PurchaseItem(car.Id, item.Quantity, purchase, car.PurchasePrice, purchase.PurchasingPrice, item.CarColor, item.Description));
                 }
                 
             }

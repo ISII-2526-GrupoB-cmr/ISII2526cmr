@@ -16,13 +16,13 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
 
         */
 
-        public PurchaseForCreateDTO(string customerName, string customerSurname, string deliveryAddress, PaymentMethodTypes paymentMethod, int quantity, IList<PurchaseItemDTO> purchaseItems)
+        public PurchaseForCreateDTO(string customerName, string customerSurname, string deliveryAddress, PaymentMethodTypes paymentMethod, IList<PurchaseItemDTO> purchaseItems)
         {
             CustomerName = customerName ?? throw new ArgumentNullException(nameof(customerName));
             CustomerSurname = customerSurname ?? throw new ArgumentNullException(nameof(customerSurname));
             DeliveryAddress = deliveryAddress ?? throw new ArgumentNullException(nameof(deliveryAddress));
             PaymentMethod = paymentMethod;
-            Quantity = quantity;
+            
             PurchaseItems = purchaseItems ?? throw new ArgumentNullException(nameof(purchaseItems));
         }
 
@@ -34,11 +34,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your address for delivery")]
         public string DeliveryAddress { get; set; }
 
-        [Required]
-        [Range(1, 100, ErrorMessage = "Quantity must be between 1 and 100")]
-        public int Quantity { get; set; }
 
-        public string Username { get; set; }
 
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Name")]
@@ -62,7 +58,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         {
             return obj is PurchaseForCreateDTO dTO &&
                    DeliveryAddress == dTO.DeliveryAddress &&
-                   Quantity == dTO.Quantity &&
+                   
                    CustomerName == dTO.CustomerName &&
                    CustomerSurname == dTO.CustomerSurname &&
                    PurchaseItems.SequenceEqual(dTO.PurchaseItems) &&
