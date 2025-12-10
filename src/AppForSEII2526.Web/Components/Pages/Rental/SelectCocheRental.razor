@@ -8,6 +8,9 @@
 @inject RentalStateContainer rentalState
 @inject NavigationManager navigation
 
+
+@attribute [Authorize]
+
 <h3>Select Cars For Rental</h3>
 <div class="container-fluid">
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
@@ -58,8 +61,12 @@
                             <thead>
                                 <tr>
                                     <th>Model</th>
-                                    <th>Renting Price</th>
+                                    <th>Fuel Type</th>
                                     <th>Manufacturer</th>
+                                    <th>Price for renting</th>
+                                    <th>Color</th>
+                                  
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -67,8 +74,11 @@
                                 {
                                     <tr id="CarData_@car.Model">
                                         <td>@car.Model</td>
-                                        <td>@car.RentingPrice</td>
+                                        <td>@car.FuelType</td>
                                         <td>@car.Manufacturer</td>
+                                        <td>@car.RentingPrice</td>
+                                        <td>@car.Color</td>
+
                                         <td>
                                             <button class="btn btn-outline-secondary" id="carToPurchase_@car.Model" @onclick="@(() => AddCar(car))">Add</button>
                                         </td>
@@ -81,39 +91,7 @@
                 }
             </div>
         </div>
-            <div class="row">
-                @if (cars == null) {
-                }
-                else
-                {
-                    <div class="mh-100 table-responsive">
-                        <table class="table table-condensed table-hover" id="TableOfMovies">
-                            <thead>
-                                <tr>
-                                    <th>Modelo</th>
-                                    <th>Renting Price</th>
-                                    <th>Manufacturer</th>
-                                    <th>Rent</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var car in cars) {
-                                    <tr id="MovieData_@car.Model">
-                                        <td>@car.Model</td>
-                                        <td>@car.RentingPrice</td>
-                                        <td>@car.Manufacturer</td>
-
-                                        <td>
-                                            <button class="btn btn-outline-secondary" id="carToRent_@car.Model" @onclick="@(() => AddCar(car))">Add</button>
-                                        </td>
-                                    </tr>
-                                }
-                        </tbody>
-                    </table>
-                    </div>
-                
-                }
-            </div>
+           
         </div>
         <div class="col-2" hidden="@hideRentingCart">
             <div class="row">
@@ -248,7 +226,7 @@
     }
 
     private void RentMovies() {
-        navigation.NavigateTo("/rentals/createrental");
+        navigation.NavigateTo("/rental/CreateCocheRental");
     }
 
 }
