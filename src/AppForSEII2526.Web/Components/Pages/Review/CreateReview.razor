@@ -1,8 +1,5 @@
 ﻿@page "/review/create"
 
-
-<h3>Create Review</h3>
-
 @using AppForSEII2526.Web.API
 @using Microsoft.AspNetCore.Authorization
 @using AppForSEII2526.Web.Components.Shared
@@ -11,12 +8,22 @@
 @inject ReviewStateContainer reviewState
 @inject NavigationManager navigation
 
+
+<h3>Create Review</h3>
+
+
+
 @attribute [Authorize]
 
 <EditForm Model="review" OnValidSubmit="OpenDialog">
     <div class="row">
         <DataAnnotationsValidator />
         <ValidationSummary class="row alert alert-danger" />
+    </div>
+
+    @* Bloques de error redundantes eliminados para limpieza *@
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @messageError</p>
     </div>
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errors: @messageError</p>
@@ -36,7 +43,7 @@
         </div>
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputText @bind-Value="review.Drivertype" class="form-control" id="Drivertype" />
+                <InputSelect @bind-Value="review.Drivertype" class="form-control" id="Drivertype" />
                 <label for="Drivertype">Drivertype</label>
             </div>
         </div>
@@ -64,13 +71,8 @@
     </div>
 
     <h4>Review detail</h4>
-    <p><b>Date from:</b> @review.RentalDateFrom.ToString("dd/MM/yyyy") <b>to:</b> @rental.RentalDateTo.ToString("dd/MM/yyyy")</p>
-    <p>
-        <b>Total price:</b> @TotalCost €
-        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyRentalItems" id="ModifyMovies">
-            Modify movies
-        </button>
-    </p>
+    <p><b>Date from:</b> @review.Created.ToString("dd/MM/yyyy")</p>
+   
 
 
     <div class="mh-100 table-responsive">
@@ -91,7 +93,6 @@
                         <td>@item.Fueltype</td>
                         <td>@item.Manufacturer</td>
                         <td>@item.Color</td>
-                        <td><InputText @bind-Value="item.Description" class="form-control" id="@($"description_{item.CarID}")" /></td>
                     </tr>
                 }
             </tbody>
@@ -113,7 +114,7 @@
 @code {
 
     private string messageError = "";
-    private bool hideErrors { get { return messageError.Length == 0; } }
+    private bool hideErrors = true;
 
     private bool DialogIsOpen;
 
