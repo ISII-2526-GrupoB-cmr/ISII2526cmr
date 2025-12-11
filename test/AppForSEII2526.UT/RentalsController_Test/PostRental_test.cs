@@ -71,36 +71,36 @@ namespace AppForSEII2526.UT.RentalsController_test
 
         public static IEnumerable<object[]> TestCasesFor_CreatePurchase()
         {
-            var rentalNoITem = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
+            var rentalNoITem = new RentalForCreateDTO("Elena", "Navarro Martinez",
               "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(2), DateTime.Today.AddDays(5), new List<RentalItemDTO>());
 
-            var rentalItems = new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85) };
+            var rentalItems = new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85,1) };
 
-            var rentalFromBeforeToday = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
+            var rentalFromBeforeToday = new RentalForCreateDTO("Elena", "Navarro Martinez", 
               "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today, DateTime.Today.AddDays(5), rentalItems);
 
-            var rentalToBeforeFrom = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
+            var rentalToBeforeFrom = new RentalForCreateDTO("Elena", "Navarro Martinez", 
               "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(5), DateTime.Today.AddDays(2), rentalItems);
 
-            var RentalApplicationUser = new RentalForCreateDTO("victor.lopez@uclm.es", "lopez muñoz", 1,
+            var RentalApplicationUser = new RentalForCreateDTO("victor.lopez@uclm.es", "lopez muñoz", 
                 "Calle Postigos 20", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(2), DateTime.Today.AddDays(4), rentalItems);
 
 
 
-            var CantidadMCero = new RentalForCreateDTO("Elena", "Navarro Martinez", 0,
+            var CantidadMCero = new RentalForCreateDTO("Elena", "Navarro Martinez", 
               "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(2), DateTime.Today.AddDays(5),
-                new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85) });
+                new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85,0) });
 
 
-            var DirInv = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
+            var DirInv = new RentalForCreateDTO("Elena", "Navarro Martinez", 
               "Avda. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(2), DateTime.Today.AddDays(5),
-                new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85) });
+                new List<RentalItemDTO>() { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85,1) });
 
             var allTests = new List<object[]>
             {
@@ -157,10 +157,10 @@ namespace AppForSEII2526.UT.RentalsController_test
 
 
 
-            var rentalDTO = new RentalForCreateDTO("Elena", "Navarro Martinez", 1,
+            var rentalDTO = new RentalForCreateDTO("Elena", "Navarro Martinez", 
               "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(6), DateTime.Today.AddDays(7), new List<RentalItemDTO>()
-                { new RentalItemDTO(2,"Toyota Corolla", "Toyota", 85) });
+                { new RentalItemDTO(2,"Toyota Corolla", "Toyota", 85, 1) });
 
             var fixedDate = new DateTime(2025, 11, 16, 21, 28, 52);
 
@@ -169,7 +169,7 @@ namespace AppForSEII2526.UT.RentalsController_test
                 "Elena", "Navarro Martinez",
               "Calle. España 2, Albacete", PaymentMethodTypes.Visa,
                 DateTime.Today.AddDays(6), DateTime.Today.AddDays(7), new List<RentalItemDTO>()
-                { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85) });
+                { new RentalItemDTO(2, "Toyota Corolla", "Toyota", 85,1) });
 
             // Act
             var result = await controller.CreateRental(rentalDTO);

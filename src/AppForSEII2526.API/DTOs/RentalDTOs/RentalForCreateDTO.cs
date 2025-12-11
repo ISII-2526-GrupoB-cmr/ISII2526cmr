@@ -5,7 +5,7 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
 {
     public class RentalForCreateDTO
     {
-        public RentalForCreateDTO(string name, string surname,int quantity, string address, PaymentMethodTypes paymentMethod, DateTime startDate, DateTime endDate, IList<RentalItemDTO> rentalItems)
+        public RentalForCreateDTO(string name, string surname, string address, PaymentMethodTypes paymentMethod, DateTime startDate, DateTime endDate, IList<RentalItemDTO> rentalItems)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Surname = surname ?? throw new ArgumentNullException(nameof(surname));
@@ -14,14 +14,12 @@ namespace AppForSEII2526.API.DTOs.RentalDTOs
             StartDate = startDate;
             EndDate = endDate;
             RentalItems = rentalItems ?? throw new ArgumentNullException(nameof(rentalItems));
-            Quantity = quantity;
         }
 
         public RentalForCreateDTO()
         {
             RentalItems = new List<RentalItemDTO>();
         }
-        public int Quantity { get; set; }
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
