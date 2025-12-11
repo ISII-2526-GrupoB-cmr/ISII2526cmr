@@ -116,7 +116,7 @@ namespace AppForSEII2526.UT.RentalsController_test
             var expectedRental = new RentalDetailDTO(1, DateTime.Today, "Elena", "Navarro Martínez",
                         "elena@uclm.es", PaymentMethodTypes.Visa,
                         startDate, endDate,
-                        new List<RentalItemDTO> { new RentalItemDTO(1, "Sedan", "Toyota", 85) });
+                        new List<RentalItemDTO> { new RentalItemDTO(1, "Sedan", "Toyota", 85,1) });
 
 
             // Act 

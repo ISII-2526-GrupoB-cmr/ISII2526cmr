@@ -1,7 +1,4 @@
-﻿
-
-
-using AppForSEII2526.API.DTOs.RentalDTOs;
+﻿using AppForSEII2526.API.DTOs.RentalDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppForSEII2526.API.Controllers
@@ -44,7 +41,7 @@ namespace AppForSEII2526.API.Controllers
                     r.RentalItems
                         .Select(ri => new RentalItemDTO(ri.Car.Id,
                                  ri.Car.Model.Name, ri.Car.Manufacturer,
-                                ri.Car.RentingPrice)).ToList<RentalItemDTO>()))
+                                ri.RentingPrice,ri.Quantity)).ToList<RentalItemDTO>()))
              .FirstOrDefaultAsync();
 
 
@@ -74,8 +71,7 @@ namespace AppForSEII2526.API.Controllers
                 ModelState.AddModelError("StartDate", "Error! La fecha de alquiler tiene que ser posterior a la de hoy");
             if (rentalForCreate.EndDate <= rentalForCreate.StartDate)
                 ModelState.AddModelError("EndDate", "Error! La fecha de fin tiene que ser mas tarde de la que empieza");
-            if (rentalForCreate.Quantity <= 0)
-                ModelState.AddModelError("Quantity", "Error! La cantidad para alquiilar tiene que ser mayor a 0");
+           
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
             var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == rentalForCreate.Name && au.Surname == rentalForCreate.Surname);
             if (user == null)
@@ -95,10 +91,17 @@ namespace AppForSEII2526.API.Controllers
             var rentingnames = rentalForCreate.RentalItems.Select(ri => ri.Modelo).ToList<string>();
 
             var cars = _context.Cars
-                .Include(c => c.Model)
                 .Include(m => m.RentalItems)
                 .ThenInclude(ri => ri.Rental)
                 .Where(m => rentingnames.Contains(m.Model.Name))
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Model.Name,
+                    c.QuantityForRenting,
+                    c.RentingPrice,
+                    NumberOfRentlasItems = c.RentalItems.Sum(pi => pi.Quantity)
+                })
                 .ToList();
 
             Rental rental = new Rental(rentalForCreate.Name, rentalForCreate.Surname,
@@ -128,7 +131,7 @@ namespace AppForSEII2526.API.Controllers
                     .FirstOrDefault(c => c.Model != null && c.Model.Name == item.Modelo);
 
                 // Si no existe el modelo, lanzar el error esperado
-                if (car == null)
+                if (car == null || car.QuantityForRenting<item.Quantity )
                 {
                     ModelState.AddModelError("RentalItems",
                         "Error! El modelo del coche no esta disponible para ser alquilado");
@@ -145,7 +148,9 @@ namespace AppForSEII2526.API.Controllers
 
                 var disponible = car.QuantityForRenting - rentedCount;
 
-                if (disponible < rentalForCreate.Quantity)
+                if (disponible < item.Quantity)
+
+
                 {
                     ModelState.AddModelError("RentalItems",
                         "Error! El modelo del coche no esta disponible para ser alquilado");
@@ -157,7 +162,7 @@ namespace AppForSEII2526.API.Controllers
                 {
                     CarId = car.Id,
                     Rental = rental,
-                    Quantity = rentalForCreate.Quantity,
+                    Quantity = item.Quantity,
                     RentingPrice = car.RentingPrice,
                     Manufacturer = car.Manufacturer
                 };
