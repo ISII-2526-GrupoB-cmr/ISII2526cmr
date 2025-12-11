@@ -14,7 +14,9 @@
 
         public float PurchasePrice { get; set; }
 
-        public CocheParaComprarDTO(int id, string model, string color, string fuelType, string manufacturer, float purchasePrice)
+        public string Description { get; set; }
+
+        public CocheParaComprarDTO(int id, string model, string color, string fuelType, string manufacturer, float purchasePrice, string description)
         {
             Id = id;
             Model = model;
@@ -22,6 +24,7 @@
             FuelType = fuelType;
             Manufacturer = manufacturer;
             PurchasePrice = purchasePrice;
+            Description = description;
         }
 
         public CocheParaComprarDTO()

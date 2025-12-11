@@ -76,7 +76,7 @@ namespace AppForSEII2526.API.Controllers
             var coches = await _context.Cars.Include(coche => coche.Model)
                 .Where(c => (c.Color.Contains(filtroColor) || (filtroColor == null)) && (c.Model.Name.Contains(modelo) || ( modelo == null)))
                 .Select(c => new CocheParaComprarDTO(c.Id, c.Model.Name,
-                c.Color, c.FuelType, c.Manufacturer, c.PurchasePrice)).ToListAsync();
+                c.Color, c.FuelType, c.Manufacturer, c.PurchasePrice, c.Description)).ToListAsync();
             return Ok(coches);
         }
 
