@@ -1,0 +1,112 @@
+﻿@page "/review/getreview"
+
+
+@using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+@inject AppForSEII2526APIClient apiclient
+
+<h3>Review Detail</h3>
+
+@attribute [Authorize]
+
+@if (review == null)
+{
+    <p>@error</p>
+}
+else
+{
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Username</th>
+            <td id="NameSurname">@review.UserName</td>
+        </tr>
+        <tr>
+            <th>Country</th>
+            <td id="Country">@review.Country</td>
+        </tr>
+        <tr>
+            <th>DriverType</th>
+            <td id="DriverType">@review.Drivertype</td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td id="Created">@review.Created.ToString("dd/MM/yyyy hh:mm:ss")</td>
+        </tr>
+    </table>
+
+    <h4>Reviewd Cars</h4>
+
+    <table class="table" id="ReviewCars">
+        <thead>
+            <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Manufacturer</th>
+                <th scope="col">Color</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ReviewItemDTO item in review.ReviewItems)
+            {
+                <tr id="ReviewItem_@item.Model">
+                    <td>@item.Color</td>
+                    <td>@item.Manufacturer</td>
+                    <td>@item.Rating</td>
+                    <td>@item.Description</td>
+                </tr>
+            }
+        </tbody>
+       
+    </table>
+
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int ReviewId { get; set; }
+    private ReviewDetailDTO review;
+    private string error = "";
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        //we check the user is logged in
+        string userName = "";
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            //we retrieve the id of the user logged in
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
+                {
+                    userName = user.Identity.Name;
+                }
+            }
+        }
+
+        try
+        {
+            review = await apiclient.GetReviewAsync(ReviewId);
+        }
+        catch (ApiException exception)
+        {
+            review = null;
+        }
+        if ((review == null) || (review.UserName != userName))
+        {
+            error = $"Error! You are not authorized to see this rental or there is not a purchase with id={ReviewId}";
+        }
+
+
+    }
+
+}
