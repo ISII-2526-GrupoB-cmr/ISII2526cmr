@@ -34,7 +34,7 @@ VALUES (2, N'SUV', N'Azul Marino', N'SUV moderna y espaciosa con gran rendimient
 
 INSERT INTO [dbo].[Cars]
 ([Id], [CarClass], [Color], [Description], [EngDisplacement], [FuelType], [MaintenanceType], [Manufacturer], [PurchaseItem], [PurchasePrice], [QuantityForPurchase], [QuantityForRenting], [RentingPrice], [RimSize], [ModelID])
-VALUES (3, N'Sports', N'Rojo', N'Coupé deportivo con motor turbo de alto rendimiento.', N'3.0L Twin Turbo', N'Gasoline', N'Performance', N'BMW', 103, 6870000, 2, 2, 350, 19, 3);
+VALUES (3, N'Sports', N'Rojo', N'Coupé deportivo con motor turbo de alto rendimiento.', N'3.0L Twin Turbo', N'Gasoline', N'Performance', N'BMW', 103, 6870000, 0, 2, 350, 19, 3);
 SET IDENTITY_INSERT [dbo].[Cars] OFF
 
 

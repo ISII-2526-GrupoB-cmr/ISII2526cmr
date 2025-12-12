@@ -25,7 +25,7 @@ else
             <td id="DeliveryAddress">@purchase.DeliveryAddress</td>
         </tr>
         <tr>
-            <th>Payment Method</th>
+            <th>Total Price</th>
             <td id="PaymentMethod">@purchase.TotalPrice</td>
         </tr>
         <tr>
@@ -49,6 +49,7 @@ else
             @foreach (PurchaseItemDTO item in purchase.PurchaseItems)
             {
                 <tr id="PurchaseItem_@item.Modelo">
+                    <td>@item.Modelo</td>
                     <td>@item.CarColor</td>
                     <td>@item.PurchasePrice</td>
                     <td>@item.Quantity</td>
@@ -94,7 +95,7 @@ else
                     userName = user.Identity.Name;
                 }
             }
-        }
+            }
 
         try
         {
@@ -108,7 +109,6 @@ else
         {
             error = $"Error! You are not authorized to see this rental or there is not a purchase with id={PurchaseID}";
         }
-
 
     }
 

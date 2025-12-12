@@ -147,7 +147,7 @@
 
         try
         {
-            cars = await apiclient.GetCocheParaComprarAsync(carColor, carModel); //donde se saca esto??
+            cars = await apiclient.GetCocheParaComprarAsync(carColor, carModel);
             errors = "";
         }
         catch (ApiException ex)
@@ -163,7 +163,8 @@
     {
         try
         {
-            modelsNames = await apiclient.GetModelsAsync(null); // donde se saca esto??
+            modelsNames = await apiclient.GetModelsAsync(null);
+            cars = await apiclient.GetCocheParaComprarAsync(null, null);
         }
         catch (ApiException ex)
         {
