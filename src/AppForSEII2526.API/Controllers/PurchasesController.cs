@@ -76,9 +76,6 @@ namespace AppForSEII2526.API.Controllers
             if (purchaseForCreate.PurchaseItems == null || purchaseForCreate.PurchaseItems.Count == 0)
                 ModelState.AddModelError("PurchaseItems", "Error! Ningun coche seleccionado");
 
-            
-
-
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
             var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == purchaseForCreate.CustomerName &&
                                                                 au.Surname == purchaseForCreate.CustomerSurname);
@@ -121,10 +118,22 @@ namespace AppForSEII2526.API.Controllers
             {
                 var car = cars.FirstOrDefault(c => c.Name == item.Modelo);
 
-                //we must check that there is enough quantity to be rented in the database
-                if (car == null || car.QuantityForPurchase < item.Quantity)
+
+                if (car == null)
                 {
                     ModelState.AddModelError("PurchaseItems", $"Error! Car Model '{item.Modelo}' is not available for being purchased");
+                }
+                if (car.QuantityForPurchase == 0)
+                {
+                    ModelState.AddModelError("PurchaseItems", $"Error! There are no more cars with model '{item.Modelo}' available");
+                }
+                if (car.QuantityForPurchase < item.Quantity && car.QuantityForPurchase != 0)
+                {
+                    ModelState.AddModelError("PurchaseItems", $"Error! There are only '{car.QuantityForPurchase}' available for model'{item.Modelo}");
+                }
+                if (item.Quantity == 0)
+                {
+                    ModelState.AddModelError("PurchaseItems", $"Error! You cannot select quantity 0 for purchase");
                 }
                 else
                 {

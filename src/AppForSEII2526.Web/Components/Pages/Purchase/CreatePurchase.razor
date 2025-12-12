@@ -90,7 +90,7 @@
                         <td>@item.CarColor</td>
                         <td>@item.PurchasePrice</td>
                         <td>@item.Description</td>
-                        <td><InputNumber @bind-Value="item.Quantity" class="form-control" id="@($"_{item.Quantity}")" /></td>
+                        <td><InputNumber @bind-Value="item.Quantity" class="form-control" id="@($"quantity_{item.Quantity}")"/></td>
                     </tr>
                 }
             </tbody>
@@ -120,8 +120,14 @@
     {
         get
         {
-            double price = purchase.PurchaseItems.Sum(ri => ri.PurchasePrice);
-            return Convert.ToDecimal(price);
+            decimal total = 0;
+            foreach (var item in purchase.PurchaseItems)
+            {
+                var price = Convert.ToDecimal(item.PurchasePrice);
+                var quantity = item.Quantity;
+                total = total + (price * quantity);
+            }
+            return total;
         }
     }
     private void ModifyPurchaseItems()
@@ -178,13 +184,6 @@
             var authState = await authenticationState;
             var user = authState?.User;
 
-            if (user is not null)
-            {
-                if (user.Identity is not null && user.Identity.IsAuthenticated)
-                {
-                    purchase.CustomerName = user.Identity.Name;
-                }
-            }
             purchase.CustomerName = purchase.CustomerName == null ? "" : purchase.CustomerName;
             purchase.CustomerSurname = purchase.CustomerSurname == null ? "" : purchase.CustomerSurname;
             purchase.DeliveryAddress = purchase.DeliveryAddress == null ? "" : purchase.DeliveryAddress;
