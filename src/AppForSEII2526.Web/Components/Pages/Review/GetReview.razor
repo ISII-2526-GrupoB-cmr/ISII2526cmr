@@ -5,9 +5,9 @@
 @using Microsoft.AspNetCore.Authorization
 @inject AppForSEII2526APIClient apiclient
 
-<h3>Review Detail</h3>
 
-@attribute [Authorize]
+
+<h3>Review Detail</h3>
 
 @if (review == null)
 {
@@ -34,13 +34,14 @@ else
         </tr>
     </table>
 
-    <h4>Reviewd Cars</h4>
+    <h4>Reviewed Cars</h4>
 
     <table class="table" id="ReviewCars">
         <thead>
             <tr>
                 <th scope="col">Model</th>
                 <th scope="col">Manufacturer</th>
+                <th scope="col">Fueltype</th>
                 <th scope="col">Color</th>
                 <th scope="col">Rating</th>
                 <th scope="col">Description</th>
@@ -50,8 +51,10 @@ else
             @foreach (ReviewItemDTO item in review.ReviewItems)
             {
                 <tr id="ReviewItem_@item.Model">
-                    <td>@item.Color</td>
+                    <td>@item.Model</td>
                     <td>@item.Manufacturer</td>
+                    <td>@item.Fueltype</td>
+                    <td>@item.Color</td>
                     <td>@item.Rating</td>
                     <td>@item.Description</td>
                 </tr>
@@ -103,7 +106,7 @@ else
         }
         if ((review == null) || (review.UserName != userName))
         {
-            error = $"Error! You are not authorized to see this rental or there is not a purchase with id={ReviewId}";
+            error = $"Error! You are not authorized to see this review or there is not a review with id={ReviewId}";
         }
 
 
