@@ -10,7 +10,7 @@
 @inject NavigationManager navigation
 
 
-@attribute [Authorize]
+
 <h3>Seleccionar coche para reseñar</h3>
 <div class="container-fluid">
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
@@ -31,7 +31,7 @@
                 <div class="col">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Manufacturer</span>
-                        <input class="text" aria-label="Manufacturer" @bind=carManufacturer id="selectManufacturer" placeholder="Manufacturer" aria-describedby="basic-addon1">
+                        <input type="text" aria-label="Manufacturer" @bind=carManufacturer class="form-control" id="selectManufacturer" placeholder="Manufacturer" aria-describedby="basic-addon1">
                            
                     </div>
                 </div>
@@ -65,9 +65,9 @@
                                 {
                                     <tr id="CarData_@car.Model">
                                         <td>@car.Model</td>
+                                        <td>@car.Manufacturer</td>
                                         <td>@car.FuelType</td>
                                         <td>@car.Color</td>
-                                        <td>@car.Manufacturer</td>
                                         <td>
                                             <button class="btn btn-outline-secondary" id="carToReview_@car.Model" @onclick="@(() => AddCar(car))">Add</button>
                                         </td>
@@ -130,7 +130,7 @@
        
         try
         {
-            cars = await apiclient.GetCocheParaReseñarAsync(carFueltype, carManufacturer);
+            cars = await apiclient.GetCocheParaReseñarAsync(carManufacturer, carFueltype);
             errors = "";
 
         }
