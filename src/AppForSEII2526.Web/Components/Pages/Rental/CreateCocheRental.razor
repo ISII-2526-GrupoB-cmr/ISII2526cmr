@@ -132,7 +132,8 @@
             var start = new DateTime(rental.StartDate.Year, rental.StartDate.Month, rental.StartDate.Day);
             var end = new DateTime(rental.EndDate.Year, rental.EndDate.Month, rental.EndDate.Day);
 
-            int days = (end - start).Days; double price = rental.RentalItems.Sum(ri => ri.RentingPrice * days); double price = rental.RentalItems.Sum(ri => ri.RentingPrice * days);
+            int days = (end - start).Days;
+            double price = rental.RentalItems.Sum(ri => ri.RentingPrice * days);
             return Convert.ToDecimal(price);
         }
     }
