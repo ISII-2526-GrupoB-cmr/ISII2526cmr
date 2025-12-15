@@ -82,7 +82,7 @@ namespace AppForSEII2526.API.Models
         public ApplicationUser ApplicationUser { get; set; }
         public string Name { get;  }
         public string Surname { get; }
-        public string Address { get;  }
+        public string Address { get; set; }
         public DateTime Now { get;  }
     }
     

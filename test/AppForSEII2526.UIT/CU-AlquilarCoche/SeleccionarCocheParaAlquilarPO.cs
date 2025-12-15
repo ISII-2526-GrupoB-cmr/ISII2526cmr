@@ -16,8 +16,8 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         private By selectModel = By.Id("selectModel");
         private By buttonSearchCars = By.Id("SearchCars");
         private By tableOfCarsBy = By.Id("TableOfCars");
-        private By carToPurchase = By.Id("carToPurchase");
-        private string colorFilter;
+        private By buttonRentCar = By.Id("rentalcarButton");
+
         public SeleccionarCocheParaAlquilarPO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
             IWebElement elementPrice= _driver.FindElement(Inputprice);
@@ -27,7 +27,6 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
 
             elementPrice.Click();
             elementPrice.Clear();
-            colorFilter = "Gris";
 
 
         }
@@ -48,6 +47,25 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         public bool CheckListOfCars(List<string[]> expectedCars)
         {
             return CheckBodyTable(expectedCars, tableOfCarsBy);
+        }
+
+        public void AddCarToRentingCart(string carmodel)
+        {
+            WaitForBeingClickable(By.Id("carToRent_" + carmodel));
+
+            _driver.FindElement(By.Id("carToRent_" + carmodel)).Click();
+        }
+
+        public void RemoveCarFromRentingCart(string carmodel)
+        {
+            WaitForBeingClickable(By.Id("removecar_" + carmodel));
+            _driver.FindElement(By.Id("removecar_" + carmodel)).Click();
+        }
+
+        public void RentCars()
+        {
+            WaitForBeingClickable(buttonRentCar);
+            _driver.FindElement(buttonRentCar).Click();
         }
 
 
