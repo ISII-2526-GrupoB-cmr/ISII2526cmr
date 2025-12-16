@@ -34,7 +34,7 @@ namespace AppForSEII2526.API.Controllers
                     .ThenInclude(ri => ri.Car) //then join table Movies
                         .ThenInclude(car => car.Model) //then join table Genre
              .Select(r => new RentalDetailDTO(r.Id, r.RentignDate, r.ApplicationUser.Name,
-                    r.ApplicationUser.Surname, r.ApplicationUser.Address,
+                    r.ApplicationUser.Surname, r.Address,
                     (PaymentMethodTypes)r.PaymentMethod,
                     DateTime.SpecifyKind(r.StartDate, DateTimeKind.Local),
                     DateTime.SpecifyKind(r.EndDate, DateTimeKind.Local),

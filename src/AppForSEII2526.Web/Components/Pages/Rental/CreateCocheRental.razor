@@ -59,7 +59,7 @@
         <div class="col-md">
             <div class="form-floating">
                 @*this button will be used to ask the user if he want to proceed to rent the movies*@
-                <button class="btn btn-primary" type="submit" id="Submit">
+                <button class="btn btn-primary" type="submit" id="rentalcarButton">
                     Rent your cars
                 </button>
             </div>
@@ -93,6 +93,7 @@
                     <th>Modelo</th>
                     <th>Price for Renting</th>
                     <th>Manufacturer</th>
+                    <th>Quantity</th>
                     <th></th>
                 </tr>
             </thead>
@@ -103,6 +104,7 @@
                         <td>@item.Modelo</td>
                         <td>@item.RentingPrice</td>
                         <td>@item.Manufacturer</td>
+                        <td><InputNumber @bind-Value="item.Quantity" class="form-control" id="@($"_{item.Quantity}")" /></td>
                     </tr>
                 }
             </tbody>
@@ -132,7 +134,8 @@
             var start = new DateTime(rental.StartDate.Year, rental.StartDate.Month, rental.StartDate.Day);
             var end = new DateTime(rental.EndDate.Year, rental.EndDate.Month, rental.EndDate.Day);
 
-            int days = (end - start).Days; double price = rental.RentalItems.Sum(ri => ri.RentingPrice * days); double price = rental.RentalItems.Sum(ri => ri.RentingPrice * days);
+            int days = (end - start).Days;
+            double price = rental.RentalItems.Sum(ri => ri.RentingPrice * days);
             return Convert.ToDecimal(price);
         }
     }
