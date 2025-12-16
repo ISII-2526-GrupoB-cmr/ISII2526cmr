@@ -48,6 +48,10 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         {
             return CheckBodyTable(expectedCars, tableOfCarsBy);
         }
+        public bool CheckMessageErrorNotAvailableCars(string expectedError)
+        {
+            return _driver.PageSource.Contains(expectedError);
+        }
 
         public void AddCarToRentingCart(string carmodel)
         {
@@ -61,7 +65,12 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
             WaitForBeingClickable(By.Id("removecar_" + carmodel));
             _driver.FindElement(By.Id("removecar_" + carmodel)).Click();
         }
+        public bool RentingNotAvailable()
+        {
+            //the button is not Displayed=hidden
 
+            return _driver.FindElement(buttonRentCar).Displayed == false;
+        }
         public void RentCars()
         {
             WaitForBeingClickable(buttonRentCar);

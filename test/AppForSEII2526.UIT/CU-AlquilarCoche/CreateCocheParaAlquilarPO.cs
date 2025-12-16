@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AppForSEII2526.UIT.CU_AlquilarCoche
 {
-    public class CreateCocheParaAlquilar : PageObject
+    public class CreateCocheParaAlquilarPO : PageObject
     {
 
        
-        public CreateCocheParaAlquilar(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
+        public CreateCocheParaAlquilarPO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
 
         }
@@ -69,6 +69,9 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         public bool CheckValidationError(string expectedError)
         {
             return _driver.PageSource.Contains(expectedError);
+        }
+        public bool CheckErrorMessageForMandatoryFields() {   
+            return _driver.PageSource.Contains("This field is required");
         }
 
     }
