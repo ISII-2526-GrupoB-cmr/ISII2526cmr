@@ -52,6 +52,7 @@ namespace AppForSEII2526.UT.RentalsController_test
                     DateTime.Today.AddDays(5),
                     new List<RentalItem>()
                     );
+            rentals.Address = user.Address; 
 
             var rentalItem = new RentalItem
             {
@@ -60,7 +61,7 @@ namespace AppForSEII2526.UT.RentalsController_test
                 Rental = rentals,
                 Quantity = 1,
                 RentingPrice = 85,
-                Manufacturer = cars[1].Manufacturer // 👈 este campo es el que antes fallaba
+                Manufacturer = cars[1].Manufacturer 
             };
             rentals.RentalItems.Add(rentalItem);
 

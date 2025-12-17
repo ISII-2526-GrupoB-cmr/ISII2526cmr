@@ -123,6 +123,12 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var item in rentalForCreate.RentalItems)
             {
+                if (item.Quantity <= 0)
+                {
+                    ModelState.AddModelError("Quantity", "Error! La cantidad para alquiilar tiene que ser mayor a 0");
+                    continue;
+                }
+
                 // Buscar el coche por nombre del modelo
                 var car = _context.Cars
                     .Include(c => c.Model)
