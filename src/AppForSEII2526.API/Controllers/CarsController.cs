@@ -71,7 +71,12 @@ namespace AppForSEII2526.API.Controllers
 
         public async Task<ActionResult> GetCocheParaComprar(string? filtroColor, string? modelo)
         {
+            bool hayCantidades = await _context.Cars.AnyAsync(c => c.QuantityForPurchase > 0);
 
+            if (!hayCantidades)
+            {
+                return BadRequest("No hay stock en el concesionario");
+            }
 
             var coches = await _context.Cars.Include(coche => coche.Model)
                 .Where(c => (c.Color.Contains(filtroColor) || (filtroColor == null)) && (c.Model.Name.Contains(modelo) || ( modelo == null)))

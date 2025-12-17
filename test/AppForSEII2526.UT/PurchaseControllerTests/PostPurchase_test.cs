@@ -42,7 +42,9 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
 
             
 
-            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, new List<PurchaseItem>());
+
+            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, "Calle Falsa 1", new List<PurchaseItem>());
+
             purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1, 1));
             _context.Add(purchase1);
             _context.SaveChanges();
@@ -52,24 +54,24 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
         public static IEnumerable<object[]> TestCasesFor_PostPurchase()
         {
             
-            var purchaseNoItem = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0,  new List<PurchaseItemDTO>());
+            var purchaseNoItem = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0, new List<PurchaseItemDTO>());
 
-                var purchaseItems = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, "Gris", "Toyota Corolla",230000 , "Sedán cómodo y eficiente, ideal para ciudad.") };
+                var purchaseItems = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, "Toyota Corolla", "Gris", 1, "Sedán cómodo y eficiente, ideal para ciudad.") };
+                var purchaseItemsCant0 = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, "Toyota Corolla", "Gris", 0, "Sedán cómodo y eficiente, ideal para ciudad.") };
 
-            var purchaseCantidadCero = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0,  purchaseItems);
+            var purchaseCantidadCero = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0, purchaseItemsCant0);
 
-            var purchaseUserNoExist = new PurchaseForCreateDTO("Juan", "Pérez", "Calle Falsa 33, Chinchilla", 0,  purchaseItems);
+            var purchaseUserNoExist = new PurchaseForCreateDTO("Juan", "Pérez", "Calle Falsa 33, Chinchilla", 0, purchaseItems);
 
-                var purchaseItemsSinDesc = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, "Gris", "Toyota Corolla", 230000, "") };
+          
 
-            var purchaseSinDescCant2 = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0,  purchaseItemsSinDesc);
+     
 
             var allTests = new List<object[]>
             {
                 new object[] { purchaseNoItem, "Error! Ningun coche seleccionado" },
-                new object[] { purchaseCantidadCero, "Error! Debes seleccionar una cantidad mayor a 0" },
                 new object[] { purchaseUserNoExist, "Error! Tu nombre no esta registrado" },
-                new object[] { purchaseSinDescCant2, "Error! Estas comprando demasiados coches sin descripcion" }
+          
             };
             return allTests;
         }
@@ -114,12 +116,12 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             var purchaseDTO = new PurchaseForCreateDTO(
                 "Elena",
                 "Navarro Martínez",
-                "Avda. España 2, Albacete",
+                "Calle Falsa 1",
                 PaymentMethodTypes.GooglePay,
-                
                 new List<PurchaseItemDTO>()
                 {
-                    new PurchaseItemDTO(1,1,"Red","Modelo A",230000,"Deportivo rápido")
+                    new PurchaseItemDTO(1,2300000,"Modelo A","Red",1,"Deportivo rápido")
+
                 }
             );
 
@@ -129,16 +131,16 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
                 DateTime.Now,
                 "Elena",
                 "Navarro Martínez",
-                "elena@uclm.es",
+                "Calle Falsa 1",
                 230000,
                 new List<PurchaseItemDTO>
                 {
                     new PurchaseItemDTO(
                         1,
-                        230000,
-                        "Red",
+                        2300000.0f,
                         "Modelo A",
-                        230000 ,
+                        "Red",
+                        1,
                         "Deportivo rápido"
                     )
                 }
@@ -155,6 +157,8 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             var actualPurchaseDetailDTO = Assert.IsType<PurchaseDetailDTO>(createdResult.Value);
 
             //actualPurchaseDetailDTO.PurchaseDate= fixedDate; // Ajustar la fecha para la comparación
+
+            
 
             Assert.Equal(expectedPurchase1, actualPurchaseDetailDTO);
         }

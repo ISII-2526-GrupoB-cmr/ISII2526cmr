@@ -39,8 +39,10 @@ namespace AppForSEII2526.UT.CarController_test
             var trackedUser = _context.ApplicationUsers
                 .First(au => au.Name == user.Name && au.Surname == user.Surname);
 
-            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, new List<PurchaseItem>());
-            purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1,1));
+
+            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, "Calle Falsa 1", new List<PurchaseItem>());
+            purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1, 1));
+
             _context.Add(purchase1);
             _context.SaveChanges();
         }
@@ -48,10 +50,13 @@ namespace AppForSEII2526.UT.CarController_test
         {
             var cochesDTOs = new List<CocheParaComprarDTO>()
             {
-                new CocheParaComprarDTO(1,"Ferrari 1","Azul","Gasolina","Ferrari",230000.0f,"Coche muy rapido"),
-                new CocheParaComprarDTO(2,"Toyota 1","Azul","Diésel","Toyota",30000.0f,"Coche no tan rapido"),
-                new CocheParaComprarDTO(3,"Honda 1","Black","Híbrido","Honda",40000.0f, "No contamina"),
+
+                new CocheParaComprarDTO(1,"Ferrari 1","Azul","Gasolina","Ferrari",230000.0f, "Deportivo rápido"),
+                new CocheParaComprarDTO(2,"Toyota 1","Azul","Diésel","Toyota",30000.0f, "Sedán cómodo"),
+                new CocheParaComprarDTO(3,"Honda 1","Black","Híbrido","Honda",40000.0f, "SUV espacioso")
+
             };
+       
 
             var cochesDTOsTC1 = new List<CocheParaComprarDTO>() { cochesDTOs[0], cochesDTOs[1] };
             var cochesDTOsTC2 = new List<CocheParaComprarDTO>() { cochesDTOs[1] };
