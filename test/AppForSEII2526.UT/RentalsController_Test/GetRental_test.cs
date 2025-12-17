@@ -48,7 +48,7 @@ namespace AppForSEII2526.UT.RentalsController_test
 
             var rentals = new Rental(
                 trackedUser,
-                "Central Dealer",
+                user.Address,
                 PaymentMethodTypes.Visa,
                 fixedDate,
                 cars[0].RentingPrice,
@@ -56,8 +56,8 @@ namespace AppForSEII2526.UT.RentalsController_test
                 DateTime.Today.AddDays(5),
                 new List<RentalItem>()
         );
+            rentals.Address = user.Address;
 
-            // ✅ Crear RentalItem pasando todos los datos requeridos
             var rentalItem = new RentalItem
             {
                 Car = cars[0],
@@ -65,7 +65,7 @@ namespace AppForSEII2526.UT.RentalsController_test
                 Rental = rentals,
                 Quantity = 1,
                 RentingPrice = 85,
-                Manufacturer = cars[0].Manufacturer // 👈 este campo es el que antes fallaba
+                Manufacturer = cars[0].Manufacturer 
             };
 
             rentals.RentalItems.Add(rentalItem);

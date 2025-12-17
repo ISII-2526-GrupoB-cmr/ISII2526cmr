@@ -13,7 +13,7 @@
 
 
 
-@attribute [Authorize]
+
 
 <EditForm Model="review" OnValidSubmit="OpenDialog">
     <div class="row">
@@ -41,12 +41,6 @@
                 <label for="Country">Country </label>
             </div>
         </div>
-        <div class="col-md">
-            <div class="form-floating mb-3">
-                <InputSelect @bind-Value="review.Drivertype" class="form-control" id="Drivertype" />
-                <label for="Drivertype">Drivertype</label>
-            </div>
-        </div>
     </div>
     <div class="row g-2">
         <div class="col-md">
@@ -55,9 +49,9 @@
                 <InputSelect class="form-select" @bind-Value="@review.Drivertype" id="DriverType">
                     <option value="@DriverType.Experto" default> Experto</option>
                     <option value="@DriverType.Novato"> Novato</option>
-                    
+
                 </InputSelect>
-                <label for="PaymentMethod">Payment Method</label>
+                <label for="DriverType">DriverType</label>
             </div>
         </div>
         <div class="col-md">
@@ -71,18 +65,23 @@
     </div>
 
     <h4>Review detail</h4>
-    <p><b>Date from:</b> @review.Created.ToString("dd/MM/yyyy")</p>
-   
 
+    <p>
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyReviewCart" id="ModifyReviewCart">
+            Modify Cars for review
+        </button>
+    </p>
 
     <div class="mh-100 table-responsive">
-        <table class="table table-condensed table-hover" id="TableOfRentalItems">
+        <table class="table table-condensed table-hover" id="TableOfReviewItems">
             <thead>
                 <tr>
                     <th>Model</th>
                     <th>Fueltype</th>
                     <th>Manufacturer</th>
                     <th>Color</th>
+                    <th>Description</th>
+                    <th>Rating</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,6 +92,22 @@
                         <td>@item.Fueltype</td>
                         <td>@item.Manufacturer</td>
                         <td>@item.Color</td>
+                        <td>
+                            <InputText @bind-Value="item.Description" class="form-control" id="@($"description_{item.Model}")"></InputText>
+                            <ValidationMessage For="@(() => item.Description)" />
+                        </td>
+                        <td>
+                            <InputSelect @bind-Value="item.Rating" class="form-control" id="@($"rating_{item.Model}")">
+
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </InputSelect>
+                            <ValidationMessage For="@(() => item.Rating)" />
+
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -100,14 +115,14 @@
     </div>
 </EditForm>
 
-    @if (DialogIsOpen)
+@if (DialogIsOpen)
 {
-    <Dialog Caption="Review movies"
-    Message="Do you want to proceed to rent the selected movies?"
-    OnClose="@OnDialogClose"
-    Type=Dialog.Category.SaveNot>
+    <Dialog Caption="Review car"
+            Message="¿Quieres proceder a la reseña de este coche?"
+            OnClose="@OnDialogClose"
+            Type=Dialog.Category.SaveNot>
     </Dialog>
-    }
+}
 
 
 
@@ -121,7 +136,34 @@
 
     private object? errors;
 
+    private void ModifyReviewCart()
+    {
+        navigation.NavigateTo("/review/seleccionarcochereview");
 
+    }
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    review.Username = user.Identity.Name;
+                }
+            }
+            review.Username = review.Username == null ? "" : review.Username;
+
+        }
+    }
 
 
     private ReviewForCreateDTO review => reviewState.Review;
@@ -144,7 +186,7 @@
                 {
                     var reviewd = await apiclient.CreateReviewAsync(review);
                     reviewState.ReviewProcessed();
-                    navigation.NavigateTo($"/rental/detailrental/?RentalID={reviewd.Id}");
+                    navigation.NavigateTo($"/review/getreview/?ReviewID={reviewd.Id}");
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {
@@ -166,28 +208,12 @@
             }
         }
     }
-    protected override async Task OnInitializedAsync()
-    {
-
-        if (authenticationState is not null)
-        {
-            var authState = await authenticationState;
-            var user = authState?.User;
-
-            if (user is not null)
-            {
-                if (user.Identity is not null && user.Identity.IsAuthenticated)
-                {
-                    review.Username = user.Identity.Name;
-                }
-            }
-            review.Username = review.Username == null ? "" : review.Username;
-
-        }
-    }
 
 
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationState { get; set; }
+
+
+
+
+
 
 }

@@ -34,7 +34,7 @@ VALUES (2, N'SUV', N'Azul Marino', N'SUV moderna y espaciosa con gran rendimient
 
 INSERT INTO [dbo].[Cars]
 ([Id], [CarClass], [Color], [Description], [EngDisplacement], [FuelType], [MaintenanceType], [Manufacturer], [PurchaseItem], [PurchasePrice], [QuantityForPurchase], [QuantityForRenting], [RentingPrice], [RimSize], [ModelID])
-VALUES (3, N'Sports', N'Rojo', N'Coupé deportivo con motor turbo de alto rendimiento.', N'3.0L Twin Turbo', N'Gasoline', N'Performance', N'BMW', 103, 6870000, 0, 2, 350, 19, 3);
+VALUES (3, N'Sports', N'Rojo', N'Coupé deportivo con motor turbo de alto rendimiento.', N'3.0L Twin Turbo', N'Gasoline', N'Performance', N'BMW', 103, 6870000, 0, 0, 350, 19, 3);
 SET IDENTITY_INSERT [dbo].[Cars] OFF
 
 
@@ -70,14 +70,14 @@ VALUES (3, 3, 1);
 -- RENTAS
 -------------------------------------------------
 SET IDENTITY_INSERT [dbo].[Rentals] ON
-INSERT INTO [dbo].[Rentals] ([Id], [DeliveryCarDealer], [PaymentMethod], [RentignDate], [StartDate], [EndDate], [TotalPrice], [ApplicationUserId])
-VALUES (1, N'MotorRent Madrid', 1, '2025-09-01', '2025-09-02', '2025-09-10', 800, 1);
+INSERT INTO [dbo].[Rentals] ([Id], [DeliveryCarDealer], [PaymentMethod], [RentignDate], [StartDate], [EndDate], [TotalPrice], [ApplicationUserId],[Address])
+VALUES (1, N'MotorRent Madrid', 1, '2025-09-01', '2025-09-02', '2025-09-10', 800, 1,'Calle. España, 2 Albacete');
 
-INSERT INTO [dbo].[Rentals] ([Id], [DeliveryCarDealer], [PaymentMethod], [RentignDate], [StartDate], [EndDate], [TotalPrice], [ApplicationUserId])
-VALUES (2, N'RentaCar BCN', 2, '2025-09-05', '2025-09-06', '2025-09-12', 900, 2);
+INSERT INTO [dbo].[Rentals] ([Id], [DeliveryCarDealer], [PaymentMethod], [RentignDate], [StartDate], [EndDate], [TotalPrice], [ApplicationUserId],[Address])
+VALUES (2, N'RentaCar BCN', 2, '2025-09-05', '2025-09-06', '2025-09-12', 900, 2,'Calle Postigos 20');
 
-INSERT INTO [dbo].[Rentals] ([Id], [DeliveryCarDealer], [PaymentMethod], [RentignDate], [StartDate], [EndDate], [TotalPrice], [ApplicationUserId])
-VALUES (3, N'SpeedDrive Valencia', 1, '2025-09-10', '2025-09-11', '2025-09-15', 1400, 3);
+INSERT INTO [dbo].[Rentals] ([Id], [DeliveryCarDealer], [PaymentMethod], [RentignDate], [StartDate], [EndDate], [TotalPrice], [ApplicationUserId],[Address])
+VALUES (3, N'SpeedDrive Valencia', 1, '2025-09-10', '2025-09-11', '2025-09-15', 1400, 3,'Calle Fresno 17');
 SET IDENTITY_INSERT [dbo].[Rentals] OFF
 
 

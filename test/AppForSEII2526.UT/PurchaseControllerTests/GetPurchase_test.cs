@@ -38,7 +38,10 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
                 .First(au => au.Name == user.Name && au.Surname == user.Surname);
 
 
+
             var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, "Calle Falsa 1", new List<PurchaseItem>());
+            
+
             purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1, 1));
             _context.Add(purchase1);
             _context.SaveChanges();
@@ -72,10 +75,11 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             var mock = new Mock<ILogger<PurchasesController>>();
             ILogger<PurchasesController> logger = mock.Object;
             var controller = new PurchasesController(_context, logger);
+            var expectedDate = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified);
 
             var expectedPurchase1 = new PurchaseDetailDTO(
                 1,
-                DateTime.Now,
+                expectedDate,
                 "Elena",
                 "Navarro Martínez",
                 "Calle Falsa 1",

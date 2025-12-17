@@ -42,7 +42,9 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
 
             
 
+
             var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, "Calle Falsa 1", new List<PurchaseItem>());
+
             purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1, 1));
             _context.Add(purchase1);
             _context.SaveChanges();
@@ -63,7 +65,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
 
           
 
-          
+     
 
             var allTests = new List<object[]>
             {
@@ -119,6 +121,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
                 new List<PurchaseItemDTO>()
                 {
                     new PurchaseItemDTO(1,2300000,"Modelo A","Red",1,"Deportivo rápido")
+
                 }
             );
 

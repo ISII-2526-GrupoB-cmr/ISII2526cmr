@@ -33,15 +33,15 @@ namespace AppForSEII2526.API.Controllers
                  .Include(r => r.RentalItems) //join table RentalItems
                     .ThenInclude(ri => ri.Car) //then join table Movies
                         .ThenInclude(car => car.Model) //then join table Genre
-             .Select(r => new RentalDetailDTO(r.Id, r.RentignDate, r.ApplicationUser.Name,
-                    r.ApplicationUser.Surname, r.ApplicationUser.Address,
+             .Select(r => new RentalDetailDTO(r.Id, DateTime.SpecifyKind(r.RentignDate, DateTimeKind.Utc), r.ApplicationUser.Name,
+                    r.ApplicationUser.Surname, r.Address,
                     (PaymentMethodTypes)r.PaymentMethod,
-                    DateTime.SpecifyKind(r.StartDate, DateTimeKind.Local),
-                    DateTime.SpecifyKind(r.EndDate, DateTimeKind.Local),
+                    DateTime.SpecifyKind(r.StartDate, DateTimeKind.Utc),
+                    DateTime.SpecifyKind(r.EndDate, DateTimeKind.Utc),
                     r.RentalItems
                         .Select(ri => new RentalItemDTO(ri.Car.Id,
                                  ri.Car.Model.Name, ri.Car.Manufacturer,
-                                ri.RentingPrice,ri.Quantity)).ToList<RentalItemDTO>()))
+                                ri.RentingPrice, ri.Quantity)).ToList<RentalItemDTO>()))
              .FirstOrDefaultAsync();
 
 
@@ -71,7 +71,7 @@ namespace AppForSEII2526.API.Controllers
                 ModelState.AddModelError("StartDate", "Error! La fecha de alquiler tiene que ser posterior a la de hoy");
             if (rentalForCreate.EndDate <= rentalForCreate.StartDate)
                 ModelState.AddModelError("EndDate", "Error! La fecha de fin tiene que ser mas tarde de la que empieza");
-           
+
             // if (!_context.ApplicationUsers.Any(au=>au.UserName==rentalForCreate.CustomerUserName))
             var user = _context.ApplicationUsers.FirstOrDefault(au => au.Name == rentalForCreate.Name && au.Surname == rentalForCreate.Surname);
             if (user == null)
@@ -105,7 +105,7 @@ namespace AppForSEII2526.API.Controllers
                 .ToList();
 
             Rental rental = new Rental(rentalForCreate.Name, rentalForCreate.Surname,
-                                       rentalForCreate.Address, DateTime.Now,
+                                       rentalForCreate.Address, DateTime.UtcNow,
                                        rentalForCreate.PaymentMethod,
                                        rentalForCreate.StartDate, rentalForCreate.EndDate, new List<RentalItem>());
             //we use an anonymous type https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/anonymous-types
@@ -123,6 +123,12 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var item in rentalForCreate.RentalItems)
             {
+                if (item.Quantity <= 0)
+                {
+                    ModelState.AddModelError("Quantity", "Error! La cantidad para alquiilar tiene que ser mayor a 0");
+                    continue;
+                }
+
                 // Buscar el coche por nombre del modelo
                 var car = _context.Cars
                     .Include(c => c.Model)
@@ -131,7 +137,7 @@ namespace AppForSEII2526.API.Controllers
                     .FirstOrDefault(c => c.Model != null && c.Model.Name == item.Modelo);
 
                 // Si no existe el modelo, lanzar el error esperado
-                if (car == null || car.QuantityForRenting<item.Quantity )
+                if (car == null || car.QuantityForRenting < item.Quantity)
                 {
                     ModelState.AddModelError("RentalItems",
                         "Error! El modelo del coche no esta disponible para ser alquilado");
@@ -198,13 +204,13 @@ namespace AppForSEII2526.API.Controllers
             //it returns rentalDetail
             var rentalDetail = new RentalDetailDTO(
                 rental.Id,
-                rental.RentignDate,
+                DateTime.SpecifyKind(rental.RentignDate, DateTimeKind.Utc),
                 rental.ApplicationUser.Name,
                 rental.ApplicationUser.Surname,
                 rentalForCreate.Address,
                 rentalForCreate.PaymentMethod,
-                rental.StartDate,
-                rental.EndDate,
+                DateTime.SpecifyKind(rental.StartDate, DateTimeKind.Utc),
+                DateTime.SpecifyKind(rental.EndDate, DateTimeKind.Utc),
                 rentalForCreate.RentalItems);
 
             return CreatedAtAction("GetRental", new { id = rental.Id }, rentalDetail);
