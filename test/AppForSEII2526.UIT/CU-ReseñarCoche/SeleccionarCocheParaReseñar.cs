@@ -1,4 +1,6 @@
-﻿using System;
+﻿//SeleccionarCocheParaReseñar_PO.cs
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -16,11 +18,12 @@ namespace AppForSEII2526.UIT.CU_ReseñarCoche
         private By searchCars = By.Id("searchCars");
         private By _tableOfCars = By.Id("TableOfCars");
         private By _modalBy = By.Id("DialogOKSaveDelete");
+        private By _modifyCar = By.Id("ModifyReviewCart");
 
 
         public SeleccionarCocheParaReseñar(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
-            
+
         }
 
         public void Buscarcoche(string manufacturer, string fueltype)
@@ -38,16 +41,26 @@ namespace AppForSEII2526.UIT.CU_ReseñarCoche
             _driver.FindElement(searchCars).Click();
         }
 
-        public void SelectCarsForReview(List<string> models)
+        public void SelectCarsForReview(string model)
         {
-           
-            foreach (var model in models)
-            {
-                By botonAdd = By.Id("ReviewCar" + model);
-                WaitForBeingVisible(_reviewButton);
-                _driver.FindElement(_reviewButton).Click();
-            }
+            var addButtonId = By.Id("carToReview_" + model);
+
+            WaitForBeingClickable(addButtonId);
+            _driver.FindElement(addButtonId).Click();
+
+
         }
+
+
+        public void PularQuitarCoche(string model)
+        {
+            var quitarButtonId = $"removeCar_{model}";
+            WaitForBeingClickable(By.Id(quitarButtonId));
+            _driver.FindElement(By.Id(quitarButtonId)).Click();
+        }
+
+
+
 
         public void ReviewCars()
         {
@@ -63,28 +76,21 @@ namespace AppForSEII2526.UIT.CU_ReseñarCoche
 
             return CheckBodyTable(expectedCars, _tableOfCars);
         }
-        
+
 
         public bool CheckReviewCarsDisabled()
         {
-            //devolvemos true si el botón está deshabilitado
-            return !_driver.FindElement(_reviewButton).Enabled;
-        }
 
-        public void ModifyReviewCart(string model)
-        {
-            By botonRemove = By.Id("removeCar_" + model);
-            WaitForBeingClickable(By.Id($"removeCar_{model}"));
-            _driver.FindElement(By.Id($"removeCar_{model}")).Click();
 
+            Thread.Sleep(1000); // Solo para probar si es un tema de tiempo
+            var botonDesactivado = _driver.FindElement(_reviewButton);
+            return !botonDesactivado.Displayed;
         }
 
 
-        public void ClickReviewButton()
-        {
-            WaitForBeingClickable(_reviewButton);
-            _driver.FindElement(_reviewButton).Click();
-        }
+
+
+
 
         public bool CheckMessageErrorNotAvailableCarsForReview(string expectedError)
         {
@@ -105,7 +111,6 @@ namespace AppForSEII2526.UIT.CU_ReseñarCoche
     }
 
 }
-    
 
-   
+
 
