@@ -4,6 +4,9 @@
 @using AppForSEII2526.Web.API
 @using AppForSEII2526.Web.Components.Shared
 @using Microsoft.AspNetCore.Authorization
+@using System.Text.Json
+@using Microsoft.AspNetCore.WebUtilities
+@using System.Collections
 
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<CreateCocheRental> logger
@@ -16,7 +19,7 @@
 <h3>CreateCocheRental</h3>
 
 @* rental is the object that will be edited thanks to the form *@
-<EditForm Model="rental" OnValidSubmit="OpenDialog">
+<EditForm Model="rental" onsubmit="HandleSubmit">
     <div class="row">
         <DataAnnotationsValidator />
         <ValidationSummary class="row alert alert-danger" />
@@ -24,6 +27,10 @@
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errors: @messageError</p>
     </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideDateErrors">
+        <p id="DateErrorsShown">@dateError</p>
+    </div>
+
     <div class="row g-3">
         <div class="col-md">
             <div class="form-floating mb-3">
@@ -82,7 +89,7 @@
     </div>
     <p>
         <b>Total price:</b> @TotalCost €
-        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyRentalItems" id="Modifycars">
+        <button class="btn btn-outline-primary" type="button" @onclick="ModifyRentalItems" id="Modifycars">
             Modify cars
         </button>
     </p>
@@ -104,7 +111,7 @@
                         <td>@item.Modelo</td>
                         <td>@item.RentingPrice</td>
                         <td>@item.Manufacturer</td>
-                        <td><InputNumber @bind-Value="item.Quantity" class="form-control" id="@($"_{item.Quantity}")" /></td>
+                        <td><InputNumber @bind-Value="item.Quantity" class="form-control" id="@($"quantity_{item.CarId}")" /></td>
                     </tr>
                 }
             </tbody>
@@ -116,16 +123,54 @@
 @if (DialogIsOpen)
 {
     <Dialog Caption="Rental cars"
-    Message="Do you want to proceed to rent the selected cars?"
-    OnClose="@OnDialogClose"
-    Type=Dialog.Category.SaveNot>
+            Message="Do you want to proceed to rent the selected cars?"
+            OnClose="@OnDialogClose"
+            Type=Dialog.Category.SaveNot>
     </Dialog>
 }
+
 
 @code {
     private string messageError = "";
     private bool hideErrors { get { return messageError.Length == 0; } }
+    private string dateError = "";
+    private bool hideDateErrors => string.IsNullOrWhiteSpace(dateError);
+
     private bool DialogIsOpen;
+
+    private void HandleSubmit(EditContext editContext)
+    {
+        messageError = "";
+        dateError = "";
+
+        // Ejecuta DataAnnotations si las tienes (Required, etc.)
+        editContext.Validate();
+        if (string.IsNullOrWhiteSpace(rental.Name))
+            messageError += "Name is required. ";
+
+        if (string.IsNullOrWhiteSpace(rental.Surname))
+            messageError += "Surname is required. ";
+
+        if (string.IsNullOrWhiteSpace(rental.Address))
+            messageError += "Address is required. ";
+
+        // Tus validaciones custom
+        if (rental.StartDate <= DateTime.Today)
+            dateError = "Start date must be after today.";
+
+        if (rental.EndDate <= rental.StartDate)
+            dateError = "End date must be after start date.";
+
+        if (!string.IsNullOrWhiteSpace(messageError) || !string.IsNullOrWhiteSpace(dateError))
+        {
+            DialogIsOpen = false;
+            StateHasChanged();
+            return;
+        }
+
+        DialogIsOpen = true;
+        StateHasChanged();
+    }
 
     private decimal TotalCost
     {
@@ -165,7 +210,8 @@
                 {
                     var rented = await apiclient.CreateRentalAsync(rental);
                     rentalState.RentalProcessed();
-                    navigation.NavigateTo($"/rental/DetaiCochelRental/?RentalID={rented.Id}");
+                    // Navigate to the details page for the created rental
+                    navigation.NavigateTo($"/rental/detailcocherental?RentalID={rented.Id}");
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {
@@ -180,8 +226,71 @@
                 }
                 catch (ApiException apiexception)
                 {
-                    //we need to inform user that there was some other error while processing the request
-                    messageError = "Error while processing your request, please try again later!";
+                    // NSwag can throw ApiException even on success (2xx) if it can't deserialize the response.
+                    logger.LogError(apiexception, "CreateRental failed. Status={Status}. Response={Response}", apiexception.StatusCode, apiexception.Response);
+
+                    // If the API returned 201 Created, we treat it as success and try to extract the rental id from the raw JSON.
+                    if ((int)apiexception.StatusCode == 201)
+                    {
+                        // 1) Try JSON body first (some setups return it correctly).
+                        if (!string.IsNullOrWhiteSpace(apiexception.Response))
+                        {
+                            try
+                            {
+                                using var doc = JsonDocument.Parse(apiexception.Response);
+                                if (doc.RootElement.TryGetProperty("id", out var idProp) && idProp.TryGetInt32(out var createdIdFromBody))
+                                {
+                                    rentalState.RentalProcessed();
+                                    navigation.NavigateTo($"/rental/detailcocherental?RentalID={createdIdFromBody}");
+                                    return;
+                                }
+                            }
+                            catch (Exception parseEx)
+                            {
+                                logger.LogError(parseEx, "CreateRental returned 201 but response JSON couldn't be parsed.");
+                            }
+                        }
+
+                        // 2) If body is empty, try the Location header from CreatedAtAction (usually contains ?id=123).
+                        var location = TryGetHeaderValue(apiexception, "Location");
+                        if (!string.IsNullOrWhiteSpace(location))
+                        {
+                            try
+                            {
+                                // Handle relative locations like "/api/Rentals/GetRental?id=123"
+                                var loc = location.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                                    ? new Uri(location, UriKind.Absolute)
+                                    : new Uri("http://local" + location.TrimStart(), UriKind.Absolute);
+
+                                var query = QueryHelpers.ParseQuery(loc.Query);
+                                if (query.TryGetValue("id", out var idValues) && int.TryParse(idValues.FirstOrDefault(), out var createdIdFromLocation))
+                                {
+                                    rentalState.RentalProcessed();
+                                    navigation.NavigateTo($"/rental/detailcocherental?RentalID={createdIdFromLocation}");
+                                    return;
+                                }
+
+                                // Fallback: parse last segment as id (e.g., ".../123")
+                                var lastSeg = loc.Segments.LastOrDefault()?.Trim('/', ' ');
+                                if (!string.IsNullOrWhiteSpace(lastSeg) && int.TryParse(lastSeg, out var createdIdFromPath))
+                                {
+                                    rentalState.RentalProcessed();
+                                    navigation.NavigateTo($"/rental/detailcocherental?RentalID={createdIdFromPath}");
+                                    return;
+                                }
+                            }
+                            catch (Exception locEx)
+                            {
+                                logger.LogError(locEx, "CreateRental returned 201 but Location header couldn't be parsed. Location={Location}", location);
+                            }
+                        }
+                    }
+
+                    // Otherwise show a helpful error. (We keep it short to avoid dumping huge HTML.)
+                    var responseSnippet = string.IsNullOrWhiteSpace(apiexception.Response)
+                        ? "(empty response)"
+                        : (apiexception.Response.Length > 300 ? apiexception.Response[..300] + "..." : apiexception.Response);
+                    messageError = $"Error while processing your request, please try again later! (HTTP {(int)apiexception.StatusCode}) {responseSnippet}";
 
                 }
 
@@ -196,16 +305,15 @@
             var authState = await authenticationState;
             var user = authState?.User;
 
-            if (user is not null)
-            {
-                if (user.Identity is not null && user.Identity.IsAuthenticated)
-                {
-                    rental.Name = user.Identity.Name;
-                }
-            }
+
             rental.Name = rental.Name == null ? "" : rental.Name;
             rental.Surname = rental.Surname == null ? "" : rental.Surname;
             rental.Address = rental.Address == null ? "" : rental.Address;
+            if (rental.StartDate == default)
+                rental.StartDate = DateTime.Today.AddDays(1);
+
+            if (rental.EndDate == default)
+                rental.EndDate = DateTime.Today.AddDays(2);
 
         }
     }
@@ -213,4 +321,34 @@
 
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
+
+    private static string? TryGetHeaderValue(ApiException ex, string headerName)
+    {
+        try
+        {
+            // ApiException type is generated; use reflection to read potential header dictionaries.
+            var t = ex.GetType();
+            var prop = t.GetProperty("Headers") ?? t.GetProperty("ResponseHeaders");
+            var headersObj = prop?.GetValue(ex);
+            if (headersObj is null) return null;
+
+            // Common shape: IDictionary<string, IEnumerable<string>>
+            if (headersObj is IDictionary dict)
+            {
+                foreach (DictionaryEntry entry in dict)
+                {
+                    if (entry.Key is string key && key.Equals(headerName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (entry.Value is IEnumerable<string> strEnum) return strEnum.FirstOrDefault();
+                        return entry.Value?.ToString();
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // ignore - best effort
+        }
+        return null;
+    }
 }

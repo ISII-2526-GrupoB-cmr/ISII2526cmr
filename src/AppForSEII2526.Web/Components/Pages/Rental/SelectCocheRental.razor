@@ -1,4 +1,4 @@
-﻿@page "/rental/SelectCocheRental"
+﻿@page "/rental/selectcocherental"
 
 
 @using Microsoft.AspNetCore.Authorization
@@ -23,7 +23,7 @@
                 <div class="col">
                     <div class="input-group mb-3">
                         <span class="input-group-text">Max Price</span>
-                        <input type="number" step="5" @bind="rentingPrice" class="form-control" placeholder="Price">
+                        <input type="number" step="5" @bind="rentingPrice" class="form-control" placeholder="Price" id="Inputprice">
                     </div>
                 </div>
                 <!-- Select de Modelos -->
@@ -39,7 +39,7 @@
                         </select>
                     </div>
                 </div>
-                
+
 
 
 
@@ -50,12 +50,13 @@
 
             </div>
             <div class="row">
-                @if (cars == null)
+                @if (!cars.Any() && cars != null)
                 {
-                    <p>Loading cars....</p>
+                    <p id="NohayCochesDisponibles"> "No hay coches disponibles"</p>
                 }
-                else
+                else if (cars.Any() && cars != null)
                 {
+
                     <div class="mh-100 table-responsive">
                         <table class="table table-condensed table-hover" id="TableOfCars">
                             <thead>
@@ -65,7 +66,7 @@
                                     <th>Manufacturer</th>
                                     <th>Price for renting</th>
                                     <th>Color</th>
-                                  
+
 
                                 </tr>
                             </thead>
@@ -91,23 +92,24 @@
                 }
             </div>
         </div>
-           
+
+    </div>
+    <div class="col-2" hidden="@hideRentingCart">
+        <div class="row">
+            <h3>Shopping Cart</h3>
         </div>
-        <div class="col-2" hidden="@hideRentingCart">
+        @foreach (RentalItemDTO item in rental.RentalItems)
+        {
             <div class="row">
-                <h3>Shopping Cart</h3>
+                <button type="button" class="btn btn-light" id="removecar_@item.Modelo" @onclick="@(() => RemoveRentalItem(item))">x @item.Modelo - @item.RentingPrice€</button>
             </div>
-            @foreach (RentalItemDTO item in rental.RentalItems) {
-                <div class="row">
-                    <button type="button" class="btn btn-light" id="removecar_@item.Modelo" @onclick="@(() => RemoveRentalItem(item))">x @item.Modelo - @item.RentingPrice€</button>
-                </div>
-            }
-            <div class="row">
-                <button type="button" class="btn btn-primary" id="rentalcarButton" @onclick=@RentMovies>Rent movies</button>
-            </div>
+        }
+        <div class="row">
+            <button type="button" class="btn btn-primary" id="rentalcarButton" @onclick=@RentMovies>Rent movies</button>
         </div>
-        
- </div>
+    </div>
+
+</div>
 
 
 
@@ -115,16 +117,19 @@
     private string carModelSelected;
     private ICollection<string>? modelsNames = new List<string>();
     private bool hideRentingCart { get { return rental.RentalItems.Count == 0; } }
-    private ICollection<CocheParaAlquilarDTO> cars;
+    private ICollection<CocheParaAlquilarDTO> cars = new List<CocheParaAlquilarDTO>();
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
     private string carModelo { get; set; }
     private float rentingPrice { get; set; }
     private DateTime _from;
-    private DateTime From {
+    private DateTime From
+    {
         get { return _from; }
-        set {
-            if (_from != value) {
+        set
+        {
+            if (_from != value)
+            {
                 //the rentingcart is cleared to ensure that only movies available for the selected period are selected
                 _from = value;
                 rental.StartDate = DateTime.SpecifyKind(_from, DateTimeKind.Utc);
@@ -135,13 +140,16 @@
     }
 
     private DateTime _to;
-    private DateTime To {
+    private DateTime To
+    {
         get { return _to; }
-        set {
-            if (_to != value) {
+        set
+        {
+            if (_to != value)
+            {
                 //the rentingcart is cleared to ensure that only movies available for the selected period are selected
                 _to = value;
-                rental.StartDate = DateTime.SpecifyKind(_to, DateTimeKind.Utc);
+                rental.EndDate = DateTime.SpecifyKind(_to, DateTimeKind.Utc);
                 rentalState.ClearRentingCart();
 
             }
@@ -151,11 +159,13 @@
 
     private bool hiddenRentingCart = true;
 
-    private void AddCar(CocheParaAlquilarDTO movie) {
+    private void AddCar(CocheParaAlquilarDTO movie)
+    {
         rentalState.AddMovieToRental(movie);
     }
 
-    private void RemoveRentalItem(RentalItemDTO item) {
+    private void RemoveRentalItem(RentalItemDTO item)
+    {
         rentalState.RemoveRentalItemToRent(item);
         if (rental.RentalItems.Count == 0) hiddenRentingCart = true;
     }
@@ -194,15 +204,18 @@
         }
 
         StateHasChanged();
-    
+
     }
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
 
-        try {
+        try
+        {
             modelsNames = await apiclient.GetModelsAsync(null);
         }
-        catch (ApiException ex) {
+        catch (ApiException ex)
+        {
             if (modelsNames == null) modelsNames = new List<string>() { "All", };
             logger.LogError("Error! There was an error while connecting to the GetGenresAsync service");
         }
@@ -222,10 +235,11 @@
         rental.EndDate = _to;
 
 
-       // return base.OnInitializedAsync();
+        // return base.OnInitializedAsync();
     }
 
-    private void RentMovies() {
+    private void RentMovies()
+    {
         navigation.NavigateTo("/rental/CreateCocheRental");
     }
 

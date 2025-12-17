@@ -14,19 +14,19 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
     {
         private By Inputprice = By.Id("Inputprice");
         private By selectModel = By.Id("selectModel");
-        private By buttonSearchCars = By.Id("SearchCars");
+        private By buttonSearchCars = By.Id("searchCars");
         private By tableOfCarsBy = By.Id("TableOfCars");
         private By buttonRentCar = By.Id("rentalcarButton");
 
         public SeleccionarCocheParaAlquilarPO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
-            IWebElement elementPrice= _driver.FindElement(Inputprice);
+            // IWebElement elementPrice= _driver.FindElement(Inputprice);
 
-            IWebElement selectDropDown = _driver.FindElement(selectModel);
-            SelectElement select = new SelectElement(selectDropDown);
+            // IWebElement selectDropDown = _driver.FindElement(selectModel);
+            // SelectElement select = new SelectElement(selectDropDown);
 
-            elementPrice.Click();
-            elementPrice.Clear();
+            // elementPrice.Click();
+            // elementPrice.Clear();
 
 
         }
@@ -50,7 +50,9 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         }
         public bool CheckMessageErrorNotAvailableCars(string expectedError)
         {
-            return _driver.PageSource.Contains(expectedError);
+            Thread.Sleep(1000);
+            var error = _driver.FindElement(By.Id("NohayCochesDisponibles"));
+            return error != null && error.Text.Contains(expectedError);
         }
 
         public void AddCarToRentingCart(string carmodel)

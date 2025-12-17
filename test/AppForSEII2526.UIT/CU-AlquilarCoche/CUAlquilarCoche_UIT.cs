@@ -46,24 +46,17 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
 
         private void InitialStepsForRentalCars_UIT()
         {
+            _output.WriteLine("Before login");
             Precondition_perform_login();
-            Thread.Sleep(500);
 
+            _output.WriteLine("After login URL: " + _driver.Url);
+            _output.WriteLine("Handles: " + _driver.WindowHandles.Count);
 
-            seleccionarCocheParaAlquilarPO.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateRenting"));
+            seleccionarCocheParaAlquilarPO.WaitForBeingVisible(By.Id("CreateRenting"));
+            _output.WriteLine("CreateRenting visible");
             _driver.FindElement(By.Id("CreateRenting")).Click();
-
-
-            try
-            {
-                var wait = new OpenQA.Selenium.Support.UI.WebDriverWait(_driver, TimeSpan.FromSeconds(5));
-                wait.Until(d => d.Url.Contains("rental"));
-            }
-            catch (WebDriverTimeoutException)
-            {
-                _driver.Navigate().GoToUrl(new Uri(_driver.Url).GetLeftPart(UriPartial.Authority) + "/rental/select");
-            }
         }
+
 
         [Theory]
         [InlineData(carId, Name, SurName, DeliveryCarDealer, PaymentMethod, Quantity)]
@@ -83,15 +76,18 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
 
             //Act
             InitialStepsForRentalCars_UIT();
+            Thread.Sleep(1000);
 
-            seleccionarCocheParaAlquilarPO.SearchCars(0, null);
+            seleccionarCocheParaAlquilarPO.SearchCars(0, "");
             seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar);
             seleccionarCocheParaAlquilarPO.RentCars();
+            Thread.Sleep(1000);
 
             createrental.fillInformationuser(name, surname, deliveryAddress, paymentMethod);
             createrental.FillInRentalQuantity(quantity, carId);
             createrental.PressRentCars();
             createrental.PressOkModalDialog();
+            Thread.Sleep(1000);
 
 
             //Assert
@@ -99,6 +95,7 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
             Assert.True(detailRental.CheckDetailParaAlquilar(name, surname, deliveryAddress, paymentMethod, DateTime.Now, startdate, enddate, totalprice),
                 "Error: detail rental is not as expected");
 
+            Thread.Sleep(1000);
 
 
             Assert.True(detailRental.CheckDetailParaAlquilar(name, surname, deliveryAddress, paymentMethod, rentingdate, startdate, enddate, totalprice),
@@ -113,10 +110,12 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
 
             InitialStepsForRentalCars_UIT();
 
-            var expectedCars = "No cars available matching the criteria.";
+            var expectedCars = "No hay coches disponibles";
+            Thread.Sleep(1000);
 
             //Arrange
-            seleccionarCocheParaAlquilarPO.SearchCars(0, "");
+            seleccionarCocheParaAlquilarPO.SearchCars(1, "");
+            Thread.Sleep(1000);
 
             //Act
             Assert.True(seleccionarCocheParaAlquilarPO.CheckMessageErrorNotAvailableCars(expectedCars));
@@ -130,14 +129,18 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         public void UC2_FA1_CU2_2_FiltradoPorPrecioYModelo(string carId, string model, string manufacturer, string fueltype, string totalprice)
         {
             InitialStepsForRentalCars_UIT();
+            Thread.Sleep(1000);
+
             //Arrange
             var expectedCars = new List<string[]>
             {
-                new string[] { carId, model, manufacturer, fueltype, totalprice },
+                new string[] {  model,fueltype, manufacturer,  totalprice },
             };
             //Act
             int totalpriceInt = int.Parse(totalprice);
             seleccionarCocheParaAlquilarPO.SearchCars(totalpriceInt, model);
+            Thread.Sleep(1000);
+
             //Assert
             Assert.True(seleccionarCocheParaAlquilarPO.CheckListOfCars(expectedCars));
 
@@ -151,10 +154,13 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         public void UC2_FA2_CU2_2_NingunCocheSeleccionado()
         {   //Arrange
             InitialStepsForRentalCars_UIT();
+            Thread.Sleep(1000);
 
             //act
+            seleccionarCocheParaAlquilarPO.SearchCars(0, "");
             seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar);
             seleccionarCocheParaAlquilarPO.RemoveCarFromRentingCart(ModelCar);
+            Thread.Sleep(1000);
 
             //Assert
             Assert.True(seleccionarCocheParaAlquilarPO.RentingNotAvailable());
@@ -163,62 +169,98 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         }
 
         [Fact]
-        [Trait("LevelTesting","Funcional Testing")]
+        [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_FA3_CU2_2_ModificarCarroYactTotal()
         {
             InitialStepsForRentalCars_UIT();
+            Thread.Sleep(1000);
 
+            seleccionarCocheParaAlquilarPO.SearchCars(0, "");
             seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar);
             seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar2);
             seleccionarCocheParaAlquilarPO.RentCars();
+            Thread.Sleep(1000);
 
-            createCocheParaAlquilarPO.FillInRentalQuantity(Quantity, carId);
-            createCocheParaAlquilarPO.FillInRentalQuantity(Quantity, carId2);
             createCocheParaAlquilarPO.PressModifyCars();
+            Thread.Sleep(1000);
 
             seleccionarCocheParaAlquilarPO.RemoveCarFromRentingCart(ModelCar2);
             seleccionarCocheParaAlquilarPO.RentCars();
         }
-        
+
 
         [Theory]
         [InlineData("", "Navarro Martínez", "Calle Albacete", "Visa")]
         [InlineData("Elena", "", "Calle Albacete", "Visa")]
         [InlineData("Elena", "Navarro Martínez", "", "Visa")]
-        [Trait("LevelTesting","Funcional Testing")]
-        public void UC2_FA4_CU2_2_ErrorDatosObligatorios(string name,string surname,string address,string paymentmethod)
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_FA4_CU2_2_ErrorDatosObligatorios(
+            string name,
+            string surname,
+            string address,
+            string paymentmethod)
         {
             InitialStepsForRentalCars_UIT();
+
+            seleccionarCocheParaAlquilarPO.SearchCars(0, "");
             seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar);
             seleccionarCocheParaAlquilarPO.RentCars();
+
             createCocheParaAlquilarPO.fillInformationuser(name, surname, address, paymentmethod);
             createCocheParaAlquilarPO.FillInRentalQuantity(Quantity, carId);
+
+
             createCocheParaAlquilarPO.PressRentCars();
-
-
-            Assert.True(createCocheParaAlquilarPO.CheckErrorMessageForMandatoryFields(),
-                "Error: The error message for mandatory fields is not shown as expected.");
+            Thread.Sleep(1000);
+            Assert.True(
+                createCocheParaAlquilarPO.CheckErrorMessageForMandatoryFields(),
+                "Expected frontend validation error was not shown"
+            );
         }
+
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_FA5_CU2_2_ModificarCochesSeleccionados()
         {
             InitialStepsForRentalCars_UIT();
+            Thread.Sleep(1000);
+
             seleccionarCocheParaAlquilarPO.SearchCars(0, "");
             seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar);
             seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar2);
             seleccionarCocheParaAlquilarPO.RentCars();
+            Thread.Sleep(1000);
             createCocheParaAlquilarPO.PressModifyCars();
+            Thread.Sleep(1000);
+
             seleccionarCocheParaAlquilarPO.RemoveCarFromRentingCart(ModelCar2);
             seleccionarCocheParaAlquilarPO.RentCars();
 
-            var expected = new List<String[]> { new String[] { ModelCar, ManufacturerCar, totalprice } };
+            var expected = new List<String[]> { new String[] { ModelCar, totalprice, ManufacturerCar } };
 
             //Esto es el assert
             Assert.True(createCocheParaAlquilarPO.CheckListOfRentalItems(expected));
         }
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_FA4_CU2_2_ErroEnlasFechasDeAlquiler()
+        {
+            InitialStepsForRentalCars_UIT();
+            seleccionarCocheParaAlquilarPO.SearchCars(0, "");
+            seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar);
+            seleccionarCocheParaAlquilarPO.RentCars();
+            createCocheParaAlquilarPO.fillInformationuser(Name, SurName, DeliveryCarDealer, PaymentMethod);
+            createCocheParaAlquilarPO.FillInRentalQuantity(Quantity, carId);
+            createCocheParaAlquilarPO.SetRentalDates(DateTime.Today.AddDays(3), DateTime.Today.AddDays(1));
+            createCocheParaAlquilarPO.PressRentCars();
+            Thread.Sleep(1000);
+            Assert.True(
+                createCocheParaAlquilarPO.CheckErrorMessageForInvalidDates(),
+                "Expected frontend validation error for invalid rental dates was not shown"
+            );
+        }
 
 
     }

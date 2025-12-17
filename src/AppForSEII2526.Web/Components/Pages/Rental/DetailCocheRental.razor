@@ -1,4 +1,4 @@
-﻿@page "/rental/DetailCocheRental"
+﻿@page "/rental/detailcocherental"
 
 
 @using AppForSEII2526.Web.API
@@ -9,12 +9,13 @@
 
 @attribute [Authorize]
 
-@if (rental==null)
+@if (rental == null)
 {
     <p>@error</p>
-}else
+}
+else
 {
-        <table class="table table-borderless table-sm">
+    <table class="table table-borderless table-sm">
         <tr>
             <th>Name and Surname</th>
             <td id="NameSurname">@rental.Name @rental.Surname</td>
@@ -33,21 +34,23 @@
         </tr>
         <tr>
             <th>Rental period</th>
-            <td id="RentalPeriod">@rental.StartDate.DateTime.ToString("dd/MM/yyyy") - @rental.EndDate.DateTime.ToString("dd/MM/yyyy")</td>
+            <td id="RentalPeriod">
+                @rental.StartDate.ToString("dd/MM/yyyy") - @rental.EndDate.ToString("dd/MM/yyyy")
+
+            </td>
         </tr>
         <tr>
             <th>Rental price</th>
-            <td id="RentalPeriod">@rental.TotalPrice</td>
+            <td id="RentalTotalPrice">@rental.TotalPrice</td>
         </tr>
     </table>
 
-       <h4>Rented Cars</h4>
+    <h4>Rented Cars</h4>
 
     <table class="table" id="RentedCars">
         <thead>
             <tr>
                 <th scope="col">Modelo</th>
-                <th scope="col">Fuel Type</th>
                 <th scope="col">Manufacturer</th>
                 <th scope="col">Price for renting</th>
             </tr>
@@ -57,16 +60,16 @@
             {
                 <tr id="RentalItem_@item.Modelo">
                     <td>@item.Modelo</td>
-                    <td>@item.Manufacturer €</td>
+                    <td>@item.Manufacturer</td>
                     <td>@item.RentingPrice €</td>
 
                 </tr>
             }
         </tbody>
         <tfoot>
-              @*colspan is used to state that TWO columns are collapsed*@
-            <th scope="row" colspan="2" class="text-end">Total Price</th>
-            <td id="TotalPrice">@rental.TotalPrice €</td>
+            @*colspan is used to state that TWO columns are collapsed*@
+        <th scope="row" colspan="2" class="text-end">Total Price</th>
+        <td id="TotalPrice">@rental.TotalPrice €</td>
         </tfoot>
 
     </table>
@@ -84,31 +87,37 @@
     private Task<AuthenticationState>? authenticationState { get; set; }
 
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
 
         //we check the user is logged in
         string userName = "";
-        if (authenticationState is not null) {
+        if (authenticationState is not null)
+        {
             var authState = await authenticationState;
             var user = authState?.User;
 
             //we retrieve the id of the user logged in
-            if (user is not null) {
-                if (user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User")) {
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
+                {
                     userName = user.Identity.Name;
                 }
             }
         }
 
-        try {
+        try
+        {
             rental = await apiclient.GetRentalAsync(RentalID);
         }
-        catch (ApiException exception) {
+        catch (ApiException exception)
+        {
             rental = null;
+            error = "Error loading rental details.";
+
         }
-        if ((rental == null) || (rental.Name != userName)) {
-            error = $"Error! You are not authorized to see this rental or there is not a rental with id={RentalID}";
-        }
+
 
 
     }

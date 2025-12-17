@@ -19,7 +19,7 @@ public class RentalStateContainer
     {
         get
         {
-            int numberOfDays = (Rental.StartDate - Rental.EndDate).Days;
+            int numberOfDays = (Rental.EndDate - Rental.StartDate).Days;
             return Convert.ToDecimal(Rental.RentalItems.Sum(ri => ri.RentingPrice * numberOfDays));
         }
     }
@@ -40,7 +40,7 @@ public class RentalStateContainer
                 CarId = coche.Id,
                 Modelo = coche.Model,
                 RentingPrice = coche.RentingPrice,
-                Manufacturer=coche.Manufacturer
+                Manufacturer = coche.Manufacturer
             }
         );
 

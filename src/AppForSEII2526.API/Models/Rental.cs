@@ -4,22 +4,22 @@ namespace AppForSEII2526.API.Models
 {
     public class Rental
     {
-       
+
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please, set your Delivery Car Dealer")]
         [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string DeliveryCarDealer { get; set; }
-       
+
         public int Id { get; set; }
 
 
         [Display(Name = "Payment Method")]
-        [StringLength(15, ErrorMessage = "Name can be neither longer than 50 characters nor shorter than 10.", MinimumLength=3)]
+        [StringLength(15, ErrorMessage = "Name can be neither longer than 50 characters nor shorter than 10.", MinimumLength = 3)]
         public PaymentMethodTypes PaymentMethod { get; set; }
 
         [Display(Name = "Renting Date")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime RentignDate { get; set; }
+        public DateTime RentignDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Start Date")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
@@ -64,10 +64,10 @@ namespace AppForSEII2526.API.Models
             EndDate = endDate;
             RentalItems = rentalItems;
         }
-        public Rental( ApplicationUser user,string deliveryCarDealer, PaymentMethodTypes paymentMethod,DateTime rentignDate,float rentingPrice, DateTime startDate, DateTime endDate, List<RentalItem> rentalItems)
+        public Rental(ApplicationUser user, string deliveryCarDealer, PaymentMethodTypes paymentMethod, DateTime rentignDate, float rentingPrice, DateTime startDate, DateTime endDate, List<RentalItem> rentalItems)
         {
-           ApplicationUser = user;
-            DeliveryCarDealer= deliveryCarDealer;
+            ApplicationUser = user;
+            DeliveryCarDealer = deliveryCarDealer;
             RentignDate = rentignDate;
             PaymentMethod = paymentMethod;
             TotalPrice = rentingPrice;
@@ -80,10 +80,10 @@ namespace AppForSEII2526.API.Models
 
         public IList<RentalItem> RentalItems { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-        public string Name { get;  }
+        public string Name { get; }
         public string Surname { get; }
         public string Address { get; set; }
-        public DateTime Now { get;  }
+        public DateTime Now { get; }
     }
-    
+
 }
