@@ -20,7 +20,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             };
             var cars = new List<Car>()
             {
-                new Car(models[0], "Deportivo", "Red", "Deportivo rápido", "2.0L", "Gasolina", 1, "Preventivo", "Ferrari", 1001, 120000.0f, 3, 2, 1500.0f, 19.0f),
+                new Car(models[0], "Deportivo", "Red", "Deportivo rápido", "2.0L", "Gasolina", 1, "Preventivo", "Ferrari", 1001, 230000.0f, 3, 2, 1500.0f, 19.0f),
                 new Car(models[1], "Sedán", "Blue", "Sedán cómodo", "1.6L", "Diésel", 2, "Correctivo", "Toyota", 1002, 30000.0f, 5, 3, 500.0f, 16.0f),
                 new Car(models[2], "SUV", "Black", "SUV espacioso", "2.5L", "Híbrido", 3, "Preventivo", "Honda", 1003, 40000.0f, 4, 2, 600.0f, 18.0f),
             };
@@ -38,7 +38,10 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
                 .First(au => au.Name == user.Name && au.Surname == user.Surname);
 
 
-            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Today, cars[0].PurchasePrice, new List<PurchaseItem>());
+
+            var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, "Calle Falsa 1", new List<PurchaseItem>());
+            
+
             purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1, 1));
             _context.Add(purchase1);
             _context.SaveChanges();
@@ -79,18 +82,17 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
                 expectedDate,
                 "Elena",
                 "Navarro Martínez",
-                "elena@uclm.es",
-                120000,
+                "Calle Falsa 1",
+                230000,
                 new List<PurchaseItemDTO>
                 {
                     new PurchaseItemDTO(
                         1,
-                        120000,
-                        "Deportivo rápid",
-                        "Red"
-                        ,
-                        120000,
-                        "Modelo A"
+                        230000.0f,
+                        "Modelo A",
+                        "Red",
+                        1,
+                        null
                     )
                 }
             );

@@ -64,7 +64,7 @@
 
     <h4>Purchase detail</h4>
     <p>
-        <b>Total price:</b> @TotalCost €
+        <b>Total price:</b> <span id="TotalPrice">@TotalCost</span> €
         <button class="btn btn-outline-primary" type="submit" @onclick="ModifyPurchaseItems" id="ModifyCars">
             Modify cars
         </button>
@@ -90,7 +90,7 @@
                         <td>@item.CarColor</td>
                         <td>@item.PurchasePrice</td>
                         <td>@item.Description</td>
-                        <td><InputNumber @bind-Value="item.Quantity" class="form-control" id="@($"quantity_{item.Quantity}")"/></td>
+                        <td><InputNumber @bind-Value="item.Quantity" class="form-control" id="@($"quantity_{item.Modelo.Replace(" ","")}")"/></td>
                     </tr>
                 }
             </tbody>
