@@ -43,7 +43,7 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
             
 
             var purchase1 = new Purchase(trackedUser, "AutoGo", 0, DateTime.Now, cars[0].PurchasePrice, new List<PurchaseItem>());
-            purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1));
+            purchase1.PurchaseItems.Add(new PurchaseItem(cars[0], purchase1, 1));
             _context.Add(purchase1);
             _context.SaveChanges();
 
@@ -52,17 +52,17 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
         public static IEnumerable<object[]> TestCasesFor_PostPurchase()
         {
             
-            var purchaseNoItem = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0, 1, new List<PurchaseItemDTO>());
+            var purchaseNoItem = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0,  new List<PurchaseItemDTO>());
 
-                var purchaseItems = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, 230000, "Toyota Corolla", "Gris", "Sedán cómodo y eficiente, ideal para ciudad.") };
+                var purchaseItems = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, "Gris", "Toyota Corolla",230000 , "Sedán cómodo y eficiente, ideal para ciudad.") };
 
-            var purchaseCantidadCero = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0, 0, purchaseItems);
+            var purchaseCantidadCero = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0,  purchaseItems);
 
-            var purchaseUserNoExist = new PurchaseForCreateDTO("Juan", "Pérez", "Calle Falsa 33, Chinchilla", 0, 1, purchaseItems);
+            var purchaseUserNoExist = new PurchaseForCreateDTO("Juan", "Pérez", "Calle Falsa 33, Chinchilla", 0,  purchaseItems);
 
-                var purchaseItemsSinDesc = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, 230000, "Toyota Corolla", "Gris", "") };
+                var purchaseItemsSinDesc = new List<PurchaseItemDTO>() { new PurchaseItemDTO(1, 230000, "Gris", "Toyota Corolla", 230000, "") };
 
-            var purchaseSinDescCant2 = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0, 2, purchaseItemsSinDesc);
+            var purchaseSinDescCant2 = new PurchaseForCreateDTO("Elena", "Navarro Martínez", "Avda. España 2, Albacete", 0,  purchaseItemsSinDesc);
 
             var allTests = new List<object[]>
             {
@@ -116,10 +116,10 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
                 "Navarro Martínez",
                 "Avda. España 2, Albacete",
                 PaymentMethodTypes.GooglePay,
-                1,
+                
                 new List<PurchaseItemDTO>()
                 {
-                    new PurchaseItemDTO(1,230000,230000,"Modelo A","Red","Deportivo rápido")
+                    new PurchaseItemDTO(1,1,"Red","Modelo A",230000,"Deportivo rápido")
                 }
             );
 
@@ -136,9 +136,9 @@ namespace AppForSEII2526.UT.PurchaseControllerTests
                     new PurchaseItemDTO(
                         1,
                         230000,
-                        230000,
-                        "Modelo A",
                         "Red",
+                        "Modelo A",
+                        230000 ,
                         "Deportivo rápido"
                     )
                 }
