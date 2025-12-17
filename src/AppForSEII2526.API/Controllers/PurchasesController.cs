@@ -39,17 +39,16 @@ namespace AppForSEII2526.API.Controllers
                     .ThenInclude(pi => pi.Car) //then join table Cars
                         .ThenInclude(car => car.Model) //then join table Model
              .Select(p => new PurchaseDetailDTO(p.Id, p.PurchasingDate, p.ApplicationUser.Name,
-                    p.ApplicationUser.Surname, p.ApplicationUser.Address,
+                    p.ApplicationUser.Surname, p.DeliveryAddress,
                     p.PurchasingPrice,
                     p.PurchaseItems
                         .Select(pi => new PurchaseItemDTO(
                             pi.Car.Id,
                             pi.Car.PurchasePrice,
                             pi.Car.Model.Name,
-                            pi.Car.Description,
+                            pi.Car.Color,
                             pi.Quantity,
-                            pi.Car.Color
-                            
+                            pi.Description
                         )).ToList<PurchaseItemDTO>())).FirstOrDefaultAsync();
 
 
@@ -175,7 +174,7 @@ namespace AppForSEII2526.API.Controllers
             //it returns purchaseDetail
             var purchaseDetail = new PurchaseDetailDTO(purchase.Id, purchase.PurchasingDate,
                 purchase.ApplicationUser.Name, purchase.ApplicationUser.Surname,
-                purchase.ApplicationUser.Address, purchase.PurchasingPrice,
+                purchase.DeliveryAddress, purchase.PurchasingPrice,
                 purchaseForCreate.PurchaseItems);
 
             return CreatedAtAction("GetPurchase", new { id = purchase.Id }, purchaseDetail);

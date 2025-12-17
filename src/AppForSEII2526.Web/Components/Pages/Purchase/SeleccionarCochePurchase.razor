@@ -153,7 +153,7 @@
         catch (ApiException ex)
         {
             logger.LogError($"{DateTime.Now} Error: {ex}");
-            errors = "Error while connecting to the system";
+            errors = ex.Response ?? ex.Message;
         }
 
         StateHasChanged();
@@ -164,13 +164,28 @@
         try
         {
             modelsNames = await apiclient.GetModelsAsync(null);
-            cars = await apiclient.GetCocheParaComprarAsync(null, null);
+            
+
+
         }
         catch (ApiException ex)
         {
             if (modelsNames == null) modelsNames = new List<string>() { "All", };
             logger.LogError("Error! There was an error while connecting to the GetModelsAsync service");
         }
+
+        try
+        {
+            cars = await apiclient.GetCocheParaComprarAsync(null, null);
+        }
+        catch (ApiException ex)
+        {
+            logger.LogError(ex, "Error loading cars");
+            errors = ex.Response ?? ex.Message;
+        }
+
+
+
        
 
     }

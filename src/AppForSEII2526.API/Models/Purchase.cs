@@ -22,7 +22,7 @@ namespace AppForSEII2526.API.Models
             PurchasingPrice = 0;
         }
 
-        public Purchase(ApplicationUser user, string deliveryCarDealer, PaymentMethodTypes paymentMethod, DateTime purchasingDate, float purchasingPrice, IList<PurchaseItem> purchaseItems)
+        public Purchase(ApplicationUser user, string deliveryCarDealer, PaymentMethodTypes paymentMethod, DateTime purchasingDate, float purchasingPrice, string deliveryAddress, IList<PurchaseItem> purchaseItems)
         {
             ApplicationUser = user;
             DeliveryCarDealer = deliveryCarDealer;
@@ -30,6 +30,7 @@ namespace AppForSEII2526.API.Models
             PurchasingDate = purchasingDate;
             PurchasingPrice = purchasingPrice;
             PurchaseItems = purchaseItems;
+            DeliveryAddress = deliveryAddress;
         }
 
         public int Id { get; set; }
@@ -55,7 +56,7 @@ namespace AppForSEII2526.API.Models
         public IList<PurchaseItem> PurchaseItems { get; set; }
         public string CustomerName { get; }
         public string CustomerSurname { get; }
-        public string DeliveryAddress { get; }
+        public string DeliveryAddress { get; set; }
     }
 
 

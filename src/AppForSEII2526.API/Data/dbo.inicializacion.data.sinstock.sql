@@ -1,4 +1,4 @@
-DELETE FROM [dbo].[ReviewItems];
+ï»¿DELETE FROM [dbo].[ReviewItems];
 DELETE FROM [dbo].[Reviews];
 
 DELETE FROM [dbo].[RentalItems];
@@ -26,15 +26,15 @@ SET IDENTITY_INSERT [dbo].[Models] OFF
 SET IDENTITY_INSERT [dbo].[Cars] ON
 INSERT INTO [dbo].[Cars]
 ([Id], [CarClass], [Color], [Description], [EngDisplacement], [FuelType], [MaintenanceType], [Manufacturer], [PurchaseItem], [PurchasePrice], [QuantityForPurchase], [QuantityForRenting], [RentingPrice], [RimSize], [ModelID])
-VALUES (1, N'Sedan', N'Gris', N'Sedán cómodo y eficiente, ideal para ciudad.', N'1.8L', N'Gasoline', N'Regular', N'Toyota', 101, 2300000, 5, 8, 85, 16, 1);
+VALUES (1, N'Sedan', N'Gris', N'SedÃ¡n cÃ³modo y eficiente, ideal para ciudad.', N'1.8L', N'Gasoline', N'Regular', N'Toyota', 101, 2300000, 0, 0, 85, 16, 1);
 
 INSERT INTO [dbo].[Cars]
 ([Id], [CarClass], [Color], [Description], [EngDisplacement], [FuelType], [MaintenanceType], [Manufacturer], [PurchaseItem], [PurchasePrice], [QuantityForPurchase], [QuantityForRenting], [RentingPrice], [RimSize], [ModelID])
-VALUES (2, N'SUV', N'Azul Marino', N'SUV moderna y espaciosa con gran rendimiento.', N'2.5L', N'Diesel', N'Standard', N'Mazda', 102, 2950000, 3, 5, 120, 18, 2);
+VALUES (2, N'SUV', N'Azul Marino', N'SUV moderna y espaciosa con gran rendimiento.', N'2.5L', N'Diesel', N'Standard', N'Mazda', 102, 2950000, 0, 0, 120, 18, 2);
 
 INSERT INTO [dbo].[Cars]
 ([Id], [CarClass], [Color], [Description], [EngDisplacement], [FuelType], [MaintenanceType], [Manufacturer], [PurchaseItem], [PurchasePrice], [QuantityForPurchase], [QuantityForRenting], [RentingPrice], [RimSize], [ModelID])
-VALUES (3, N'Sports', N'Rojo', N'Coupé deportivo con motor turbo de alto rendimiento.', N'3.0L Twin Turbo', N'Gasoline', N'Performance', N'BMW', 103, 6870000, 0, 2, 350, 19, 3);
+VALUES (3, N'Sports', N'Rojo', N'CoupÃ© deportivo con motor turbo de alto rendimiento.', N'3.0L Twin Turbo', N'Gasoline', N'Performance', N'BMW', 103, 6870000, 0, 0, 350, 19, 3);
 SET IDENTITY_INSERT [dbo].[Cars] OFF
 
 
@@ -95,28 +95,28 @@ VALUES (3, 3, 1,3,1,1);
 
 
 -------------------------------------------------
--- RESEÑAS
+-- RESEÃ‘AS
 -------------------------------------------------
 SET IDENTITY_INSERT [dbo].[Reviews] ON
 INSERT INTO [dbo].[Reviews] ([Id], [country], [created], [drivertype], [ApplicationUserId])
-VALUES (1, N'España', '2025-09-15', 0, 1);
+VALUES (1, N'EspaÃ±a', '2025-09-15', 0, 1);
 
 INSERT INTO [dbo].[Reviews] ([Id], [country], [created], [drivertype], [ApplicationUserId])
-VALUES (2, N'España', '2025-09-20', 1, 2);
+VALUES (2, N'EspaÃ±a', '2025-09-20', 1, 2);
 
 INSERT INTO [dbo].[Reviews] ([Id], [country], [created], [drivertype], [ApplicationUserId])
-VALUES (3, N'España', '2025-09-25', 1, 3);
+VALUES (3, N'EspaÃ±a', '2025-09-25', 1, 3);
 SET IDENTITY_INSERT [dbo].[Reviews] OFF
 
 
 -------------------------------------------------
--- ITEMS DE RESEÑA
+-- ITEMS DE RESEÃ‘A
 -------------------------------------------------
 INSERT INTO [dbo].[ReviewItems] ([CarId], [ReviewId], [Description], [Rating])
-VALUES (1, 1, N'Excelente coche para ciudad, muy económico.', 5);
+VALUES (1, 1, N'Excelente coche para ciudad, muy econÃ³mico.', 5);
 
 INSERT INTO [dbo].[ReviewItems] ([CarId], [ReviewId], [Description], [Rating])
-VALUES (2, 2, N'Cómodo y espacioso, ideal para viajes largos.', 4);
+VALUES (2, 2, N'CÃ³modo y espacioso, ideal para viajes largos.', 4);
 
 INSERT INTO [dbo].[ReviewItems] ([CarId], [ReviewId], [Description], [Rating])
 VALUES (3, 3, N'Potencia impresionante, aunque consume mucho.', 5)
