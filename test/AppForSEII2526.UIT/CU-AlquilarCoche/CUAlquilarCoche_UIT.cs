@@ -28,7 +28,7 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         private string ModelCar2 = "BMW M4";
         private string ManufacturerCar2 = "BMW";
         private string FuelType2 = "Gasoline";
-        private string totalprice2 = "85";
+        private string totalprice2 = "350   ";
         public CUAlquilarCoche_UIT(ITestOutputHelper output) : base(output)
         {
             seleccionarCocheParaAlquilarPO = new SeleccionarCocheParaAlquilarPO(_driver, output);
