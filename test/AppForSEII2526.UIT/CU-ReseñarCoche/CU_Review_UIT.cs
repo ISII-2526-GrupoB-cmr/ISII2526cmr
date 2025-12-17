@@ -38,7 +38,7 @@ namespace AppForSEII2526.UIT.CU_ReseñarCoche
         private const string manufacturer2 = "Mazda";
         private const string fueltype2 = "Diesel";
         private const string color2 = "Azul Marino";
-        private const string description2 = "Reseña Mazda CX-5";
+        private const string description2 = "Reseña para Mazda CX-5";
         private const int rating2 = 4;
 
 
