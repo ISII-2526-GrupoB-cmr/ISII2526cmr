@@ -29,6 +29,11 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         private string ManufacturerCar2 = "BMW";
         private string FuelType2 = "Gasoline";
         private string totalprice2 = "350   ";
+        private const int carId3 = 3;
+        private string ModelCar3 = "Mazda CX-5";
+        private string ManufacturerCar3 = "Mazda";
+        private string FuelType3 = "Diesel";
+        private string totalprice3 = "120";
         public CUAlquilarCoche_UIT(ITestOutputHelper output) : base(output)
         {
             seleccionarCocheParaAlquilarPO = new SeleccionarCocheParaAlquilarPO(_driver, output);
@@ -248,6 +253,7 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
         public void UC2_FA4_CU2_2_ErroEnlasFechasDeAlquiler()
         {
             InitialStepsForRentalCars_UIT();
+
             seleccionarCocheParaAlquilarPO.SearchCars(0, "");
             seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar);
             seleccionarCocheParaAlquilarPO.RentCars();
@@ -262,6 +268,29 @@ namespace AppForSEII2526.UIT.CU_AlquilarCoche
             );
         }
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void examen()
+        {
+            InitialStepsForRentalCars_UIT();
+            seleccionarCocheParaAlquilarPO.SearchCars(0, "Toyota Corolla");
+            seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar);
+            seleccionarCocheParaAlquilarPO.SearchCars(12, "All");
+            seleccionarCocheParaAlquilarPO.AddCarToRentingCart(ModelCar3);
+            seleccionarCocheParaAlquilarPO.RemoveCarFromRentingCart(ModelCar);
+            seleccionarCocheParaAlquilarPO.RentCars();
+            createCocheParaAlquilarPO.fillInformationuser(Name, SurName, DeliveryCarDealer, PaymentMethod);
+            createCocheParaAlquilarPO.FillInRentalQuantity(Quantity, carId3);
+            createCocheParaAlquilarPO.PressRentCars();
+            createCocheParaAlquilarPO.PressOkModalDialog();
+
+
+            Assert.True(
+                createCocheParaAlquilarPO.CheckErrorMessageForMandatoryFields(),
+                "Expected frontend validation error was not shown"
+            );
+
+        }
 
     }
 }
