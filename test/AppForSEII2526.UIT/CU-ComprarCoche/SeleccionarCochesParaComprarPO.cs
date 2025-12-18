@@ -35,6 +35,7 @@ namespace AppForSEII2526.UIT.CU_ComprarCoche
         public void SearchCars(string color, string model)
         {
             WaitForBeingVisible(inputColor);
+            _driver.FindElement(inputColor).Clear();
             //Se introduce el color
             _driver.FindElement(inputColor).SendKeys(color);
             //Con todo esto se selecciona el modelo
@@ -58,17 +59,17 @@ namespace AppForSEII2526.UIT.CU_ComprarCoche
             return actualErrorShown.Text == errorMessage;
         }
 
-        public void AddMovieToPurchasingCart(string carColor)
+        public void AddMovieToPurchasingCart(string carModel)
         {
-            WaitForBeingClickable(By.Id("carToPurchase_" + carColor));
+            WaitForBeingClickable(By.Id("carToPurchase_" + carModel));
 
-            _driver.FindElement(By.Id("carToPurchase_" + carColor)).Click();
+            _driver.FindElement(By.Id("carToPurchase_" + carModel)).Click();
         }
 
-        public void RemoveCarFromPurchasingCart(string carColor)
+        public void RemoveCarFromPurchasingCart(string carModel)
         {
-            WaitForBeingClickable(By.Id("removeCar_" + carColor));
-            _driver.FindElement(By.Id("removeCar_" + carColor)).Click();
+            WaitForBeingClickable(By.Id("removeCar_" + carModel));
+            _driver.FindElement(By.Id("removeCar_" + carModel)).Click();
         }
 
         public void PurchaseCars()

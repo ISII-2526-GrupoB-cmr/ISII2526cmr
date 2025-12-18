@@ -1,4 +1,5 @@
 ﻿using AppForSEII2526.UIT.Shared;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using OpenQA.Selenium.DevTools.V140.Network;
 using OpenQA.Selenium.DevTools.V140.Storage;
 using System;
@@ -80,6 +81,43 @@ namespace AppForSEII2526.UIT.CU_ComprarCoche
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
+        public void PRUEBA_EXAMEN()
+        {
+            //Arrange
+            var expectedPurchaseItems = new List<string[]> { new string[] { carModel1, carColor1, carPriceForPurchasing1, quantity1 } };
+            var namesurname = name + " " + surname;
+
+            //Act
+            InitialStepsForPurchasingCars();
+            Thread.Sleep(3000);
+            seleccionarCochesParaComprar_PO.SearchCars("Azul Marino", ""); //filtro por color
+            Thread.Sleep(3000);
+            seleccionarCochesParaComprar_PO.AddMovieToPurchasingCart(carModel2);
+            Thread.Sleep(3000);
+            seleccionarCochesParaComprar_PO.SearchCars("", "Toyota Corolla"); //filtro por modelo
+            Thread.Sleep(3000);
+            seleccionarCochesParaComprar_PO.AddMovieToPurchasingCart(carModel1);
+            Thread.Sleep(3000);
+            seleccionarCochesParaComprar_PO.RemoveCarFromPurchasingCart(carModel2); //elimino el primero
+            Thread.Sleep(3000);
+            seleccionarCochesParaComprar_PO.PurchaseCars();
+            Thread.Sleep(3000);
+            crearCompra_PO.FillInPurchaseInfo(name, surname, deliveryAddress, paymentMethod1);
+            Thread.Sleep(3000);
+            crearCompra_PO.FillInPurchaseQuantity(quantity1, carModel1);
+            Thread.Sleep(3000);
+            crearCompra_PO.PressPurchaseYourCars();
+            Thread.Sleep(3000);
+            crearCompra_PO.PressOkModalDialog();
+            Thread.Sleep(3000);
+
+            //Assert
+            Assert.True(detailCompra_PO.CheckPurchaseDetail(namesurname, deliveryAddress, DateTime.Now, carPriceForPurchasing1), "Error: detail purchase is not as expected");
+            Assert.True(detailCompra_PO.CheckListOfCars(expectedPurchaseItems), "Error, purchase items are not as expected");
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
         public void UC1_AF2_UC1_6_PurchasingNotavailable()
         {
             //Arrange
@@ -148,21 +186,30 @@ namespace AppForSEII2526.UIT.CU_ComprarCoche
         {
             //Arrange
             InitialStepsForPurchasingCars();
+            Thread.Sleep(1000);
 
             string carModelSinEspacios = carModel1.Replace(" ", "");
             string expectedData = name + surname + deliveryAddress + paymentMethod2 + quantity1;
 
             seleccionarCochesParaComprar_PO.AddMovieToPurchasingCart(carModel1);
+            Thread.Sleep(1000);
             seleccionarCochesParaComprar_PO.AddMovieToPurchasingCart(carModel2);
+            Thread.Sleep(1000);
             seleccionarCochesParaComprar_PO.PurchaseCars();
+            Thread.Sleep(1000);
 
             crearCompra_PO.FillInPurchaseInfo(name, surname, deliveryAddress, paymentMethod2);
+            Thread.Sleep(1000);
             crearCompra_PO.FillInPurchaseQuantity(quantity1, carModel1);
+            Thread.Sleep(1000);
 
             //Act
             crearCompra_PO.VolverAlSelect();
+            Thread.Sleep(1000);
             seleccionarCochesParaComprar_PO.RemoveCarFromPurchasingCart(carModel2);
+            Thread.Sleep(1000);
             seleccionarCochesParaComprar_PO.PurchaseCars();
+            Thread.Sleep(1000);
 
             string actualData = crearCompra_PO.ReturnData(carModel1);
 
@@ -208,15 +255,19 @@ namespace AppForSEII2526.UIT.CU_ComprarCoche
         {
             //Arrange
             InitialStepsForPurchasingCars();
+            Thread.Sleep(1000);
             //Act
             seleccionarCochesParaComprar_PO.AddMovieToPurchasingCart(carModel1);
             seleccionarCochesParaComprar_PO.PurchaseCars();
+            Thread.Sleep(1000);
 
             crearCompra_PO.FillInPurchaseInfo(name, surname, deliveryaddres, paymentmethod);
             crearCompra_PO.FillInPurchaseQuantity(quantity, carModel1);
+            Thread.Sleep(1000);
 
             crearCompra_PO.PressPurchaseYourCars();
             //crearCompra_PO.PressOkModalDialog();
+            Thread.Sleep(1000);
 
             //Assert
             Assert.True(crearCompra_PO.CheckValidationError(expectedMessageError), $"Expected error: {expectedMessageError}");
