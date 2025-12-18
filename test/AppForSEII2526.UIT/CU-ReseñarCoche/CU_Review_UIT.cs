@@ -209,6 +209,47 @@ namespace AppForSEII2526.UIT.CU_ReseñarCoche
 
         }
 
+        [Theory]
+        [InlineData(ModelCar, ModelCar2, manufacturer2, fueltype2, color2, "Experto", "Toyota", "Diesel")]
+        [Trait("Level Testing", "Functional Testing")]
+        public void UC4_AF0_AF0_Examen(string modelo, string model2, string manufacturer, string fueltype, string color, string drivertype , string filtroManufacturer, string filtroFueltype) {
+            PrimerosPasosReviewCar();
+            var parsedDriverType = Enum.Parse<DriverType>(drivertype);
+            Thread.Sleep(1000);
+            seleccionarCocheParaReseñar.BuscarManufacturer(filtroManufacturer);
+            Thread.Sleep(1000);
+            seleccionarCocheParaReseñar.SelectCarsForReview(modelo);
+            Thread.Sleep(1000);
+            seleccionarCocheParaReseñar.BorrarManufacturer(filtroManufacturer);
+            Thread.Sleep(1000);
+            seleccionarCocheParaReseñar.BuscarFueltype(filtroFueltype);
+            Thread.Sleep(1000);
+            seleccionarCocheParaReseñar.SelectCarsForReview(model2);
+            Thread.Sleep(1000);
+            seleccionarCocheParaReseñar.PularQuitarCoche(modelo);
+            Thread.Sleep(1000);
+            seleccionarCocheParaReseñar.ReviewCars();
+            Thread.Sleep(1000);
+            createReview_PO.RellenarReview(username, country, parsedDriverType);
+            createReview_PO.RellenarDetailReview(description2, rating2, model2);
+            createReview_PO.PulsarSubmitReview();
+            Thread.Sleep(1000);
+            createReview_PO.PressOkModalDialog();
+            var expectedReview = new List<string[]>
+{
+                new string[] {
+                    model2,
+                    manufacturer2,
+                    fueltype2,
+                    color2,
+                    rating2.ToString(),
+                    description2
+                }
+            };
+            Assert.True(reviewDetail_PO.CheckReviewDetail(username, country, DateTime.Now, parsedDriverType));
+            Assert.True(reviewDetail_PO.CheckListOfCars(expectedReview));
+
+        }
 
     }
 }

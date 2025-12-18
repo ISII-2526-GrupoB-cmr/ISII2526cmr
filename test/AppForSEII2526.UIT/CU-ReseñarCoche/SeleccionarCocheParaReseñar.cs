@@ -51,6 +51,35 @@ namespace AppForSEII2526.UIT.CU_ReseñarCoche
 
         }
 
+        public void BuscarFueltype(string fueltype) {
+            WaitForBeingVisible(selectFueltype);
+            var fuelInput = _driver.FindElement(selectFueltype);
+            fuelInput.SendKeys(fueltype);
+            _driver.FindElement(searchCars).Click();
+        
+        
+        }
+
+        public void BorrarManufacturer(string manufacturer) {
+            WaitForBeingVisible(selectManufacturer);
+            var manuInput = _driver.FindElement(selectManufacturer);
+            manuInput.Clear();
+            _driver.FindElement(searchCars).Click();
+
+
+
+        }
+
+        public void BuscarManufacturer(string manufacturer)
+        {
+            WaitForBeingVisible(selectManufacturer);
+            var manuInput = _driver.FindElement(selectManufacturer);
+            manuInput.SendKeys(manufacturer);
+            _driver.FindElement(searchCars).Click();
+
+
+        }
+
 
         public void PularQuitarCoche(string model)
         {
